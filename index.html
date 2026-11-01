@@ -22,7 +22,7 @@
       flex-direction: column;
     }
 
-    /* 1. 상단 실시간 티커 영역 */
+    /* 1. 상단 실시간 티커 영역 (코스피 야간선물 포함) */
     .ticker-bar {
       width: 100%;
       background-color: #0f172a;
@@ -41,7 +41,7 @@
       margin: 0 auto;
       padding: 16px 24px;
       display: flex;
-       flex-wrap: wrap;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
@@ -147,7 +147,7 @@
       }
     }
 
-    /* 공통 카드 박스 (영역 침범 완벽 차단) */
+    /* 공통 카드 박스 */
     .card-box {
       background-color: #ffffff;
       border: 1px solid #e2e8f0;
@@ -301,19 +301,19 @@
 </head>
 <body>
 
-  <!-- 1. 상단 실시간 티커 바 -->
+  <!-- 1. 상단 실시간 티커 바 (코스피 야간선물 및 주요 지수 포함) -->
   <div class="ticker-bar">
     <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
       {
         "symbols": [
+          { "proName": "EUREX:FESX1!", "title": "코스피 야간선물" },
           { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
           { "proName": "FOREXCOM:NSXUSD", "title": "나스닥 100" },
           { "proName": "FX_IDC:USDKRW", "title": "원/달러 환율" },
           { "proName": "TVC:GOLD", "title": "국제 금(Gold)" },
-          { "proName": "TVC:USOIL", "title": "WTI 원유" },
-          { "proName": "TVC:US10Y", "title": "미국채 10년물" }
+          { "proName": "TVC:USOIL", "title": "WTI 원유" }
         ],
         "showSymbolLogo": true,
         "colorTheme": "dark",
@@ -365,7 +365,7 @@
     </div>
   </nav>
 
-  <!-- 3. 메인 대시보드 영역 (좌측 차트 박스와 우측 브리핑 박스 완전 분리) -->
+  <!-- 3. 메인 대시보드 영역 -->
   <main class="dashboard-container">
 
     <!-- [좌측 독립 카드] 글로벌 지수 · 원자재 · 외환 추이 차트 -->
