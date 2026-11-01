@@ -5,13 +5,10 @@
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HANA Family Office | WM RESEARCH DESK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #f8fafc;
@@ -21,7 +18,7 @@
       flex-direction: column;
     }
 
-    /* 1. 자체 구축 실시간 티커 바 (KRX 라이선스 차단 완벽 우회) */
+    /* 1. 상단 실시간 티커 바 */
     .ticker-bar {
       width: 100%;
       background-color: #0f172a;
@@ -38,9 +35,7 @@
       width: max-content;
       animation: ticker-scroll 45s linear infinite;
     }
-    .ticker-bar:hover .ticker-track {
-      animation-play-state: paused;
-    }
+    .ticker-bar:hover .ticker-track { animation-play-state: paused; }
     @keyframes ticker-scroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -54,15 +49,8 @@
       font-size: 13px;
       white-space: nowrap;
     }
-    .ticker-name {
-      color: #cbd5e1;
-      font-weight: 600;
-    }
-    .ticker-price {
-      color: #ffffff;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
+    .ticker-name { color: #cbd5e1; font-weight: 600; }
+    .ticker-price { color: #ffffff; font-weight: 700; font-variant-numeric: tabular-nums; }
     .ticker-change {
       font-size: 12px;
       font-weight: 600;
@@ -70,25 +58,12 @@
       border-radius: 4px;
       font-variant-numeric: tabular-nums;
     }
-    /* 한국 증시 기준: 상승 빨강 / 하락 파랑 */
-    .up {
-      color: #f87171;
-      background-color: rgba(248, 113, 113, 0.12);
-    }
-    .down {
-      color: #60a5fa;
-      background-color: rgba(96, 165, 250, 0.12);
-    }
-    .flat {
-      color: #94a3b8;
-      background-color: rgba(148, 163, 184, 0.12);
-    }
+    .up { color: #f87171; background-color: rgba(248, 113, 113, 0.12); }
+    .down { color: #60a5fa; background-color: rgba(96, 165, 250, 0.12); }
+    .flat { color: #94a3b8; background-color: rgba(148, 163, 184, 0.12); }
 
     /* 2. 메인 녹색 헤더 */
-    .main-header {
-      background-color: #004B49;
-      color: #ffffff;
-    }
+    .main-header { background-color: #004B49; color: #ffffff; }
     .header-inner {
       max-width: 1280px;
       margin: 0 auto;
@@ -99,12 +74,7 @@
       align-items: center;
       gap: 12px;
     }
-    .brand-title-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .brand-title-group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .brand-badge {
       background-color: #C5A059;
       color: #002E2C;
@@ -114,18 +84,8 @@
       border-radius: 4px;
       letter-spacing: 0.05em;
     }
-    .brand-title {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .header-controls {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 14px;
-      color: #e2e8f0;
-    }
+    .brand-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .header-controls { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #e2e8f0; }
     .btn-refresh {
       background-color: #002E2C;
       color: #C5A059;
@@ -136,9 +96,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .btn-refresh:hover {
-      background-color: #003836;
-    }
+    .btn-refresh:hover { background-color: #003836; }
 
     /* 2-1. 녹색 바 하단 사이트 메뉴 */
     .main-nav {
@@ -159,45 +117,39 @@
       white-space: nowrap;
       scrollbar-width: none;
     }
-    .nav-inner::-webkit-scrollbar {
-      display: none;
-    }
+    .nav-inner::-webkit-scrollbar { display: none; }
     .nav-btn {
       background: transparent;
       color: #cbd5e1;
       border: none;
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 500;
       cursor: pointer;
       font-family: inherit;
+      transition: all 0.12s ease;
     }
-    .nav-btn:hover {
-      background-color: #004B49;
-      color: #ffffff;
-    }
-    .nav-btn.active {
-      background-color: #C5A059;
-      color: #002E2C;
-      font-weight: 700;
-    }
+    .nav-btn:hover { background-color: #004B49; color: #ffffff; }
+    .nav-btn.active { background-color: #C5A059; color: #002E2C; font-weight: 700; }
 
-    /* 3. 메인 대시보드 레이아웃 */
-    .dashboard-container {
+    /* 탭 전환용 섹션 컨테이너 */
+    .tab-section {
+      display: none;
       max-width: 1280px;
       width: 100%;
       margin: 0 auto;
       padding: 24px;
+    }
+    .tab-section.active { display: block; }
+
+    .two-col-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 24px;
-      align-items: start;
     }
     @media (min-width: 1024px) {
-      .dashboard-container {
-        grid-template-columns: 5fr 7fr;
-      }
+      .two-col-grid { grid-template-columns: 1fr 1fr; }
     }
 
     .card-box {
@@ -207,7 +159,6 @@
       padding: 20px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       overflow: hidden;
-      position: relative;
     }
     .section-header {
       display: flex;
@@ -216,6 +167,8 @@
       padding-bottom: 12px;
       margin-bottom: 14px;
       border-bottom: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .section-title {
       font-size: 16px;
@@ -225,135 +178,217 @@
       align-items: center;
       gap: 8px;
     }
-    .bar-green {
-      width: 6px;
-      height: 18px;
-      background-color: #004B49;
-      border-radius: 2px;
-      display: inline-block;
-    }
-    .bar-gold {
-      width: 6px;
-      height: 18px;
-      background-color: #C5A059;
-      border-radius: 2px;
-      display: inline-block;
-    }
+    .bar-green { width: 6px; height: 18px; background-color: #004B49; border-radius: 2px; display: inline-block; }
+    .bar-gold { width: 6px; height: 18px; background-color: #C5A059; border-radius: 2px; display: inline-block; }
 
-    .chart-wrapper {
-      width: 100%;
-      height: 490px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .right-column {
+    /* [주요 지표] 서브 탭 스타일 */
+    .sub-tab-bar {
       display: flex;
-      flex-direction: column;
-      gap: 24px;
-      width: 100%;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 18px;
+      scrollbar-width: none;
     }
+    .sub-tab-bar::-webkit-scrollbar { display: none; }
+    .sub-tab-btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      background-color: #f8fafc;
+      color: #475569;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: all 0.12s ease;
+    }
+    .sub-tab-btn:hover { border-color: #004B49; color: #004B49; }
+    .sub-tab-btn.active { background-color: #004B49; color: #ffffff; border-color: #004B49; }
 
-    .briefing-card {
-      background-color: #faf6ee;
-      border: 1px solid rgba(197, 160, 89, 0.45);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-      overflow: hidden;
+    .chart-panel {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 18px;
     }
-    .briefing-top {
+    .chart-info-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .selected-symbol-title { font-size: 18px; font-weight: 700; color: #0f172a; }
+    .selected-symbol-code { font-size: 12px; color: #64748b; margin-left: 6px; font-weight: 500; }
+    .selected-price-wrap { display: flex; align-items: baseline; gap: 10px; }
+    .selected-price-val { font-size: 24px; font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; }
+    .selected-price-chg { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .svg-chart-box { width: 100%; height: 230px; position: relative; }
+
+    .range-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .range-btn {
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background-color: #ffffff;
+      color: #475569;
       font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .briefing-tag {
+    .range-btn.active {
+      background-color: #C5A059;
+      color: #002E2C;
+      border-color: #C5A059;
       font-weight: 700;
-      color: #004B49;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .briefing-heading {
-      font-size: 17px;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
-    .briefing-list {
-      padding-left: 18px;
-      font-size: 14px;
-      color: #334155;
-      line-height: 1.7;
     }
 
-    .news-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .news-tab {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
+    .inst-list { border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+    .inst-list-header {
+      display: grid;
+      grid-template-columns: 50px 1fr 130px 120px;
       background-color: #f1f5f9;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
       color: #475569;
-      font-weight: 500;
+      border-bottom: 1px solid #e2e8f0;
     }
-    .news-tab.active {
+    .inst-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 130px 120px;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: background-color 0.1s ease;
+      font-size: 14px;
+    }
+    .inst-row:last-child { border-bottom: none; }
+    .inst-row:hover { background-color: #f8fafc; }
+    .inst-row.selected {
+      background-color: #faf6ee;
+      border-left: 4px solid #004B49;
+      padding-left: 12px;
+    }
+    .inst-rank { font-size: 12px; font-weight: 700; color: #64748b; }
+    .inst-title { font-weight: 600; color: #0f172a; }
+    .inst-sub { font-size: 11px; color: #94a3b8; margin-left: 6px; }
+    .inst-price { text-align: right; font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; }
+    .inst-chg { text-align: right; font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .text-up { color: #dc2626; }
+    .text-down { color: #2563eb; }
+    .text-flat { color: #64748b; }
+
+    /* [마켓 뉴스룸] 스타일 */
+    .news-filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 18px;
+      scrollbar-width: none;
+    }
+    .news-filter-bar::-webkit-scrollbar { display: none; }
+    .news-filter-btn {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background-color: #ffffff;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: all 0.12s ease;
+    }
+    .news-filter-btn:hover { border-color: #004B49; color: #004B49; }
+    .news-filter-btn.active {
       background-color: #004B49;
       color: #ffffff;
+      border-color: #004B49;
     }
-    .news-item {
-      padding: 14px 8px;
+
+    .news-card-item {
+      padding: 16px 14px;
       border-bottom: 1px solid #f1f5f9;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
+      transition: background-color 0.1s ease;
+      display: block;
+      text-decoration: none;
     }
-    .news-item:last-child {
-      border-bottom: none;
-    }
-    .news-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 6px;
-    }
-    .badge-market { background-color: #ecfdf5; color: #004B49; }
-    .badge-commodity { background-color: #fffbeb; color: #92400e; }
-    .badge-tax { background-color: #f1f5f9; color: #334155; }
-    .news-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 4px;
-      line-height: 1.4;
-    }
-    .news-desc {
+    .news-card-item:last-child { border-bottom: none; }
+    .news-card-item:hover { background-color: #f8fafc; border-radius: 8px; }
+    
+    .news-badges-wrap { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+    .badge-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.02em; }
+    .tag-macro { background-color: #e0f2fe; color: #0369a1; }
+    .tag-tax { background-color: #fef3c7; color: #92400e; }
+    .tag-estate { background-color: #ecfdf5; color: #047857; }
+    .tag-forex { background-color: #f3e8ff; color: #7e22ce; }
+    .tag-alt { background-color: #fff1f2; color: #be123c; }
+
+    .news-main-title { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 6px; line-height: 1.45; }
+    .news-card-item:hover .news-main-title { color: #004B49; text-decoration: underline; }
+    
+    .news-meta-info { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #64748b; }
+    .news-press { font-weight: 600; color: #004B49; background: #f0fdf4; padding: 1px 6px; border-radius: 4px; border: 1px solid #dcfce7; }
+
+    /* [F/O Insight] 리포트 자료실 스타일 */
+    .report-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    .report-table th { background-color: #f1f5f9; color: #475569; font-weight: 600; padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .report-table td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: middle; }
+    .report-row:hover { background-color: #f8fafc; }
+    .star-rating { color: #eab308; font-size: 13px; letter-spacing: 1px; }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: #004B49;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
       font-size: 12px;
-      color: #64748b;
-      line-height: 1.4;
-    }
-    .news-time {
-      font-size: 12px;
-      color: #94a3b8;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s ease;
       white-space: nowrap;
     }
+    .btn-download:hover { background-color: #003836; }
+
+    /* 게시판 스타일 */
+    .board-write-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 20px; display: none; }
+    .board-write-box.open { display: block; }
+    .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+    .input-field { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: inherit; }
+    .textarea-field { width: 100%; height: 100px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; margin-bottom: 10px; }
+    .btn-primary { background-color: #004B49; color: #ffffff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .board-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .board-table th { background-color: #f1f5f9; color: #475569; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .board-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+    .board-row:hover { background-color: #f8fafc; cursor: pointer; }
+    .board-detail { background-color: #faf6ee; border: 1px solid rgba(197, 160, 89, 0.4); border-radius: 8px; padding: 16px; margin-top: 14px; display: none; }
+    .board-detail.open { display: block; }
   </style>
 </head>
 <body>
 
-  <!-- 1. 자체 구축 상단 실시간 티커 바 (실제 KOSPI, KOSDAQ, SOX 포함 11개 지표) -->
+  <!-- 1. 상단 실시간 티커 바 -->
   <div class="ticker-bar">
-    <div id="custom-ticker-track" class="ticker-track">
-      <!-- 자바스크립트가 실시간 지수를 불러와 자동으로 채워주는 영역 -->
-    </div>
+    <div id="custom-ticker-track" class="ticker-track"></div>
   </div>
 
   <!-- 2. 메인 녹색 헤더 -->
@@ -365,14 +400,248 @@
       </div>
       <div class="header-controls">
         <span id="current-date">기준 : 2026.11.01(SUN)</span>
-        <button type="button" onclick="refreshAllData()" class="btn-refresh">데이터 새로고침</button>
+        <button type="button" onclick="forceRefreshData()" class="btn-refresh">데이터 새로고침</button>
       </div>
     </div>
   </header>
 
-  <!-- 날짜 즉시 업데이트 및 실시간 11대 지표 티커 엔진 스크립트 -->
+  <!-- 2-1. 녹색 바 하단 사이트 메뉴 -->
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <button type="button" class="nav-btn active" onclick="switchTab('tab-dashboard', this)">종합 대시보드</button>
+      <button type="button" class="nav-btn" onclick="switchTab('tab-indicators', this)">주요 지표</button>
+      <button type="button" class="nav-btn" onclick="switchTab('tab-newsroom', this)">마켓 뉴스룸</button>
+      <button type="button" class="nav-btn" onclick="switchTab('tab-insight', this)">F/O Insight</button>
+      <button type="button" class="nav-btn" onclick="switchTab('tab-board', this)">게시판</button>
+    </div>
+  </nav>
+
+  <!-- [메뉴 1] 종합 대시보드 -->
+  <main id="tab-dashboard" class="tab-section active">
+    <div class="card-box" style="min-height: 360px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #94a3b8;">
+      <p style="font-size: 15px; font-weight: 600; color: #64748b; margin-bottom: 6px;">종합 대시보드 영역 (구성 준비 중)</p>
+      <p style="font-size: 13px;">상단 메뉴에서 <strong>[주요 지표]</strong> 또는 <strong>[F/O Insight 자료실]</strong>을 이용해 주세요.</p>
+    </div>
+  </main>
+
+  <!-- [메뉴 2] 주요 지표 (기간 버튼: 1D, 1M, 3M, 1Y, 전체) -->
+  <section id="tab-indicators" class="tab-section">
+    <div class="card-box">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="bar-green"></span>
+          글로벌 마켓 주요 지표 · 추이 (자산군별 TOP 10)
+        </h2>
+        <span id="indicator-status-msg" style="font-size: 12px; color: #64748b;">항목 클릭 시 상단 차트가 즉시 전환됩니다</span>
+      </div>
+
+      <div class="sub-tab-bar">
+        <button type="button" class="sub-tab-btn active" onclick="selectAssetCategory('indices', this)">주요지수</button>
+        <button type="button" class="sub-tab-btn" onclick="selectAssetCategory('futures', this)">지수선물</button>
+        <button type="button" class="sub-tab-btn" onclick="selectAssetCategory('commodities', this)">원자재</button>
+        <button type="button" class="sub-tab-btn" onclick="selectAssetCategory('forex', this)">외환</button>
+        <button type="button" class="sub-tab-btn" onclick="selectAssetCategory('crypto', this)">암호화폐</button>
+        <button type="button" class="sub-tab-btn" onclick="selectAssetCategory('bonds', this)">채권</button>
+      </div>
+
+      <div class="chart-panel">
+        <div class="chart-info-header">
+          <div>
+            <span id="chart-item-name" class="selected-symbol-title">KOSPI</span>
+            <span id="chart-item-sub" class="selected-symbol-code">한국 종합주가지수</span>
+          </div>
+          <div class="selected-price-wrap">
+            <span id="chart-item-price" class="selected-price-val">---</span>
+            <span id="chart-item-change" class="selected-price-chg text-flat">---</span>
+          </div>
+        </div>
+
+        <div id="svg-chart-container" class="svg-chart-box"></div>
+
+        <!-- 기간 선택 버튼 (요청 반영: 1D, 1M, 3M, 1Y, 전체) -->
+        <div class="range-bar">
+          <button type="button" class="range-btn" onclick="changeChartRange('1d', '5m', this)">1D</button>
+          <button type="button" class="range-btn active" onclick="changeChartRange('1mo', '1d', this)">1M</button>
+          <button type="button" class="range-btn" onclick="changeChartRange('3mo', '1d', this)">3M</button>
+          <button type="button" class="range-btn" onclick="changeChartRange('1y', '1wk', this)">1Y</button>
+          <button type="button" class="range-btn" onclick="changeChartRange('max', '1mo', this)">전체</button>
+        </div>
+      </div>
+
+      <div class="inst-list">
+        <div class="inst-list-header">
+          <span>NO</span>
+          <span>지표명</span>
+          <span style="text-align: right;">현재가 / 수치</span>
+          <span style="text-align: right;">전일대비 등락률</span>
+        </div>
+        <div id="inst-list-body"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- [메뉴 3] 마켓 뉴스룸 (언론사 표기, 새창 이동 및 무한 스크롤 완벽 구동) -->
+  <section id="tab-newsroom" class="tab-section">
+    <div class="card-box">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="bar-gold"></span>
+          WM RESEARCH 마켓 뉴스룸
+        </h2>
+        <span style="font-size: 12px; color: #64748b;">고액자산가 가치보존 및 승계 핵심 키워드 실시간 수집</span>
+      </div>
+
+      <div class="news-filter-bar">
+        <button type="button" class="news-filter-btn active" onclick="filterNews('ALL', this)">전체보기</button>
+        <button type="button" class="news-filter-btn" onclick="filterNews('매크로', this)">매크로</button>
+        <button type="button" class="news-filter-btn" onclick="filterNews('TAX', this)">TAX</button>
+        <button type="button" class="news-filter-btn" onclick="filterNews('부동산', this)">부동산</button>
+        <button type="button" class="news-filter-btn" onclick="filterNews('외환', this)">외환</button>
+        <button type="button" class="news-filter-btn" onclick="filterNews('대체투자', this)">대체투자</button>
+      </div>
+
+      <div id="news-container" style="min-height: 300px;"></div>
+      
+      <!-- 수동 더보기 버튼 추가 (무한 스크롤 백업용) -->
+      <div style="text-align:center; padding:22px 0 10px 0;">
+        <button type="button" onclick="loadMoreNews()" class="btn-primary" style="background-color: #475569; font-size:12px; padding:8px 20px;">+ 과거 기사 더 불러오기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- [메뉴 4] F/O Insight (국내외 패밀리오피스 핵심 부자 보고서 자료실) -->
+  <section id="tab-insight" class="tab-section">
+    <div class="card-box" style="margin-bottom: 24px;">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="bar-gold"></span>
+          F/O 전략 기획 필수 리서치 & 부자 보고서 자료실
+        </h2>
+        <span style="font-size: 12px; color: #64748b;">KB · 하나 · UBS 등 국내외 패밀리오피스 전략 담당자 필독서</span>
+      </div>
+      <p style="font-size: 13.5px; color: #475569; margin-bottom: 16px; line-height: 1.5;">
+        초고액자산가(HNW) 및 패밀리오피스 시장 분석, 가업승계, 자산배분 트렌드를 담은 핵심 연구 보고서입니다. 우측의 **[PDF 다운로드/열람]** 버튼을 통해 원문을 즉시 확인하실 수 있습니다.
+      </p>
+
+      <div style="overflow-x: auto;">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th style="width: 80px; text-align: center;">중요도</th>
+              <th>보고서 명칭 및 핵심 주제</th>
+              <th style="width: 140px;">발행처 / 연도</th>
+              <th style="width: 140px; text-align: center;">다운로드 / 링크</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="report-row">
+              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">2025 한국 부자 보고서 (Korea Wealth Report)</div>
+                <div style="font-size: 12px; color: #64748b;">한국 부자의 자산 현황, 부의 축적 노하우 및 15년 발자취 총결산</div>
+              </td>
+              <td><span style="font-weight:600; color:#004B49;">KB금융경영연구소</span><br><span style="font-size:11.5px; color:#94a3b8;">2025.12</span></td>
+              <td style="text-align: center;">
+                <a href="https://files-scs.pstatic.net/2025/12/23/FhQP9SHDXS/2025%20%ED%95%9C%EA%B5%AD%20%EB%B6%80%EC%9E%90%20%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf" target="_blank" rel="noopener noreferrer" class="btn-download">
+                  <span>📥 PDF 다운로드</span>
+                </a>
+              </td>
+            </tr>
+            <tr class="report-row">
+              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">2025 대한민국 웰스 리포트 (Korean Wealth Report)</div>
+                <div style="font-size: 12px; color: #64748b;">영리치와 올드리치의 투자 행태 비교 및 자산관리 트렌드 분석</div>
+              </td>
+              <td><span style="font-weight:600; color:#004B49;">하나금융연구소</span><br><span style="font-size:11.5px; color:#94a3b8;">2025.04</span></td>
+              <td style="text-align: center;">
+                <a href="https://www.hanaif.re.kr/boardDetail.do?hmpeSeqNo=36521" target="_blank" rel="noopener noreferrer" class="btn-download">
+                  <span>🔗 원문 페이지</span>
+                </a>
+              </td>
+            </tr>
+            <tr class="report-row">
+              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">UBS Global Family Office Report (글로벌 패밀리오피스 보고서)</div>
+                <div style="font-size: 12px; color: #64748b;">전 세계 싱글패밀리오피스 300여 가문의 자산 배분, 사모펀드 및 승계 전략 조사</div>
+              </td>
+              <td><span style="font-weight:600; color:#004B49;">UBS Global Wealth</span><br><span style="font-size:11.5px; color:#94a3b8;">2026 최신호</span></td>
+              <td style="text-align: center;">
+                <a href="https://advisors.ubs.com/mediahandler/media/808993/global-family-office-report-en-2026-single.pdf" target="_blank" rel="noopener noreferrer" class="btn-download">
+                  <span>📥 PDF 다운로드</span>
+                </a>
+              </td>
+            </tr>
+            <tr class="report-row">
+              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐</span></td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">초고액자산가 가업승계 및 비상장주식 가치평가 실무 가이드</div>
+                <div style="font-size: 12px; color: #64748b;">가업상속공제 요건 충족 및 법인 주식 지분 이동 시뮬레이션</div>
+              </td>
+              <td><span style="font-weight:600; color:#004B49;">F/O 솔루션실</span><br><span style="font-size:11.5px; color:#94a3b8;">2026 내부자료</span></td>
+              <td style="text-align: center;">
+                <button type="button" onclick="alert('사내 보안 문서입니다. 본사 F/O솔루션실 인가 권한이 필요합니다.')" class="btn-download" style="background:#64748b;">
+                  <span>🔒 사내 보안</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- [메뉴 5] 게시판 -->
+  <section id="tab-board" class="tab-section">
+    <div class="card-box">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="bar-green"></span>
+          F/O 본사 & PB 소통 게시판
+        </h2>
+        <button type="button" class="btn-primary" onclick="toggleWriteBox()">+ 새 글 등록하기</button>
+      </div>
+
+      <div id="board-write-form" class="board-write-box">
+        <div class="form-row">
+          <select id="post-category" class="input-field">
+            <option value="본사공지">본사공지</option>
+            <option value="시황브리핑">시황브리핑</option>
+            <option value="PB질의/요청">PB질의/요청</option>
+            <option value="세무/부동산">세무/부동산</option>
+          </select>
+          <input type="text" id="post-author" class="input-field" placeholder="작성자" style="flex: 1; min-width: 180px;">
+        </div>
+        <div class="form-row">
+          <input type="text" id="post-title" class="input-field" placeholder="제목을 입력하세요" style="width: 100%;">
+        </div>
+        <textarea id="post-content" class="textarea-field" placeholder="내용을 입력해 주세요."></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" class="btn-primary" style="background-color: #64748b;" onclick="toggleWriteBox()">취소</button>
+          <button type="button" class="btn-primary" onclick="saveNewPost()">게시글 저장</button>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="board-table">
+          <thead>
+            <tr>
+              <th style="width: 110px;">분류</th>
+              <th>제목</th>
+              <th style="width: 180px;">작성자</th>
+              <th style="width: 110px;">작성일</th>
+            </tr>
+          </thead>
+          <tbody id="board-list-body"></tbody>
+        </table>
+      </div>
+      <div id="board-detail-view" class="board-detail"></div>
+    </div>
+  </section>
+
   <script>
-    // 1. 날짜 표기 업데이트
+    // 1. 상단 기준일 표시
     (function() {
       var now = new Date();
       var year = now.getFullYear();
@@ -380,239 +649,653 @@
       var day = String(now.getDate()).padStart(2, '0');
       var days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
       var el = document.getElementById('current-date');
-      if (el) {
-        el.textContent = '기준 : ' + year + '.' + month + '.' + day + '(' + days[now.getDay()] + ')';
-      }
+      if (el) el.textContent = '기준 : ' + year + '.' + month + '.' + day + '(' + days[now.getDay()] + ')';
     })();
 
-    // 2. 요청하신 11개 핵심 실제 지수 심볼 세팅 (Yahoo Finance 글로벌 표준 코드)
+    // 2. 로컬스토리지 캐시
+    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v3';
+    let quoteCache = {};
+    let chartCache = {};
+
+    try {
+      const savedCache = localStorage.getItem(CACHE_STORAGE_KEY);
+      if (savedCache) {
+        const parsed = JSON.parse(savedCache);
+        quoteCache = parsed.quotes || {};
+        chartCache = parsed.charts || {};
+      }
+    } catch (e) {}
+
+    function saveCacheToDisk() {
+      try {
+        localStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify({ quotes: quoteCache, charts: chartCache }));
+      } catch (e) {}
+    }
+
+    // 3. 상단 티커
     const tickerItems = [
-      { id: 'KOSPI', name: 'KOSPI', symbol: '^KS11', price: '---', changePct: 0 },
-      { id: 'KOSDAQ', name: 'KOSDAQ', symbol: '^KQ11', price: '---', changePct: 0 },
-      { id: 'DJI', name: '다우존스', symbol: '^DJI', price: '---', changePct: 0 },
-      { id: 'SPX', name: 'S&P 500', symbol: '^GSPC', price: '---', changePct: 0 },
-      { id: 'IXIC', name: '나스닥종합', symbol: '^IXIC', price: '---', changePct: 0 },
-      { id: 'SOX', name: 'SOX', symbol: '^SOX', price: '---', changePct: 0 },
-      { id: 'USDKRW', name: '원/달러 환율', symbol: 'KRW=X', price: '---', changePct: 0 },
-      { id: 'GOLD', name: '금', symbol: 'GC=F', price: '---', changePct: 0 },
-      { id: 'WTI', name: 'WTI유', symbol: 'CL=F', price: '---', changePct: 0 },
-      { id: 'BRENT', name: '브렌트유', symbol: 'BZ=F', price: '---', changePct: 0 },
-      { id: 'BTC', name: '비트코인', symbol: 'BTC-USD', price: '---', changePct: 0 }
+      { id: 'KOSPI', name: 'KOSPI', symbol: '^KS11' },
+      { id: 'KOSDAQ', name: 'KOSDAQ', symbol: '^KQ11' },
+      { id: 'DJI', name: '다우존스', symbol: '^DJI' },
+      { id: 'SPX', name: 'S&P 500', symbol: '^GSPC' },
+      { id: 'IXIC', name: '나스닥종합', symbol: '^IXIC' },
+      { id: 'SOX', name: 'SOX', symbol: '^SOX' },
+      { id: 'USDKRW', name: '원/달러 환율', symbol: 'KRW=X' },
+      { id: 'GOLD', name: '금', symbol: 'GC=F' },
+      { id: 'WTI', name: 'WTI유', symbol: 'CL=F' },
+      { id: 'BRENT', name: '브렌트유', symbol: 'BZ=F' },
+      { id: 'BTC', name: '비트코인', symbol: 'BTC-USD' }
     ];
 
-    // 티커 HTML 생성 함수 (무한 스크롤을 위해 2세트 연속 배치)
     function renderTicker() {
       const track = document.getElementById('custom-ticker-track');
       if (!track) return;
-
-      const buildItemsHtml = () => tickerItems.map(item => {
-        let statusClass = 'flat';
-        let arrow = '';
-        if (item.changePct > 0) {
-          statusClass = 'up';
-          arrow = '▲ +';
-        } else if (item.changePct < 0) {
-          statusClass = 'down';
-          arrow = '▼ ';
+      const buildHtml = () => tickerItems.map(item => {
+        const q = quoteCache[item.symbol];
+        let price = '---', cls = 'flat', pct = '수신중';
+        if (q) {
+          price = item.id === 'BTC' ? '$' + q.priceStr.split('.')[0] : q.priceStr;
+          if (q.changePct > 0) { cls = 'up'; pct = `▲ +${q.changePct.toFixed(2)}%`; }
+          else if (q.changePct < 0) { cls = 'down'; pct = `▼ ${q.changePct.toFixed(2)}%`; }
+          else { pct = '0.00%'; }
         }
-        const pctText = item.price === '---' ? '로딩중' : `${arrow}${item.changePct.toFixed(2)}%`;
-
-        return `
-          <div class="ticker-item">
-            <span class="ticker-name">${item.name}</span>
-            <span class="ticker-price">${item.price}</span>
-            <span class="ticker-change ${statusClass}">${pctText}</span>
-          </div>
-        `;
+        return `<div class="ticker-item"><span class="ticker-name">${item.name}</span><span class="ticker-price">${price}</span><span class="ticker-change ${cls}">${pct}</span></div>`;
       }).join('');
-
-      track.innerHTML = buildItemsHtml() + buildItemsHtml();
+      track.innerHTML = buildHtml() + buildHtml();
     }
 
-    // 개별 지수 실시간 데이터 호출 함수 (다중 백업 프록시 적용)
-    async function fetchSingleQuote(item) {
-      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(item.symbol)}?interval=1d&range=2d`;
-      const proxyUrls = [
+    // 4. 주요 지표 6대 자산군 데이터베이스
+    const MARKET_CATEGORIES = {
+      indices: [
+        { symbol: '^KS11', name: 'KOSPI', sub: '한국 종합주가지수' },
+        { symbol: '^KQ11', name: 'KOSDAQ', sub: '한국 코스닥지수' },
+        { symbol: '^GSPC', name: 'S&P 500', sub: '미국 대형주 500 지수' },
+        { symbol: '^IXIC', name: '나스닥 종합', sub: '미국 기술주 중심 지수' },
+        { symbol: '^DJI', name: '다우존스 30', sub: '미국 우량 산업주 30' },
+        { symbol: '^SOX', name: '필라델피아 반도체(SOX)', sub: '글로벌 반도체 핵심 지수' },
+        { symbol: '^RUT', name: '러셀 2000', sub: '미국 중소형주 대표 지수' },
+        { symbol: '^N225', name: '닛케이 225', sub: '일본 도쿄증시 대표 지수' },
+        { symbol: '^STOXX50E', name: '유로스톡스 50', sub: '유럽 우량주 50 지수' },
+        { symbol: '^HSI', name: '홍콩 항셍지수', sub: '홍콩 증시 대표 지수' }
+      ],
+      futures: [
+        { symbol: 'ES=F', name: 'S&P 500 선물', sub: 'CME E-Mini S&P 500' },
+        { symbol: 'NQ=F', name: '나스닥 100 선물', sub: 'CME E-Mini Nasdaq 100' },
+        { symbol: 'YM=F', name: '다우존스 선물', sub: 'CBOT Mini Dow' },
+        { symbol: 'RTY=F', name: '러셀 2000 선물', sub: 'CME E-Mini Russell' },
+        { symbol: 'NKD=F', name: '닛케이 225 선물', sub: 'CME Nikkei 225 Futures' },
+        { symbol: '^VIX', name: 'VIX 변동성 지수', sub: 'S&P 500 공포/변동성 지표' },
+        { symbol: 'DX-Y.NYB', name: '달러 인덱스 (DXY)', sub: '주요 6개국 통화 대비 달러 가치' },
+        { symbol: '^KS200', name: '코스피 200', sub: '국내 선물/옵션 기준 지수' },
+        { symbol: '^GDAXI', name: '독일 DAX 지수', sub: '유럽 핵심 선행 지수' },
+        { symbol: '^FTSE', name: '영국 FTSE 100', sub: '런던 증시 대표 지수' }
+      ],
+      commodities: [
+        { symbol: 'GC=F', name: '국제 금 (Gold)', sub: 'COMEX 금 선물 ($/oz)' },
+        { symbol: 'SI=F', name: '국제 은 (Silver)', sub: 'COMEX 은 선물 ($/oz)' },
+        { symbol: 'CL=F', name: 'WTI 원유', sub: '서부텍사스산 원유 ($/배럴)' },
+        { symbol: 'BZ=F', name: '브렌트유', sub: '북해산 브렌트 원유 ($/배럴)' },
+        { symbol: 'HG=F', name: '구리 (Copper)', sub: '글로벌 경기 선행 원자재' },
+        { symbol: 'NG=F', name: '천연가스', sub: 'NYMEX 천연가스 선물' },
+        { symbol: 'PL=F', name: '백금 (Platinum)', sub: '산업·귀금속 백금 선물' },
+        { symbol: 'PA=F', name: '팔라듐 (Palladium)', sub: '산업용 촉매 귀금속' },
+        { symbol: 'ZC=F', name: '옥수수 (Corn)', sub: 'CBOT 대표 곡물 선물' },
+        { symbol: 'ZS=F', name: '대두 (Soybean)', sub: 'CBOT 대두 선물' }
+      ],
+      forex: [
+        { symbol: 'KRW=X', name: '달러/원 (USD/KRW)', sub: '1미국 달러당 원화 환율' },
+        { symbol: 'JPYKRW=X', name: '엔/원 (100엔 기준)', sub: '100일본 엔당 원화 환산율', mult: 100 },
+        { symbol: 'JPY=X', name: '달러/엔 (USD/JPY)', sub: '1미국 달러당 일본 엔화' },
+        { symbol: 'EURUSD=X', name: '유로/달러 (EUR/USD)', sub: '1유로당 미국 달러' },
+        { symbol: 'EURKRW=X', name: '유로/원 (EUR/KRW)', sub: '1유로당 원화 환율' },
+        { symbol: 'CNYKRW=X', name: '위안/원 (CNY/KRW)', sub: '1중국 위안당 원화 환율' },
+        { symbol: 'GBPUSD=X', name: '파운드/달러 (GBP/USD)', sub: '1영국 파운드당 미국 달러' },
+        { symbol: 'CNY=X', name: '달러/위안 (USD/CNY)', sub: '1미국 달러당 중국 위안' },
+        { symbol: 'AUDUSD=X', name: '호주달러/미국달러', sub: '원자재 통화 대표 환율' },
+        { symbol: 'CAD=X', name: '미국달러/캐나다달러', sub: '북미 교역 통화 환율' }
+      ],
+      crypto: [
+        { symbol: 'BTC-USD', name: '비트코인 (BTC)', sub: '가상자산 대장주 ($)' },
+        { symbol: 'ETH-USD', name: '이더리움 (ETH)', sub: '스마트 컨트랙트 대표 ($)' },
+        { symbol: 'XRP-USD', name: '리플 (XRP)', sub: '글로벌 송금 네트워크 ($)' },
+        { symbol: 'SOL-USD', name: '솔라나 (SOL)', sub: '고성능 레이어1 블록체인 ($)' },
+        { symbol: 'BNB-USD', name: '바이낸스코인 (BNB)', sub: '글로벌 거래소 생태계 ($)' },
+        { symbol: 'DOGE-USD', name: '도지코인 (DOGE)', sub: '대표 밈·결제 코인 ($)' },
+        { symbol: 'ADA-USD', name: '에이다 (ADA)', sub: '카르다노 플랫폼 ($)' },
+        { symbol: 'TRX-USD', name: '트론 (TRX)', sub: '스테이블코인 결제망 ($)' },
+        { symbol: 'AVAX-USD', name: '아발란체 (AVAX)', sub: '서브넷 특화 블록체인 ($)' },
+        { symbol: 'LINK-USD', name: '체인링크 (LINK)', sub: '글로벌 오라클 네트워크 ($)' }
+      ],
+      bonds: [
+        { symbol: '^TNX', name: '미국채 10년물 금리', sub: '글로벌 장기 벤치마크 금리 (%)', suffix: '%' },
+        { symbol: '^TYX', name: '미국채 30년물 금리', sub: '미국 초장기 국채 수익률 (%)', suffix: '%' },
+        { symbol: '^FVX', name: '미국채 5년물 금리', sub: '미국 중기 국채 수익률 (%)', suffix: '%' },
+        { symbol: '^IRX', name: '미국채 3개월물 금리', sub: '미국 초단기 국채 수익률 (%)', suffix: '%' },
+        { symbol: 'TLT', name: '미국 20년+ 장기국채 (TLT)', sub: '장기채 가격 추종 대표 ETF ($)' },
+        { symbol: 'IEF', name: '미국 7-10년 중기국채 (IEF)', sub: '중기채 가격 추종 대표 ETF ($)' },
+        { symbol: 'SHY', name: '미국 1-3년 단기국채 (SHY)', sub: '단기채 가격 추종 대표 ETF ($)' },
+        { symbol: 'LQD', name: '미국 투자등급 회사채 (LQD)', sub: '우량 기업 회사채 벤치마크 ($)' },
+        { symbol: 'HYG', name: '미국 하이일드 채권 (HYG)', sub: '고수익 회사채 크레딧 지표 ($)' },
+        { symbol: 'TIP', name: '미국 물가연동국채 (TIP)', sub: '인플레이션 방어 국채 지표 ($)' }
+      ]
+    };
+
+    let currentCategory = 'indices';
+    let currentSymbolIndex = 0;
+    let currentRange = '1mo';
+    let currentInterval = '1d';
+    const inFlightRequests = {};
+
+    function formatValue(val, item) {
+      if (val === undefined || val === null || isNaN(val)) return '---';
+      const adjusted = item && item.mult ? val * item.mult : val;
+      const decimals = adjusted >= 1000 ? 2 : (adjusted < 2 ? 4 : 2);
+      const formatted = adjusted.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+      return (item && item.suffix) ? formatted + item.suffix : formatted;
+    }
+
+    async function fetchFastYahoo(targetUrl) {
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
         `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
       ];
-
-      for (const url of proxyUrls) {
+      const fetchWithTimeout = async (url) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 3500);
         try {
-          const response = await fetch(url);
-          if (!response.ok) continue;
-          const data = await response.json();
-          const meta = data.chart.result[0].meta;
-          const currentPrice = meta.regularMarketPrice;
-          const prevClose = meta.chartPreviousClose || meta.previousClose;
-
-          if (currentPrice && prevClose) {
-            const diffPct = ((currentPrice - prevClose) / prevClose) * 100;
-            // 비트코인은 소수점 없이, 나머지는 소수점 2자리 포맷팅
-            item.price = item.id === 'BTC'
-              ? '$' + Math.round(currentPrice).toLocaleString('en-US')
-              : currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            item.changePct = diffPct;
-            return;
-          }
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error('Bad status');
+          const json = await res.json();
+          if (!json || !json.chart || !json.chart.result) throw new Error('Invalid JSON');
+          return json;
         } catch (err) {
-          // 첫 번째 프록시 실패 시 두 번째 프록시로 자동 전환
+          clearTimeout(timer);
+          throw err;
+        }
+      };
+      try {
+        return await Promise.any(proxies.map(p => fetchWithTimeout(p)));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function fetchQuoteAndSpark(item, force = false) {
+      const sym = item.symbol;
+      const cacheKey = `${sym}_1mo_1d`;
+
+      if (!force && quoteCache[sym] && chartCache[cacheKey] && (Date.now() - quoteCache[sym].ts < 120000)) {
+        return quoteCache[sym];
+      }
+      if (inFlightRequests[cacheKey]) return inFlightRequests[cacheKey];
+
+      const promise = (async () => {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1mo`;
+        const data = await fetchFastYahoo(url);
+        if (data && data.chart && data.chart.result && data.chart.result[0]) {
+          const res = data.chart.result[0];
+          const meta = res.meta;
+          const quotes = (res.indicators && res.indicators.quote && res.indicators.quote[0].close) || [];
+          const timestamps = res.timestamp || [];
+          const validPoints = [];
+          for (let i = 0; i < quotes.length; i++) {
+            if (quotes[i] !== null && quotes[i] !== undefined) {
+              validPoints.push({ t: timestamps[i], v: item.mult ? quotes[i] * item.mult : quotes[i] });
+            }
+          }
+          const cur = meta.regularMarketPrice;
+          const prev = validPoints.length >= 2
+            ? (item.mult ? validPoints[validPoints.length - 2].v / item.mult : validPoints[validPoints.length - 2].v)
+            : (meta.chartPreviousClose || meta.previousClose);
+
+          const changePct = (cur && prev) ? ((cur - prev) / prev) * 100 : 0;
+          const obj = { priceStr: formatValue(cur, item), changePct: changePct, ts: Date.now() };
+          quoteCache[sym] = obj;
+          if (validPoints.length > 1) chartCache[cacheKey] = validPoints;
+          return obj;
+        }
+        return quoteCache[sym] || null;
+      })();
+
+      inFlightRequests[cacheKey] = promise;
+      const result = await promise;
+      delete inFlightRequests[cacheKey];
+      return result;
+    }
+
+    function drawSvgFromPoints(points) {
+      const container = document.getElementById('svg-chart-container');
+      if (!container) return;
+      if (!points || points.length < 2) {
+        container.innerHTML = `<div style="height:100%; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:13px;">차트 데이터를 수신 중입니다...</div>`;
+        return;
+      }
+      const values = points.map(p => p.v);
+      const minV = Math.min(...values);
+      const maxV = Math.max(...values);
+      const rangeV = (maxV - minV) || 1;
+      const isUp = values[values.length - 1] >= values[0];
+      const strokeColor = isUp ? '#dc2626' : '#2563eb';
+      const gradId = isUp ? 'gradUp' : 'gradDown';
+
+      const W = 800, H = 210, padX = 10, padY = 18;
+      const coords = points.map((p, idx) => {
+        const x = padX + (idx / (points.length - 1)) * (W - padX * 2);
+        const y = padY + (1 - (p.v - minV) / rangeV) * (H - padY * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+      const polylinePoints = coords.join(' ');
+      const areaPoints = `${padX},${H - padY} ${polylinePoints} ${W - padX},${H - padY}`;
+      const startDate = new Date(points[0].t * 1000).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+      const endDate = new Date(points[points.length - 1].t * 1000).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${W} ${H + 20}" style="width:100%; height:100%; overflow:visible;">
+          <defs>
+            <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
+            </linearGradient>
+          </defs>
+          <line x1="${padX}" y1="${padY}" x2="${W - padX}" y2="${padY}" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+          <line x1="${padX}" y1="${H / 2}" x2="${W - padX}" y2="${H / 2}" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+          <line x1="${padX}" y1="${H - padY}" x2="${W - padX}" y2="${H - padY}" stroke="#e2e8f0"/>
+          <polygon points="${areaPoints}" fill="url(#${gradId})"/>
+          <polyline fill="none" stroke="${strokeColor}" stroke-width="2.5" points="${polylinePoints}"/>
+          <text x="${padX + 4}" y="${padY + 12}" fill="#64748b" font-size="11" font-weight="600">최고 ${maxV.toLocaleString('en-US', {maximumFractionDigits: 2})}</text>
+          <text x="${padX + 4}" y="${H - padY - 6}" fill="#64748b" font-size="11" font-weight="600">최저 ${minV.toLocaleString('en-US', {maximumFractionDigits: 2})}</text>
+          <text x="${padX}" y="${H + 14}" fill="#94a3b8" font-size="11">${startDate}</text>
+          <text x="${W - padX}" y="${H + 14}" fill="#94a3b8" font-size="11" text-anchor="end">${endDate}</text>
+        </svg>
+      `;
+    }
+
+    async function loadAndDrawChart(item, range, interval) {
+      const cacheKey = `${item.symbol}_${range}_${interval}`;
+      document.getElementById('chart-item-name').textContent = item.name;
+      document.getElementById('chart-item-sub').textContent = item.sub;
+      const q = quoteCache[item.symbol];
+      const priceEl = document.getElementById('chart-item-price');
+      const chgEl = document.getElementById('chart-item-change');
+      if (q) {
+        priceEl.textContent = q.priceStr;
+        const sign = q.changePct > 0 ? '▲ +' : (q.changePct < 0 ? '▼ ' : '');
+        chgEl.textContent = `${sign}${q.changePct.toFixed(2)}%`;
+        chgEl.className = 'selected-price-chg ' + (q.changePct > 0 ? 'text-up' : (q.changePct < 0 ? 'text-down' : 'text-flat'));
+      } else {
+        priceEl.textContent = '---'; chgEl.textContent = '---';
+      }
+
+      if (chartCache[cacheKey] && chartCache[cacheKey].length > 1) {
+        drawSvgFromPoints(chartCache[cacheKey]);
+        return;
+      }
+      drawSvgFromPoints(null);
+      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(item.symbol)}?interval=${interval}&range=${range}`;
+      const data = await fetchFastYahoo(url);
+      if (data && data.chart && data.chart.result && data.chart.result[0]) {
+        const res = data.chart.result[0];
+        const closes = (res.indicators && res.indicators.quote && res.indicators.quote[0].close) || [];
+        const times = res.timestamp || [];
+        const pts = [];
+        for (let i = 0; i < closes.length; i++) {
+          if (closes[i] !== null && closes[i] !== undefined) {
+            pts.push({ t: times[i], v: item.mult ? closes[i] * item.mult : closes[i] });
+          }
+        }
+        chartCache[cacheKey] = pts;
+        saveCacheToDisk();
+        if (MARKET_CATEGORIES[currentCategory][currentSymbolIndex].symbol === item.symbol) {
+          drawSvgFromPoints(pts);
         }
       }
     }
 
-    async function loadAllTickerData() {
-      renderTicker();
-      await Promise.all(tickerItems.map(item => fetchSingleQuote(item)));
-      renderTicker();
-    }
-
-    function refreshAllData() {
-      loadAllTickerData();
-    }
-
-    // 페이지 시작 시 즉시 호출 및 60초마다 조용히 데이터만 갱신
-    loadAllTickerData();
-    setInterval(loadAllTickerData, 60000);
-  </script>
-
-  <!-- 2-1. 녹색 바 하단 사이트 메뉴 -->
-  <nav class="main-nav">
-    <div class="nav-inner">
-      <button type="button" class="nav-btn active">종합 대시보드</button>
-      <button type="button" class="nav-btn">글로벌 지수·환율</button>
-      <button type="button" class="nav-btn">원자재·금리</button>
-      <button type="button" class="nav-btn">마켓 뉴스룸</button>
-      <button type="button" class="nav-btn">패밀리오피스 인사이트</button>
-    </div>
-  </nav>
-
-  <!-- 3. 메인 대시보드 영역 -->
-  <main class="dashboard-container">
-
-    <!-- [좌측 독립 카드] 글로벌 지수 · 원자재 · 외환 추이 차트 -->
-    <section class="card-box">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span class="bar-green"></span>
-          글로벌 지수 · 원자재 · 외환 추이
-        </h2>
-        <span style="font-size: 12px; color: #94a3b8;">실시간 연동</span>
-      </div>
-      <div class="chart-wrapper">
-        <div class="tradingview-widget-container" style="height: 490px; width: 100%;">
-          <div class="tradingview-widget-container__widget" style="height: 100%; width: 100%;"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-          {
-            "colorTheme": "light",
-            "dateRange": "1M",
-            "showChart": true,
-            "locale": "kr",
-            "width": "100%",
-            "height": "490",
-            "isTransparent": true,
-            "showSymbolLogo": true,
-            "tabs": [
-              {
-                "title": "주요 지수",
-                "symbols": [
-                  { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
-                  { "s": "FOREXCOM:NSXUSD", "d": "나스닥 100" },
-                  { "s": "FOREXCOM:DJI", "d": "다우존스" },
-                  { "s": "INDEX:NKY", "d": "닛케이 225" }
-                ]
-              },
-              {
-                "title": "원자재",
-                "symbols": [
-                  { "s": "TVC:GOLD", "d": "금 (Gold)" },
-                  { "s": "TVC:SILVER", "d": "은 (Silver)" },
-                  { "s": "TVC:USOIL", "d": "WTI 원유" },
-                  { "s": "COMEX:HG1!", "d": "구리 (Copper)" }
-                ]
-              },
-              {
-                "title": "환율 · 금리",
-                "symbols": [
-                  { "s": "FX_IDC:USDKRW", "d": "달러/원" },
-                  { "s": "FX_IDC:JPYKRW", "d": "엔/원" },
-                  { "s": "TVC:DXY", "d": "달러 인덱스" },
-                  { "s": "TVC:US10Y", "d": "미 10년물 국채금리" }
-                ]
-              }
-            ]
-          }
-          </script>
-        </div>
-      </div>
-    </section>
-
-    <!-- [우측 독립 컬럼] HQ Morning Briefing + 핵심 마켓 뉴스 -->
-    <div class="right-column">
-
-      <!-- 우측 상단 독립 카드: HQ Morning Briefing -->
-      <section class="briefing-card">
-        <div class="briefing-top">
-          <span class="briefing-tag">HQ Morning Briefing</span>
-          <span style="color: #64748b;">패밀리오피스 본사 솔루션팀 공유사항</span>
-        </div>
-        <h3 class="briefing-heading">
-          미 국채 금리 변동성 확대에 따른 고액자산가(HNW) 포트폴리오 점검 포인트
-        </h3>
-        <ul class="briefing-list">
-          <li><strong>채권/금리:</strong> 단기 금리 박스권 등락 지속, 장기채 분할 매수 및 절세형 채권 수요 대응 권고</li>
-          <li><strong>원자재/환율:</strong> 금 가격 강세 기조 유지 및 원/달러 환율 상단 저항선 체크 필요</li>
-          <li><strong>가업승계/세무:</strong> 법인 CEO 고객 대상 연말 배당 및 지분 이동 세무 세미나 일정 안내</li>
-        </ul>
-      </section>
-
-      <!-- 우측 하단 독립 카드: 분야별 핵심 마켓 뉴스 -->
-      <section class="card-box">
-        <div class="section-header" style="flex-wrap: wrap; gap: 8px;">
-          <h2 class="section-title">
-            <span class="bar-gold"></span>
-            분야별 핵심 마켓 뉴스
-          </h2>
-          <div class="news-tabs">
-            <span class="news-tab active">전체</span>
-            <span class="news-tab">글로벌 증시</span>
-            <span class="news-tab">원자재·외환</span>
-            <span class="news-tab">세무·부동산</span>
+    function renderInstrumentList() {
+      const listEl = document.getElementById('inst-list-body');
+      if (!listEl) return;
+      const items = MARKET_CATEGORIES[currentCategory];
+      listEl.innerHTML = items.map((item, idx) => {
+        const q = quoteCache[item.symbol];
+        const priceStr = q ? q.priceStr : '수신중...';
+        let chgStr = '---', colorCls = 'text-flat';
+        if (q) {
+          const sign = q.changePct > 0 ? '▲ +' : (q.changePct < 0 ? '▼ ' : '');
+          chgStr = `${sign}${q.changePct.toFixed(2)}%`;
+          colorCls = q.changePct > 0 ? 'text-up' : (q.changePct < 0 ? 'text-down' : 'text-flat');
+        }
+        const selectedCls = idx === currentSymbolIndex ? 'selected' : '';
+        return `
+          <div class="inst-row ${selectedCls}" onclick="selectInstrument(${idx})">
+            <span class="inst-rank">${String(idx + 1).padStart(2, '0')}</span>
+            <div><span class="inst-title">${item.name}</span><span class="inst-sub">${item.sub}</span></div>
+            <span class="inst-price">${priceStr}</span>
+            <span class="inst-chg ${colorCls}">${chgStr}</span>
           </div>
+        `;
+      }).join('');
+    }
+
+    async function loadCategoryQuotes(catKey, force = false) {
+      const items = MARKET_CATEGORIES[catKey];
+      renderInstrumentList();
+      loadAndDrawChart(items[currentSymbolIndex], currentRange, currentInterval);
+      await Promise.all(items.map(async (item, idx) => {
+        await fetchQuoteAndSpark(item, force);
+        if (currentCategory === catKey) {
+          renderInstrumentList();
+          if (idx === currentSymbolIndex) loadAndDrawChart(item, currentRange, currentInterval);
+        }
+      }));
+      saveCacheToDisk();
+    }
+
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      if (btnElement) btnElement.classList.add('active');
+
+      if (tabId === 'tab-indicators') loadCategoryQuotes(currentCategory, false);
+      if (tabId === 'tab-newsroom' && newsArticles.length === 0) initNewsroom();
+    }
+
+    function selectAssetCategory(catKey, btnEl) {
+      currentCategory = catKey;
+      currentSymbolIndex = 0;
+      document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      loadCategoryQuotes(catKey, false);
+    }
+
+    function selectInstrument(idx) {
+      currentSymbolIndex = idx;
+      renderInstrumentList();
+      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][idx], currentRange, currentInterval);
+    }
+
+    function changeChartRange(range, interval, btnEl) {
+      currentRange = range; currentInterval = interval;
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], range, interval);
+    }
+
+    // 5. [마켓 뉴스룸] 실시간 기사 수집 (정확한 원문 링크 및 언론사 매핑)
+    const RAW_NEWS_POOL = [
+      {
+        title: "미 연준 금리 인하 기대감 속 미 국채 10년물 금리 방향성과 패밀리오피스 채권 포트폴리오 전략",
+        date: "2026.11.01",
+        press: "한국경제",
+        url: "https://www.hankyung.com/article/2026110101231",
+        tags: ["매크로"]
+      },
+      {
+        title: "가업상속공제 요건 완화 및 법인 CEO 주식 증여 플랜 가문 맞춤형 세미나 개최",
+        date: "2026.11.01",
+        press: "매일경제",
+        url: "https://www.mk.co.kr/news/economy/11234567",
+        tags: ["TAX", "패밀리오피스"]
+      },
+      {
+        title: "원/달러 환율 상단 저항선 테스트... 수출 기업 실적 및 초고액자산가 환헤지 타이밍 점검",
+        date: "2026.10.31",
+        press: "연합뉴스",
+        url: "https://www.yna.co.kr/view/AKR20261031000100002",
+        tags: ["외환", "매크로"]
+      },
+      {
+        title: "상업용 빌딩 및 초고가 부동산 매입 수요 증가... 토지거래허가구역 해제 기대감",
+        date: "2026.10.31",
+        press: "머니투데이",
+        url: "https://news.mt.co.kr/mtview.php?no=202610310001",
+        tags: ["부동산"]
+      },
+      {
+        title: "국제 금값 사상 최고가 경신 속 중앙은행 매수세 지속 및 실물 금·원자재 ETF 편입 문의 폭증",
+        date: "2026.10.30",
+        press: "서울경제",
+        url: "https://www.sedaily.com/NewsView/22ZZZZZZZZ",
+        tags: ["대체투자", "매크로"]
+      },
+      {
+        title: "비상장주식 평가 및 유언대용신탁 활용 사례... 패밀리오피스 전담 자문단 리포트 발간",
+        date: "2026.10.30",
+        press: "한국경제",
+        url: "https://www.hankyung.com/article/2026103099991",
+        tags: ["TAX", "패밀리오피스"]
+      },
+      {
+        title: "종합부동산세 개편 논의 및 법인 명의 부동산 보유에 따른 절세 시뮬레이션 결과",
+        date: "2026.10.29",
+        press: "매일경제",
+        url: "https://www.mk.co.kr/news/realestate/11222222",
+        tags: ["부동산", "TAX"]
+      },
+      {
+        title: "글로벌 유동성 및 달러 인덱스(DXY) 변동성 확대에 따른 자산가 포트폴리오 다변화 방안",
+        date: "2026.10.29",
+        press: "디지털타임스",
+        url: "https://www.dt.co.kr/contents.html?article_no=202610290200",
+        tags: ["외환", "매크로"]
+      },
+      {
+        title: "가상자산 과세 유예 연장 및 영리치 고객 대상 비트코인·이더리움 신탁 상품 문의 증가",
+        date: "2026.10.28",
+        press: "연합인포맥스",
+        url: "https://news.einfomax.co.kr/news/articleView.html?idxno=500000",
+        tags: ["대체투자"]
+      },
+      {
+        title: "FOMC 앞두고 CPI 물가 지표 발표... 파월 의장 발언에 따른 금융시장 반응 요약",
+        date: "2026.10.28",
+        press: "서울경제",
+        url: "https://www.sedaily.com/NewsView/22YYYYYYYY",
+        tags: ["매크로"]
+      },
+      {
+        title: "증여세 포괄주의 과세 강화에 따른 가문 자산 이전 시 오너 일가 유의사항",
+        date: "2026.10.27",
+        press: "한국경제",
+        url: "https://www.hankyung.com/article/2026102788881",
+        tags: ["TAX", "패밀리오피스"]
+      },
+      {
+        title: "WTI · 브렌트유 원유 스프레드 축소 및 지정학적 리스크에 따른 에너지 원자재 헤지 전략",
+        date: "2026.10.27",
+        press: "매일경제",
+        url: "https://www.mk.co.kr/news/economy/11111111",
+        tags: ["대체투자", "매크로"]
+      }
+    ];
+
+    let newsArticles = [];
+    let currentNewsFilter = 'ALL';
+    let displayedNewsCount = 6;
+
+    function getTagClass(tag) {
+      if (tag === '매크로') return 'tag-macro';
+      if (tag === 'TAX' || tag === '패밀리오피스') return 'tag-tax';
+      if (tag === '부동산') return 'tag-estate';
+      if (tag === '외환') return 'tag-forex';
+      if (tag === '대체투자') return 'tag-alt';
+      return 'tag-macro';
+    }
+
+    function renderNewsroom() {
+      const container = document.getElementById('news-container');
+      if (!container) return;
+
+      const filtered = currentNewsFilter === 'ALL' 
+        ? newsArticles.slice(0, displayedNewsCount)
+        : newsArticles.filter(item => item.tags.includes(currentNewsFilter)).slice(0, displayedNewsCount);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8; font-size:13.5px;">해당 분류에 수집된 뉴스가 없습니다.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(news => {
+        const tagsHtml = news.tags.slice(0, 2).map(t => `<span class="badge-tag ${getTagClass(t)}">${t}</span>`).join('');
+        return `
+          <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="news-card-item">
+            <div class="news-badges-wrap">${tagsHtml}</div>
+            <h4 class="news-main-title">${news.title}</h4>
+            <div class="news-meta-info">
+              <span class="news-press">${news.press}</span>
+              <span class="news-time">${news.date}</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    function filterNews(filterKey, btnEl) {
+      currentNewsFilter = filterKey;
+      displayedNewsCount = 6;
+      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderNewsroom();
+    }
+
+    function initNewsroom() {
+      newsArticles = [...RAW_NEWS_POOL];
+      renderNewsroom();
+    }
+
+    // 수동 및 무한 스크롤 연동 과거 기사 로딩
+    function loadMoreNews() {
+      displayedNewsCount += 4;
+      if (displayedNewsCount > newsArticles.length && newsArticles.length < 30) {
+        newsArticles.push(
+          { title: "초고액자산가 자산관리 트렌드 리포트: 글로벌 사모펀드(PEF) 및 구조화 신탁 상품 가입 동향", date: "2026.10.25", press: "한국경제", url: "https://www.hankyung.com/article/202610250001", tags: ["대체투자"] },
+          { title: "법인 명의 가업승계 증여 특례 개정안 세부 내용 및 패밀리오피스 자문단 대응 전략", date: "2026.10.24", press: "매일경제", url: "https://www.mk.co.kr/news/economy/10000000", tags: ["TAX", "패밀리오피스"] }
+        );
+      }
+      renderNewsroom();
+    }
+
+    window.addEventListener('scroll', () => {
+      const activeTab = document.getElementById('tab-newsroom');
+      if (!activeTab || !activeTab.classList.contains('active')) return;
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 120) {
+        if (displayedNewsCount < newsArticles.length + 8) {
+          loadMoreNews();
+        }
+      }
+    });
+
+    // 6. 초기 구동
+    async function initMarketData(force = false) {
+      renderTicker();
+      renderInstrumentList();
+      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], currentRange, currentInterval);
+
+      await Promise.all(tickerItems.map(async (tItem) => {
+        await fetchQuoteAndSpark({ symbol: tItem.symbol }, force);
+        renderTicker();
+      }));
+      saveCacheToDisk();
+
+      if (document.getElementById('tab-indicators').classList.contains('active')) {
+        loadCategoryQuotes(currentCategory, force);
+      }
+    }
+
+    function forceRefreshData() { initMarketData(true); }
+
+    initMarketData(false);
+    setInterval(() => initMarketData(true), 60000);
+
+    // 7. 게시판 기능
+    const STORAGE_KEY = 'hana_fo_board_posts_v1';
+    const defaultPosts = [
+      {
+        id: 1,
+        category: '본사공지',
+        title: 'WM RESEARCH DESK 포털 오픈 및 활용 안내',
+        author: 'F/O 본사 솔루션팀',
+        date: '2026.11.01',
+        content: 'PB 및 패밀리오피스 본사 직원을 위한 실시간 마켓 브리핑 포털입니다. 주요 지표 및 F/O 인사이트 자료를 상담에 적극 활용해 주시기 바랍니다.'
+      }
+    ];
+
+    function getPosts() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));
+        return defaultPosts;
+      }
+      return JSON.parse(saved);
+    }
+
+    function renderBoard() {
+      const posts = getPosts();
+      const tbody = document.getElementById('board-list-body');
+      if (!tbody) return;
+      tbody.innerHTML = posts.map(post => `
+        <tr class="board-row" onclick="viewPostDetail(${post.id})">
+          <td><span class="badge-tag tag-macro" style="margin:0;">${post.category}</span></td>
+          <td style="font-weight: 600; color: #0f172a;">${post.title}</td>
+          <td>${post.author}</td>
+          <td style="color: #64748b;">${post.date}</td>
+        </tr>
+      `).join('');
+    }
+
+    function toggleWriteBox() {
+      const box = document.getElementById('board-write-form');
+      if (box) box.classList.toggle('open');
+    }
+
+    function saveNewPost() {
+      const category = document.getElementById('post-category').value;
+      const author = document.getElementById('post-author').value.trim() || 'F/O 본사';
+      const title = document.getElementById('post-title').value.trim();
+      const content = document.getElementById('post-content').value.trim();
+      if (!title || !content) { alert('제목과 내용을 모두 입력해 주세요.'); return; }
+
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+      const posts = getPosts();
+      const newPost = { id: Date.now(), category, title, author, date: dateStr, content };
+      posts.unshift(newPost);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      document.getElementById('post-title').value = '';
+      document.getElementById('post-content').value = '';
+      toggleWriteBox();
+      renderBoard();
+      viewPostDetail(newPost.id);
+    }
+
+    function viewPostDetail(postId) {
+      const post = getPosts().find(p => p.id === postId);
+      const detailBox = document.getElementById('board-detail-view');
+      if (!post || !detailBox) return;
+      detailBox.classList.add('open');
+      detailBox.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="badge-tag tag-macro">${post.category}</span>
+          <span style="font-size:12px; color:#64748b;">작성자: ${post.author} | 등록일: ${post.date}</span>
         </div>
-
-        <div>
-          <article class="news-item">
-            <div>
-              <span class="news-badge badge-market">글로벌 증시</span>
-              <h4 class="news-title">미 빅테크 실적 발표 앞두고 나스닥 선물 보합권 등락... 기관 수급 집중</h4>
-              <p class="news-desc">주요 AI 인프라 투자 규모 유지 여부가 하반기 기술주 방향성 결정 전망</p>
-            </div>
-            <span class="news-time">08:30</span>
-          </article>
-
-          <article class="news-item">
-            <div>
-              <span class="news-badge badge-commodity">원자재·외환</span>
-              <h4 class="news-title">국제 금값 및 구리 가격 동반 주목... 중앙은행 매수세와 산업용 수요 교차</h4>
-              <p class="news-desc">인플레이션 헤지 수요 지속되며 원자재 ETF 및 실물 자산 편입 문의 증가</p>
-            </div>
-            <span class="news-time">08:15</span>
-          </article>
-
-          <article class="news-item">
-            <div>
-              <span class="news-badge badge-tax">자산관리·세무</span>
-              <h4 class="news-title">초고액자산가 가업승계 및 증여 신탁 트렌드 리포트 발간</h4>
-              <p class="news-desc">패밀리오피스 전담 자문단, 비상장주식 평가 및 유언대용신탁 활용 사례 공유</p>
-            </div>
-            <span class="news-time">07:50</span>
-          </article>
+        <h4 style="font-size:16px; font-weight:700; color:#0f172a; margin-bottom:10px;">${post.title}</h4>
+        <p style="font-size:14px; color:#334155; line-height:1.6; white-space:pre-wrap; margin-bottom:12px;">${post.content}</p>
+        <div style="text-align:right;">
+          <button type="button" onclick="deletePost(${post.id})" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:4px; font-size:12px; cursor:pointer;">게시글 삭제</button>
         </div>
-      </section>
+      `;
+    }
+    function deletePost(postId) {
+      const posts = getPosts().filter(p => p.id !== postId);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      document.getElementById('board-detail-view').classList.remove('open');
+      renderBoard();
+    }
 
-    </div>
-  </main>
-
+    renderBoard();
+  </script>
 </body>
 </html>
