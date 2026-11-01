@@ -5,7 +5,7 @@
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HANA Family Office | WM RESEARCH DESK</title>
-  <!-- 반응형 스타일링을 위한 Tailwind CSS 불러오기 -->
+  <!-- 반응형 스타일링을 위한 Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
@@ -28,34 +28,16 @@
     }
   </script>
   <style>
-    /* 모바일 메뉴 가로 스크롤바 숨김 처리 */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- 1. 상단 실시간 지수 / 환율 / 원자재 티커 바 (TradingView 무료 위젯) -->
-  <div class="w-full bg-slate-900 border-b border-slate-700">
-    <div class="tradingview-widget-container">
+  <!-- 1. 상단 실시간 티커 바 -->
+  <div class="w-full bg-slate-900 border-b border-slate-700 min-h-[46px]">
+    <div id="top-ticker-container" class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {
-        "symbols": [
-          { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
-          { "proName": "FOREXCOM:NSXUSD", "title": "나스닥 100" },
-          { "proName": "FX_IDC:USDKRW", "title": "원/달러 환율" },
-          { "proName": "TVC:GOLD", "title": "국제 금(Gold)" },
-          { "proName": "TVC:USOIL", "title": "WTI 원유" },
-          { "proName": "TVC:US10Y", "title": "미국채 10년물" }
-        ],
-        "showSymbolLogo": true,
-        "colorTheme": "dark",
-        "isTransparent": false,
-        "displayMode": "adaptive",
-        "locale": "kr"
-      }
-      </script>
     </div>
   </div>
 
@@ -67,62 +49,58 @@
         <h1 class="text-xl sm:text-2xl font-bold tracking-tight">WM RESEARCH DESK</h1>
       </div>
       <div class="flex items-center gap-3 text-sm text-slate-200">
-        <!-- 날짜 표시 영역: 기준 : YYYY.MM.DD(SUN) -->
-        <span id="current-date" class="font-medium tracking-wide"></span>
-        <!-- 수동 새로고침 버튼 (자동 새로고침 제거됨) -->
-        <button onclick="location.reload()" class="px-3 py-1.5 bg-brand-dark hover:bg-opacity-80 border border-brand-gold/40 rounded text-xs text-brand-gold transition">
+        <!-- 날짜 표시 영역: 스크립트 로딩 전에도 기본 표시되도록 초기값 내장 -->
+        <span id="current-date" class="font-medium tracking-wide">기준 : 2026.11.01(SUN)</span>
+        <button type="button" onclick="location.reload()" class="px-3 py-1.5 bg-brand-dark hover:bg-opacity-80 border border-brand-gold/40 rounded text-xs text-brand-gold transition">
           데이터 새로고침
         </button>
       </div>
     </div>
   </header>
 
-  <!-- 2-1. 녹색 바 하단 사이트 메뉴 (Navigation Bar) -->
+  <!-- 헤더 직후 날짜 즉시 계산 실행 (하단 코드 영향 받지 않도록 상단 배치) -->
+  <script>
+    (function() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      const dayOfWeek = days[now.getDay()];
+      const dateEl = document.getElementById('current-date');
+      if (dateEl) {
+        dateEl.textContent = '기준 : ' + year + '.' + month + '.' + day + '(' + dayOfWeek + ')';
+      }
+    })();
+  </script>
+
+  <!-- 2-1. 녹색 바 하단 사이트 메뉴 -->
   <nav class="bg-brand-dark text-slate-200 border-t border-brand-gold/20 shadow-md sticky top-0 z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ul class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 text-xs sm:text-sm font-medium whitespace-nowrap">
         <li>
-          <a href="#" class="px-3.5 py-1.5 rounded-md bg-brand-gold text-brand-dark font-bold transition block">
+          <button type="button" class="px-3.5 py-1.5 rounded-md bg-brand-gold text-brand-dark font-bold transition block">
             종합 대시보드
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
             글로벌 지수·환율
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
             원자재·금리
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
             마켓 뉴스룸
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
             패밀리오피스 인사이트
-          </a>
+          </button>
         </li>
       </ul>
-    </div>
-  </nav>
-
-  <!-- 3. 메인 반응형 대시보드 영역 (모바일 1단 / 태블릿·폴드 2단 / PC 3단) -->
-  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
-
-    <!-- 좌측 영역: 주요 지수 및 원자재 종합 차트 (5칸 차지) -->
-    <section class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col h-[560px]">
-      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-        <h2 class="font-bold text-slate-800 flex items-center gap-2">
-          <span class="w-2 h-5 bg-brand-green rounded-sm"></span>
-          글로벌 지수 · 원자재 · 외환 추이
-        </h2>
-        <span class="text-xs text-slate-400">실시간 연동</span>
-      </div>
-      <div class="flex-grow w-full">
-        <div class="tradingview-widget-container h-full w-full">
-          <div class="tradingview-widget-container__widget h-full w-full"></div>
-          <script type="text/javascript" src="
