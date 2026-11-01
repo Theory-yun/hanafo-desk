@@ -5,267 +5,492 @@
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HANA Family Office | WM RESEARCH DESK</title>
-  <!-- 반응형 스타일링을 위한 Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              green: '#004B49',
-              dark: '#002E2C',
-              gold: '#C5A059',
-              lightGold: '#F5EFE6'
-            }
-          },
-          fontFamily: {
-            sans: ['Pretendard', 'sans-serif'],
-          }
-        }
+  <style>
+    /* 외부 스크립트 오류 없이 100% 고정 작동하는 자체 내장형 스타일 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 상단 실시간 티커 영역 */
+    .ticker-bar {
+      width: 100%;
+      background-color: #0f172a;
+      border-bottom: 1px solid #334155;
+      min-height: 46px;
+      overflow: hidden;
+    }
+
+    /* 2. 메인 녹색 헤더 */
+    .main-header {
+      background-color: #004B49;
+      color: #ffffff;
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+       flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand-badge {
+      background-color: #C5A059;
+      color: #002E2C;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .brand-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #e2e8f0;
+    }
+    .btn-refresh {
+      background-color: #002E2C;
+      color: #C5A059;
+      border: 1px solid rgba(197, 160, 89, 0.4);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-refresh:hover {
+      background-color: #003836;
+    }
+
+    /* 2-1. 녹색 바 하단 사이트 메뉴 */
+    .main-nav {
+      background-color: #002E2C;
+      border-top: 1px solid rgba(197, 160, 89, 0.25);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 8px 24px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-btn {
+      background: transparent;
+      color: #cbd5e1;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .nav-btn:hover {
+      background-color: #004B49;
+      color: #ffffff;
+    }
+    .nav-btn.active {
+      background-color: #C5A059;
+      color: #002E2C;
+      font-weight: 700;
+    }
+
+    /* 3. 메인 대시보드 레이아웃 (절대 겹치지 않는 독립 그리드) */
+    .dashboard-container {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (min-width: 1024px) {
+      .dashboard-container {
+        grid-template-columns: 5fr 7fr;
       }
     }
-  </script>
-  <style>
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* 공통 카드 박스 (영역 침범 완벽 차단) */
+    .card-box {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      position: relative;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bar-green {
+      width: 6px;
+      height: 18px;
+      background-color: #004B49;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .bar-gold {
+      width: 6px;
+      height: 18px;
+      background-color: #C5A059;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    /* 좌측 차트 전용 고정 컨테이너 */
+    .chart-wrapper {
+      width: 100%;
+      height: 490px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 우측 컬럼 (브리핑 + 뉴스 수직 배치) */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* HQ Morning Briefing 전용 카드 */
+    .briefing-card {
+      background-color: #faf6ee;
+      border: 1px solid rgba(197, 160, 89, 0.45);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+    .briefing-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .briefing-tag {
+      font-weight: 700;
+      color: #004B49;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .briefing-heading {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .briefing-list {
+      padding-left: 18px;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.7;
+    }
+
+    /* 뉴스 리스트 스타일 */
+    .news-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .news-tab {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: #f1f5f9;
+      color: #475569;
+      font-weight: 500;
+    }
+    .news-tab.active {
+      background-color: #004B49;
+      color: #ffffff;
+    }
+    .news-item {
+      padding: 14px 8px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .news-item:last-child {
+      border-bottom: none;
+    }
+    .news-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .badge-market { background-color: #ecfdf5; color: #004B49; }
+    .badge-commodity { background-color: #fffbeb; color: #92400e; }
+    .badge-tax { background-color: #f1f5f9; color: #334155; }
+    .news-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .news-desc {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .news-time {
+      font-size: 12px;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+<body>
 
   <!-- 1. 상단 실시간 티커 바 -->
-  <div class="w-full bg-slate-900 border-b border-slate-700 min-h-[46px]">
-    <div id="top-ticker-container" class="tradingview-widget-container">
+  <div class="ticker-bar">
+    <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+          { "proName": "FOREXCOM:NSXUSD", "title": "나스닥 100" },
+          { "proName": "FX_IDC:USDKRW", "title": "원/달러 환율" },
+          { "proName": "TVC:GOLD", "title": "국제 금(Gold)" },
+          { "proName": "TVC:USOIL", "title": "WTI 원유" },
+          { "proName": "TVC:US10Y", "title": "미국채 10년물" }
+        ],
+        "showSymbolLogo": true,
+        "colorTheme": "dark",
+        "isTransparent": false,
+        "displayMode": "adaptive",
+        "locale": "kr"
+      }
+      </script>
     </div>
   </div>
 
   <!-- 2. 메인 녹색 헤더 -->
-  <header class="bg-brand-green text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-      <div class="flex items-center gap-3">
-        <span class="px-2.5 py-1 bg-brand-gold text-brand-dark font-bold text-xs rounded tracking-wider">HANA Family Office</span>
-        <h1 class="text-xl sm:text-2xl font-bold tracking-tight">WM RESEARCH DESK</h1>
+  <header class="main-header">
+    <div class="header-inner">
+      <div class="brand-title-group">
+        <span class="brand-badge">HANA Family Office</span>
+        <h1 class="brand-title">WM RESEARCH DESK</h1>
       </div>
-      <div class="flex items-center gap-3 text-sm text-slate-200">
-        <!-- 날짜 표시 영역: 스크립트 로딩 전에도 기본 표시되도록 초기값 내장 -->
-        <span id="current-date" class="font-medium tracking-wide">기준 : 2026.11.01(SUN)</span>
-        <button type="button" onclick="location.reload()" class="px-3 py-1.5 bg-brand-dark hover:bg-opacity-80 border border-brand-gold/40 rounded text-xs text-brand-gold transition">
-          데이터 새로고침
-        </button>
+      <div class="header-controls">
+        <span id="current-date">기준 : 2026.11.01(SUN)</span>
+        <button type="button" onclick="location.reload()" class="btn-refresh">데이터 새로고침</button>
       </div>
     </div>
   </header>
 
-  <!-- 헤더 직후 날짜 즉시 계산 실행 (하단 코드 영향 받지 않도록 상단 배치) -->
+  <!-- 날짜 즉시 업데이트 스크립트 -->
   <script>
     (function() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-      const dayOfWeek = days[now.getDay()];
-      const dateEl = document.getElementById('current-date');
-      if (dateEl) {
-        dateEl.textContent = '기준 : ' + year + '.' + month + '.' + day + '(' + dayOfWeek + ')';
+      var now = new Date();
+      var year = now.getFullYear();
+      var month = String(now.getMonth() + 1).padStart(2, '0');
+      var day = String(now.getDate()).padStart(2, '0');
+      var days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      var el = document.getElementById('current-date');
+      if (el) {
+        el.textContent = '기준 : ' + year + '.' + month + '.' + day + '(' + days[now.getDay()] + ')';
       }
     })();
   </script>
 
   <!-- 2-1. 녹색 바 하단 사이트 메뉴 -->
-  <nav class="bg-brand-dark text-slate-200 border-t border-brand-gold/20 shadow-md sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <ul class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 text-xs sm:text-sm font-medium whitespace-nowrap">
-        <li>
-          <button type="button" class="px-3.5 py-1.5 rounded-md bg-brand-gold text-brand-dark font-bold transition block">
-            종합 대시보드
-          </button>
-        </li>
-        <li>
-          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
-            글로벌 지수·환율
-          </button>
-        </li>
-        <li>
-          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
-            원자재·금리
-          </button>
-        </li>
-        <li>
-          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
-            마켓 뉴스룸
-          </button>
-        </li>
-        <li>
-          <button type="button" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
-            패밀리오피스 인사이트
-          </button>
-        </li>
-      </ul>
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <button type="button" class="nav-btn active">종합 대시보드</button>
+      <button type="button" class="nav-btn">글로벌 지수·환율</button>
+      <button type="button" class="nav-btn">원자재·금리</button>
+      <button type="button" class="nav-btn">마켓 뉴스룸</button>
+      <button type="button" class="nav-btn">패밀리오피스 인사이트</button>
     </div>
   </nav>
 
-  <!-- 3. 메인 반응형 대시보드 영역 -->
-  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
+  <!-- 3. 메인 대시보드 영역 (좌측 차트 박스와 우측 브리핑 박스 완전 분리) -->
+  <main class="dashboard-container">
 
-    <!-- 좌측 영역: 주요 지수 및 원자재 종합 차트 (높이 490px 명시적 고정) -->
-    <section class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col">
-      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-        <h2 class="font-bold text-slate-800 flex items-center gap-2">
-          <span class="w-2 h-5 bg-brand-green rounded-sm"></span>
+    <!-- [좌측 독립 카드] 글로벌 지수 · 원자재 · 외환 추이 차트 -->
+    <section class="card-box">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="bar-green"></span>
           글로벌 지수 · 원자재 · 외환 추이
         </h2>
-        <span class="text-xs text-slate-400">실시간 연동</span>
+        <span style="font-size: 12px; color: #94a3b8;">실시간 연동</span>
       </div>
-      <div id="market-overview-container" class="w-full h-[490px]">
-        <div class="tradingview-widget-container__widget w-full h-full"></div>
+      <div class="chart-wrapper">
+        <div class="tradingview-widget-container" style="height: 490px; width: 100%;">
+          <div class="tradingview-widget-container__widget" style="height: 100%; width: 100%;"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+          {
+            "colorTheme": "light",
+            "dateRange": "1M",
+            "showChart": true,
+            "locale": "kr",
+            "width": "100%",
+            "height": "490",
+            "isTransparent": true,
+            "showSymbolLogo": true,
+            "tabs": [
+              {
+                "title": "주요 지수",
+                "symbols": [
+                  { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
+                  { "s": "FOREXCOM:NSXUSD", "d": "나스닥 100" },
+                  { "s": "FOREXCOM:DJI", "d": "다우존스" },
+                  { "s": "INDEX:NKY", "d": "닛케이 225" }
+                ]
+              },
+              {
+                "title": "원자재",
+                "symbols": [
+                  { "s": "TVC:GOLD", "d": "금 (Gold)" },
+                  { "s": "TVC:SILVER", "d": "은 (Silver)" },
+                  { "s": "TVC:USOIL", "d": "WTI 원유" },
+                  { "s": "COMEX:HG1!", "d": "구리 (Copper)" }
+                ]
+              },
+              {
+                "title": "환율 · 금리",
+                "symbols": [
+                  { "s": "FX_IDC:USDKRW", "d": "달러/원" },
+                  { "s": "FX_IDC:JPYKRW", "d": "엔/원" },
+                  { "s": "TVC:DXY", "d": "달러 인덱스" },
+                  { "s": "TVC:US10Y", "d": "미 10년물 국채금리" }
+                ]
+              }
+            ]
+          }
+          </script>
+        </div>
       </div>
     </section>
 
-    <!-- 우측 영역: 본사 모닝 브리핑 및 핵심 뉴스 큐레이션 -->
-    <section class="lg:col-span-7 flex flex-col gap-6">
+    <!-- [우측 독립 컬럼] HQ Morning Briefing + 핵심 마켓 뉴스 -->
+    <div class="right-column">
 
-      <!-- 상단 카드: 패밀리오피스 & PB 모닝 하이라이트 -->
-      <div class="bg-brand-lightGold/60 border border-brand-gold/40 rounded-xl p-5 shadow-sm">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-bold text-brand-green uppercase tracking-wider">HQ Morning Briefing</span>
-          <span class="text-xs text-slate-500">패밀리오피스 본사 솔루션팀 공유사항</span>
+      <!-- 우측 상단 독립 카드: HQ Morning Briefing -->
+      <section class="briefing-card">
+        <div class="briefing-top">
+          <span class="briefing-tag">HQ Morning Briefing</span>
+          <span style="color: #64748b;">패밀리오피스 본사 솔루션팀 공유사항</span>
         </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">미 국채 금리 변동성 확대에 따른 고액자산가(HNW) 포트폴리오 점검 포인트</h3>
-        <ul class="text-sm text-slate-700 space-y-1.5 list-disc list-inside">
+        <h3 class="briefing-heading">
+          미 국채 금리 변동성 확대에 따른 고액자산가(HNW) 포트폴리오 점검 포인트
+        </h3>
+        <ul class="briefing-list">
           <li><strong>채권/금리:</strong> 단기 금리 박스권 등락 지속, 장기채 분할 매수 및 절세형 채권 수요 대응 권고</li>
           <li><strong>원자재/환율:</strong> 금 가격 강세 기조 유지 및 원/달러 환율 상단 저항선 체크 필요</li>
           <li><strong>가업승계/세무:</strong> 법인 CEO 고객 대상 연말 배당 및 지분 이동 세무 세미나 일정 안내</li>
         </ul>
-      </div>
+      </section>
 
-      <!-- 하단 카드: 분야별 실시간 핵심 뉴스 브리핑 -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex-grow">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
-          <h2 class="font-bold text-slate-800 flex items-center gap-2">
-            <span class="w-2 h-5 bg-brand-gold rounded-sm"></span>
+      <!-- 우측 하단 독립 카드: 분야별 핵심 마켓 뉴스 -->
+      <section class="card-box">
+        <div class="section-header" style="flex-wrap: wrap; gap: 8px;">
+          <h2 class="section-title">
+            <span class="bar-gold"></span>
             분야별 핵심 마켓 뉴스
           </h2>
-          <div class="flex gap-1.5 text-xs">
-            <span class="px-2.5 py-1 bg-brand-green text-white rounded-full font-medium">전체</span>
-            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">글로벌 증시</span>
-            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">원자재·외환</span>
-            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">세무·부동산</span>
+          <div class="news-tabs">
+            <span class="news-tab active">전체</span>
+            <span class="news-tab">글로벌 증시</span>
+            <span class="news-tab">원자재·외환</span>
+            <span class="news-tab">세무·부동산</span>
           </div>
         </div>
 
-        <div class="divide-y divide-slate-100 text-sm">
-          <article class="py-3 flex justify-between items-start gap-4 hover:bg-slate-50 px-2 rounded transition">
+        <div>
+          <article class="news-item">
             <div>
-              <span class="inline-block px-2 py-0.5 bg-emerald-50 text-brand-green text-xs font-semibold rounded mb-1">글로벌 증시</span>
-              <h4 class="font-semibold text-slate-800 hover:text-brand-green cursor-pointer">미 빅테크 실적 발표 앞두고 나스닥 선물 보합권 등락... 기관 수급 집중</h4>
-              <p class="text-xs text-slate-500 mt-0.5">주요 AI 인프라 투자 규모 유지 여부가 하반기 기술주 방향성 결정 전망</p>
+              <span class="news-badge badge-market">글로벌 증시</span>
+              <h4 class="news-title">미 빅테크 실적 발표 앞두고 나스닥 선물 보합권 등락... 기관 수급 집중</h4>
+              <p class="news-desc">주요 AI 인프라 투자 규모 유지 여부가 하반기 기술주 방향성 결정 전망</p>
             </div>
-            <span class="text-xs text-slate-400 whitespace-nowrap">08:30</span>
+            <span class="news-time">08:30</span>
           </article>
 
-          <article class="py-3 flex justify-between items-start gap-4 hover:bg-slate-50 px-2 rounded transition">
+          <article class="news-item">
             <div>
-              <span class="inline-block px-2 py-0.5 bg-amber-50 text-amber-800 text-xs font-semibold rounded mb-1">원자재·외환</span>
-              <h4 class="font-semibold text-slate-800 hover:text-brand-green cursor-pointer">국제 금값 및 구리 가격 동반 주목... 중앙은행 매수세와 산업용 수요 교차</h4>
-              <p class="text-xs text-slate-500 mt-0.5">인플레이션 헤지 수요 지속되며 원자재 ETF 및 실물 자산 편입 문의 증가</p>
+              <span class="news-badge badge-commodity">원자재·외환</span>
+              <h4 class="news-title">국제 금값 및 구리 가격 동반 주목... 중앙은행 매수세와 산업용 수요 교차</h4>
+              <p class="news-desc">인플레이션 헤지 수요 지속되며 원자재 ETF 및 실물 자산 편입 문의 증가</p>
             </div>
-            <span class="text-xs text-slate-400 whitespace-nowrap">08:15</span>
+            <span class="news-time">08:15</span>
           </article>
 
-          <article class="py-3 flex justify-between items-start gap-4 hover:bg-slate-50 px-2 rounded transition">
+          <article class="news-item">
             <div>
-              <span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded mb-1">자산관리·세무</span>
-              <h4 class="font-semibold text-slate-800 hover:text-brand-green cursor-pointer">초고액자산가 가업승계 및 증여 신탁 트렌드 리포트 발간</h4>
-              <p class="text-xs text-slate-500 mt-0.5">패밀리오피스 전담 자문단, 비상장주식 평가 및 유언대용신탁 활용 사례 공유</p>
+              <span class="news-badge badge-tax">자산관리·세무</span>
+              <h4 class="news-title">초고액자산가 가업승계 및 증여 신탁 트렌드 리포트 발간</h4>
+              <p class="news-desc">패밀리오피스 전담 자문단, 비상장주식 평가 및 유언대용신탁 활용 사례 공유</p>
             </div>
-            <span class="text-xs text-slate-400 whitespace-nowrap">07:50</span>
+            <span class="news-time">07:50</span>
           </article>
         </div>
-      </div>
+      </section>
 
-    </section>
+    </div>
   </main>
 
-  <!-- 4. 외부 금융 위젯 안전 로딩 스크립트 -->
-  <script>
-    window.addEventListener('DOMContentLoaded', function() {
-      // 상단 티커 바 로드
-      const tickerContainer = document.getElementById('top-ticker-container');
-      if (tickerContainer) {
-        const tickerScript = document.createElement('script');
-        tickerScript.type = 'text/javascript';
-        tickerScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
-        tickerScript.async = true;
-        tickerScript.text = JSON.stringify({
-          "symbols": [
-            { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
-            { "proName": "FOREXCOM:NSXUSD", "title": "나스닥 100" },
-            { "proName": "FX_IDC:USDKRW", "title": "원/달러 환율" },
-            { "proName": "TVC:GOLD", "title": "국제 금(Gold)" },
-            { "proName": "TVC:USOIL", "title": "WTI 원유" },
-            { "proName": "TVC:US10Y", "title": "미국채 10년물" }
-          ],
-          "showSymbolLogo": true,
-          "colorTheme": "dark",
-          "isTransparent": false,
-          "displayMode": "adaptive",
-          "locale": "kr"
-        });
-        tickerContainer.appendChild(tickerScript);
-      }
-
-      // 좌측 종합 마켓 차트 로드 (높이 490 명시)
-      const overviewContainer = document.getElementById('market-overview-container');
-      if (overviewContainer) {
-        const overviewScript = document.createElement('script');
-        overviewScript.type = 'text/javascript';
-        overviewScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
-        overviewScript.async = true;
-        overviewScript.text = JSON.stringify({
-          "colorTheme": "light",
-          "dateRange": "1M",
-          "showChart": true,
-          "locale": "kr",
-          "width": "100%",
-          "height": 490,
-          "isTransparent": true,
-          "showSymbolLogo": true,
-          "tabs": [
-            {
-              "title": "주요 지수",
-              "symbols": [
-                { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
-                { "s": "FOREXCOM:NSXUSD", "d": "나스닥 100" },
-                { "s": "FOREXCOM:DJI", "d": "다우존스" },
-                { "s": "INDEX:NKY", "d": "닛케이 225" }
-              ]
-            },
-            {
-              "title": "원자재",
-              "symbols": [
-                { "s": "TVC:GOLD", "d": "금 (Gold)" },
-                { "s": "TVC:SILVER", "d": "은 (Silver)" },
-                { "s": "TVC:USOIL", "d": "WTI 원유" },
-                { "s": "COMEX:HG1!", "d": "구리 (Copper)" }
-              ]
-            },
-            {
-              "title": "환율 · 금리",
-              "symbols": [
-                { "s": "FX_IDC:USDKRW", "d": "달러/원" },
-                { "s": "FX_IDC:JPYKRW", "d": "엔/원" },
-                { "s": "TVC:DXY", "d": "달러 인덱스" },
-                { "s": "TVC:US10Y", "d": "미 10년물 국채금리" }
-              ]
-            }
-          ]
-        });
-        overviewContainer.appendChild(overviewScript);
-      }
-    });
-  </script>
 </body>
 </html>
