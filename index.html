@@ -69,10 +69,9 @@
       <div class="flex items-center gap-3 text-sm text-slate-200">
         <!-- 날짜 표시 영역: 기준 : YYYY.MM.DD(SUN) -->
         <span id="current-date" class="font-medium tracking-wide"></span>
-        <!-- 수동 새로고침 및 5분 자동 새로고침 카운트다운 버튼 -->
-        <button onclick="location.reload()" class="px-3 py-1.5 bg-brand-dark hover:bg-opacity-80 border border-brand-gold/40 rounded text-xs text-brand-gold transition flex items-center gap-1.5">
-          <span>데이터 새로고침</span>
-          <span id="refresh-timer" class="text-[11px] text-slate-300 font-mono">(05:00)</span>
+        <!-- 수동 새로고침 버튼 (자동 새로고침 제거됨) -->
+        <button onclick="location.reload()" class="px-3 py-1.5 bg-brand-dark hover:bg-opacity-80 border border-brand-gold/40 rounded text-xs text-brand-gold transition">
+          데이터 새로고침
         </button>
       </div>
     </div>
@@ -82,6 +81,48 @@
   <nav class="bg-brand-dark text-slate-200 border-t border-brand-gold/20 shadow-md sticky top-0 z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ul class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 text-xs sm:text-sm font-medium whitespace-nowrap">
-        <!-- 현재 선택된 활성 메뉴 스타일 -->
         <li>
-          <a href="#" class="px-3.5 py-1.5 rounded-md bg-brand-gold text-
+          <a href="#" class="px-3.5 py-1.5 rounded-md bg-brand-gold text-brand-dark font-bold transition block">
+            종합 대시보드
+          </a>
+        </li>
+        <li>
+          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+            글로벌 지수·환율
+          </a>
+        </li>
+        <li>
+          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+            원자재·금리
+          </a>
+        </li>
+        <li>
+          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+            마켓 뉴스룸
+          </a>
+        </li>
+        <li>
+          <a href="#" class="px-3.5 py-1.5 rounded-md hover:bg-brand-green hover:text-white transition block">
+            패밀리오피스 인사이트
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 3. 메인 반응형 대시보드 영역 (모바일 1단 / 태블릿·폴드 2단 / PC 3단) -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
+
+    <!-- 좌측 영역: 주요 지수 및 원자재 종합 차트 (5칸 차지) -->
+    <section class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col h-[560px]">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+        <h2 class="font-bold text-slate-800 flex items-center gap-2">
+          <span class="w-2 h-5 bg-brand-green rounded-sm"></span>
+          글로벌 지수 · 원자재 · 외환 추이
+        </h2>
+        <span class="text-xs text-slate-400">실시간 연동</span>
+      </div>
+      <div class="flex-grow w-full">
+        <div class="tradingview-widget-container h-full w-full">
+          <div class="tradingview-widget-container__widget h-full w-full"></div>
+          <script type="text/javascript" src="
