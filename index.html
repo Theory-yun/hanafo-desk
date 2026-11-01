@@ -104,3 +104,168 @@
           </button>
         </li>
       </ul>
+    </div>
+  </nav>
+
+  <!-- 3. 메인 반응형 대시보드 영역 -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
+
+    <!-- 좌측 영역: 주요 지수 및 원자재 종합 차트 (높이 490px 명시적 고정) -->
+    <section class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+        <h2 class="font-bold text-slate-800 flex items-center gap-2">
+          <span class="w-2 h-5 bg-brand-green rounded-sm"></span>
+          글로벌 지수 · 원자재 · 외환 추이
+        </h2>
+        <span class="text-xs text-slate-400">실시간 연동</span>
+      </div>
+      <div id="market-overview-container" class="w-full h-[490px]">
+        <div class="tradingview-widget-container__widget w-full h-full"></div>
+      </div>
+    </section>
+
+    <!-- 우측 영역: 본사 모닝 브리핑 및 핵심 뉴스 큐레이션 -->
+    <section class="lg:col-span-7 flex flex-col gap-6">
+
+      <!-- 상단 카드: 패밀리오피스 & PB 모닝 하이라이트 -->
+      <div class="bg-brand-lightGold/60 border border-brand-gold/40 rounded-xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-brand-green uppercase tracking-wider">HQ Morning Briefing</span>
+          <span class="text-xs text-slate-500">패밀리오피스 본사 솔루션팀 공유사항</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">미 국채 금리 변동성 확대에 따른 고액자산가(HNW) 포트폴리오 점검 포인트</h3>
+        <ul class="text-sm text-slate-700 space-y-1.5 list-disc list-inside">
+          <li><strong>채권/금리:</strong> 단기 금리 박스권 등락 지속, 장기채 분할 매수 및 절세형 채권 수요 대응 권고</li>
+          <li><strong>원자재/환율:</strong> 금 가격 강세 기조 유지 및 원/달러 환율 상단 저항선 체크 필요</li>
+          <li><strong>가업승계/세무:</strong> 법인 CEO 고객 대상 연말 배당 및 지분 이동 세무 세미나 일정 안내</li>
+        </ul>
+      </div>
+
+      <!-- 하단 카드: 분야별 실시간 핵심 뉴스 브리핑 -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex-grow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+          <h2 class="font-bold text-slate-800 flex items-center gap-2">
+            <span class="w-2 h-5 bg-brand-gold rounded-sm"></span>
+            분야별 핵심 마켓 뉴스
+          </h2>
+          <div class="flex gap-1.5 text-xs">
+            <span class="px-2.5 py-1 bg-brand-green text-white rounded-full font-medium">전체</span>
+            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">글로벌 증시</span>
+            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">원자재·외환</span>
+            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">세무·부동산</span>
+          </div>
+        </div>
+
+        <div class="divide-y divide-slate-100 text-sm">
+          <article class="py-3 flex justify-between items-start gap-4 hover:bg-slate-50 px-2 rounded transition">
+            <div>
+              <span class="inline-block px-2 py-0.5 bg-emerald-50 text-brand-green text-xs font-semibold rounded mb-1">글로벌 증시</span>
+              <h4 class="font-semibold text-slate-800 hover:text-brand-green cursor-pointer">미 빅테크 실적 발표 앞두고 나스닥 선물 보합권 등락... 기관 수급 집중</h4>
+              <p class="text-xs text-slate-500 mt-0.5">주요 AI 인프라 투자 규모 유지 여부가 하반기 기술주 방향성 결정 전망</p>
+            </div>
+            <span class="text-xs text-slate-400 whitespace-nowrap">08:30</span>
+          </article>
+
+          <article class="py-3 flex justify-between items-start gap-4 hover:bg-slate-50 px-2 rounded transition">
+            <div>
+              <span class="inline-block px-2 py-0.5 bg-amber-50 text-amber-800 text-xs font-semibold rounded mb-1">원자재·외환</span>
+              <h4 class="font-semibold text-slate-800 hover:text-brand-green cursor-pointer">국제 금값 및 구리 가격 동반 주목... 중앙은행 매수세와 산업용 수요 교차</h4>
+              <p class="text-xs text-slate-500 mt-0.5">인플레이션 헤지 수요 지속되며 원자재 ETF 및 실물 자산 편입 문의 증가</p>
+            </div>
+            <span class="text-xs text-slate-400 whitespace-nowrap">08:15</span>
+          </article>
+
+          <article class="py-3 flex justify-between items-start gap-4 hover:bg-slate-50 px-2 rounded transition">
+            <div>
+              <span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded mb-1">자산관리·세무</span>
+              <h4 class="font-semibold text-slate-800 hover:text-brand-green cursor-pointer">초고액자산가 가업승계 및 증여 신탁 트렌드 리포트 발간</h4>
+              <p class="text-xs text-slate-500 mt-0.5">패밀리오피스 전담 자문단, 비상장주식 평가 및 유언대용신탁 활용 사례 공유</p>
+            </div>
+            <span class="text-xs text-slate-400 whitespace-nowrap">07:50</span>
+          </article>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- 4. 외부 금융 위젯 안전 로딩 스크립트 -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // 상단 티커 바 로드
+      const tickerContainer = document.getElementById('top-ticker-container');
+      if (tickerContainer) {
+        const tickerScript = document.createElement('script');
+        tickerScript.type = 'text/javascript';
+        tickerScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+        tickerScript.async = true;
+        tickerScript.text = JSON.stringify({
+          "symbols": [
+            { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+            { "proName": "FOREXCOM:NSXUSD", "title": "나스닥 100" },
+            { "proName": "FX_IDC:USDKRW", "title": "원/달러 환율" },
+            { "proName": "TVC:GOLD", "title": "국제 금(Gold)" },
+            { "proName": "TVC:USOIL", "title": "WTI 원유" },
+            { "proName": "TVC:US10Y", "title": "미국채 10년물" }
+          ],
+          "showSymbolLogo": true,
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "displayMode": "adaptive",
+          "locale": "kr"
+        });
+        tickerContainer.appendChild(tickerScript);
+      }
+
+      // 좌측 종합 마켓 차트 로드 (높이 490 명시)
+      const overviewContainer = document.getElementById('market-overview-container');
+      if (overviewContainer) {
+        const overviewScript = document.createElement('script');
+        overviewScript.type = 'text/javascript';
+        overviewScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
+        overviewScript.async = true;
+        overviewScript.text = JSON.stringify({
+          "colorTheme": "light",
+          "dateRange": "1M",
+          "showChart": true,
+          "locale": "kr",
+          "width": "100%",
+          "height": 490,
+          "isTransparent": true,
+          "showSymbolLogo": true,
+          "tabs": [
+            {
+              "title": "주요 지수",
+              "symbols": [
+                { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
+                { "s": "FOREXCOM:NSXUSD", "d": "나스닥 100" },
+                { "s": "FOREXCOM:DJI", "d": "다우존스" },
+                { "s": "INDEX:NKY", "d": "닛케이 225" }
+              ]
+            },
+            {
+              "title": "원자재",
+              "symbols": [
+                { "s": "TVC:GOLD", "d": "금 (Gold)" },
+                { "s": "TVC:SILVER", "d": "은 (Silver)" },
+                { "s": "TVC:USOIL", "d": "WTI 원유" },
+                { "s": "COMEX:HG1!", "d": "구리 (Copper)" }
+              ]
+            },
+            {
+              "title": "환율 · 금리",
+              "symbols": [
+                { "s": "FX_IDC:USDKRW", "d": "달러/원" },
+                { "s": "FX_IDC:JPYKRW", "d": "엔/원" },
+                { "s": "TVC:DXY", "d": "달러 인덱스" },
+                { "s": "TVC:US10Y", "d": "미 10년물 국채금리" }
+              ]
+            }
+          ]
+        });
+        overviewContainer.appendChild(overviewScript);
+      }
+    });
+  </script>
+</body>
+</html>
