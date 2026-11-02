@@ -551,7 +551,7 @@
       </div>
       <div class="header-controls">
         <span id="current-date"></span>
-        <button type="button" onclick="App.forceRefresh()" class="btn-refresh">🔄 실시간 라이브 시세 · 뉴스 동기화</button>
+        <button type="button" onclick="App.forceRefresh()" class="btn-refresh">🔄 실시간 라이브 시세 · 원문 뉴스 동기화</button>
       </div>
     </div>
   </header>
@@ -583,7 +583,6 @@
     </div>
 
     <div id="dashboard-screen-view">
-      <!-- 주요 지표 (요약): 글로벌 지표 현지시간 + 한국시간(현지 마감일+1일 새벽) 정확 표기 -->
       <section class="market-tiles-section">
         <div class="tiles-section-bar">
           <h2 class="section-title"><span class="bar-green"></span><span>주요 지표 (요약)</span></h2>
@@ -613,7 +612,7 @@
         <div class="section-header">
           <h2 class="section-title"><span class="bar-gold"></span><span>손님 필독 마켓 뉴스룸 인기 기사 TOP 5</span></h2>
           <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:11.5px; color:#047857; font-weight:700;">✔ 클릭 시 개별 기사 원문 페이지로 직접 이동합니다</span>
+            <span style="font-size:11.5px; color:#047857; font-weight:700;">✔ 100% 실제 언론사 원문 제목 · 원문 출고일 · 원문 링크 직결</span>
             <button type="button" class="no-print" onclick="UI.switchTab('tab-newsroom')" style="background:none; border:none; color:#004B49; font-size:12px; font-weight:700; cursor:pointer;">전체 뉴스룸 보기 →</button>
           </div>
         </div>
@@ -666,7 +665,7 @@
     <div id="formal-pdf-report-wrapper"></div>
   </main>
 
-  <!-- [탭 2] 주요 지표 (100% 실시간 LIVE API 데이터 및 실데이터 차트) -->
+  <!-- [탭 2] 주요 지표 -->
   <section id="tab-indicators" class="tab-section">
     <div class="card-box">
       <div class="section-header">
@@ -710,14 +709,14 @@
     </div>
   </section>
 
-  <!-- [탭 3] 마켓 뉴스룸 -->
+  <!-- [탭 3] 마켓 뉴스룸 (더미 뉴스 제거 -> 100% 실제 RSS 원문 제목·출고일·링크 바인딩) -->
   <section id="tab-newsroom" class="tab-section">
     <div class="card-box">
       <div class="section-header">
         <h2 class="section-title"><span class="bar-gold"></span><span>WM RESEARCH 실시간 마켓 뉴스룸</span></h2>
         <div style="display:flex; align-items:center; gap:10px;">
-          <span id="news-status-badge" style="font-size: 12px; color: #047857; font-weight: 700;">● 멀티 RSS 뉴스 수집 엔진 가동중</span>
-          <button type="button" onclick="NET.initNewsroom()" class="btn-primary" style="padding:5px 12px; font-size:12px;">🔄 실시간 뉴스 즉시 수집</button>
+          <span id="news-status-badge" style="font-size: 12px; color: #047857; font-weight: 700;">● 언론사 원문 RSS 실시간 수집중...</span>
+          <button type="button" onclick="NET.initNewsroom(true)" class="btn-primary" style="padding:5px 12px; font-size:12px;">🔄 실시간 뉴스 즉시 재수집</button>
         </div>
       </div>
       <div class="news-top-controls">
@@ -738,7 +737,7 @@
       <div id="news-container" style="min-height: 360px;"></div>
       <div style="text-align:center; padding:22px 0 10px; border-top: 1px solid #f1f5f9; margin-top: 10px;">
         <div id="news-count-info" style="font-size:12px; color:#64748b; margin-bottom:10px;"></div>
-        <button type="button" id="btn-load-more-news" onclick="Actions.loadMoreNews(10)" class="btn-primary" style="padding:10px 26px;">+ 과거 기사 10개 더 불러오기 (기간 제한 없음)</button>
+        <button type="button" id="btn-load-more-news" onclick="Actions.loadMoreNews(10)" class="btn-primary" style="padding:10px 26px;">+ 실제 과거 기사 10개 더 불러오기 (원문 출고일 기준)</button>
       </div>
     </div>
   </section>
@@ -825,7 +824,7 @@
 
   <script>
     /* =========================================================================
-       DOM & Storage Helpers (Purge Old Stale Cache Keys)
+       DOM, HTML Entity Decoder & Storage Helpers
        ========================================================================= */
     const $ = (id) => document.getElementById(id);
     const StorageUtil = {
@@ -839,13 +838,22 @@
         try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
       }
     };
-    // 구버전 캐시(5,001.42가 남아있던 캐시) 자동 삭제
+
+    // RSS 제목 내 HTML 엔티티(&quot;, &#39;, &amp; 등)를 원문 제목 그대로 깨끗하게 복원
+    function decodeHtmlEntities(str) {
+      if (!str) return '';
+      const txt = document.createElement('textarea');
+      txt.innerHTML = str;
+      return txt.value.trim();
+    }
+
+    // 이전 버전의 더미/오류 캐시 일괄 정리
     try {
       ['hana_fo_live_quotes_v29', 'hana_fo_market_cache_v12', 'hana_fo_confirmed_6_close_v3'].forEach(k => localStorage.removeItem(k));
     } catch (e) {}
 
     /* =========================================================================
-       Module 1: DATA (Accurate Dates & Verified Close Values)
+       Module 1: DATA (Accurate Dates & Verified Close Values — NO Fake News!)
        ========================================================================= */
     const DateInfo = (() => {
       const now = new Date();
@@ -854,7 +862,6 @@
       const d = String(now.getDate()).padStart(2, '0');
       const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-      // 직전 미국 정규장 마감일 계산 (월요일이면 금요일, 일요일이면 금요일, 토요일이면 금요일, 화~금이면 전일)
       const usTradeDate = new Date(now);
       const dow = now.getDay();
       if (dow === 1) usTradeDate.setDate(now.getDate() - 3);
@@ -864,7 +871,6 @@
 
       const usLocalMMDD = `${String(usTradeDate.getMonth() + 1).padStart(2, '0')}.${String(usTradeDate.getDate()).padStart(2, '0')}`;
 
-      // 핵심 수정: 미국 현지 마감(16:00 ET)의 한국 시간은 미국 거래일의 정확히 다음 날(+1일) 새벽 05:00(서머타임)
       const usCloseKstDate = new Date(usTradeDate);
       usCloseKstDate.setDate(usTradeDate.getDate() + 1);
       const usKstMMDD = `${String(usCloseKstDate.getMonth() + 1).padStart(2, '0')}.${String(usCloseKstDate.getDate()).padStart(2, '0')}`;
@@ -873,8 +879,8 @@
         full: `${y}.${m}.${d}`,
         mmdd: `${m}.${d}`,
         dayName: days[dow],
-        usLocalMMDD, // 예: 금요일 10.30
-        usKstMMDD    // 예: 토요일 10.31 (10.30 16:00 EDT = 한국 10.31 05:00 KST)
+        usLocalMMDD,
+        usKstMMDD
       };
     })();
 
@@ -884,7 +890,6 @@
         KOSPI: { name: 'KOSPI', price: '5,857.26', diff: '+126.52', pct: '+2.21%', isUp: true, upper: '3', up: '618', flat: '36', down: '256', lower: '0', indiv: '-7,334', foreign: '-3,718', inst: '+11,048' },
         KOSDAQ: { name: 'KOSDAQ', price: '736.22', diff: '+11.84', pct: '+1.63%', isUp: true, upper: '1', up: '1,055', flat: '66', down: '617', lower: '0', indiv: '+4', foreign: '-164', inst: '+207' }
       },
-      // 대시보드 6대 핵심 지표: 검증된 실제 10.30/11.02 수치 및 정확한 현지·한국 마감시간 세팅
       confirmed6: [
         {
           symbol: '^KS11', naverCode: 'KOSPI', isGlobal: false, name: '코스피',
@@ -1039,45 +1044,24 @@
         { day: 25, type: 'ev-tax', tag: '절세체크', title: '연말 대주주 양도세 및 배당 플랜 사전 점검' },
         { day: 27, type: 'ev-macro', tag: '통화정책', title: '한국은행 금융통화위원회 기준금리 결정' }
       ],
+      // 5대 카테고리 실시간 RSS 검색 규칙 (최근 7일 이내 실제 기사 우선 검색)
       newsCategoryRules: [
-        { cat: '매크로', query: '연준 금리 OR 한국은행 기준금리 OR 국고채 금리 OR 코스피 기관 순매수', keywords: ['금리', '연준', 'FOMC', '파월', '국채', '국고채', '물가', 'CPI', '통화정책', '한국은행', '코스피', '순매수', '증시'] },
-        { cat: 'TAX', query: '패밀리오피스 OR 가업상속공제 OR 상속세 개편 OR 증여세 OR 유언대용신탁', keywords: ['세무', '세제', '상속', '증여', '가업승계', '가업상속', '패밀리오피스', '유언대용신탁', '신탁', '절세', '비상장', '배당'] },
-        { cat: '부동산', query: '상업용 빌딩 매매 OR 종합부동산세 OR 토지거래허가구역 OR 초고가 아파트', keywords: ['부동산', '빌딩', '종부세', '종합부동산세', '토지거래', '재건축', '아파트', '상업용', '오피스', '꼬마빌딩'] },
-        { cat: '외환', query: '원달러 환율 네고 OR 달러 인덱스 OR 엔달러 환율 OR 서울외환시장', keywords: ['환율', '원/달러', '원달러', '달러', '엔화', '유로', '위안', '외환', '환헤지', '네고'] },
-        { cat: '대체투자', query: '국제 금값 OR WTI 원유 OR 비트코인 ETF OR 사모펀드 PEF', keywords: ['금값', '금 시세', '원유', 'WTI', '브렌트유', '구리', '원자재', '비트코인', '가상자산', '사모펀드', 'PEF', '대체투자'] }
+        { cat: '매크로', query: '(연준 금리 OR 한국은행 기준금리 OR 국고채 금리 OR 코스피 기관) when:7d', rawQuery: '연준 금리 OR 한국은행 기준금리 OR 국고채 금리 OR 코스피 기관', keywords: ['금리', '연준', 'FOMC', '파월', '국채', '국고채', '물가', 'CPI', '통화정책', '한국은행', '코스피', '순매수', '증시'] },
+        { cat: 'TAX', query: '(패밀리오피스 OR 가업상속공제 OR 상속세 OR 증여세 OR 유언대용신탁) when:30d', rawQuery: '패밀리오피스 OR 가업상속공제 OR 상속세 OR 증여세 OR 유언대용신탁', keywords: ['세무', '세제', '상속', '증여', '가업승계', '가업상속', '패밀리오피스', '유언대용신탁', '신탁', '절세', '비상장', '배당'] },
+        { cat: '부동산', query: '(상업용 빌딩 OR 종합부동산세 OR 토지거래허가구역 OR 재건축) when:7d', rawQuery: '상업용 빌딩 OR 종합부동산세 OR 토지거래허가구역 OR 재건축', keywords: ['부동산', '빌딩', '종부세', '종합부동산세', '토지거래', '재건축', '아파트', '상업용', '오피스', '꼬마빌딩'] },
+        { cat: '외환', query: '(원달러 환율 OR 달러 인덱스 OR 엔달러 환율 OR 외환시장) when:7d', rawQuery: '원달러 환율 OR 달러 인덱스 OR 엔달러 환율 OR 외환시장', keywords: ['환율', '원/달러', '원달러', '달러', '엔화', '유로', '위안', '외환', '환헤지', '네고'] },
+        { cat: '대체투자', query: '(국제 금값 OR WTI 원유 OR 비트코인 ETF OR 사모펀드 PEF) when:7d', rawQuery: '국제 금값 OR WTI 원유 OR 비트코인 ETF OR 사모펀드 PEF', keywords: ['금값', '금 시세', '원유', 'WTI', '브렌트유', '구리', '원자재', '비트코인', '가상자산', '사모펀드', 'PEF', '대체투자'] }
       ],
+      // 국내 주요 경제지 공식 실시간 RSS 피드 (원문 제목·링크·출고일 100% 일치)
       directRssFeeds: [
         { url: 'https://www.hankyung.com/feed/economy', press: '한국경제', cat: '매크로' },
         { url: 'https://www.hankyung.com/feed/finance', press: '한국경제', cat: '매크로' },
         { url: 'https://www.hankyung.com/feed/realestate', press: '한국경제', cat: '부동산' },
         { url: 'https://www.mk.co.kr/rss/30100041/', press: '매일경제', cat: '매크로' },
-        { url: 'https://www.mk.co.kr/rss/50300009/', press: '매일경제', cat: '부동산' }
-      ],
-      initialNews: [
-        { title: "미 금리 동결 속 반도체 수출기업 달러 네고 출회에 원·달러 환율 하향 안정", press: "한국경제", date: "2026.11.02 15:40", timestamp: Date.now() - 1800000, url: "https://www.hankyung.com/article/202610294088Y", tags: ["외환", "매크로"] },
-        { title: "국고채 3년·10년물 금리 일제히 하락… 미 기술주 조정 속 주요국 채권 강세", press: "SBS뉴스", date: "2026.11.02 15:10", timestamp: Date.now() - 3600000, url: "https://news.sbs.co.kr/news/endPage.do?news_id=N1008823670", tags: ["매크로"] },
-        { title: "\"1300조 시장 잡아라\"… 5년새 100조 모은 韓 패밀리오피스 가업승계·절세 경쟁", press: "서울경제", date: "2026.11.02 14:20", timestamp: Date.now() - 5400000, url: "https://www.sedaily.com/article/14132033", tags: ["TAX", "부동산"] },
-        { title: "코스피 기관 대규모 순매수 유입… SK하이닉스·방산 우량주 집중 매집", press: "동아일보", date: "2026.11.02 13:50", timestamp: Date.now() - 7200000, url: "https://weekly.donga.com/economy/article/all/11/6439840/1", tags: ["매크로", "대체투자"] },
-        { title: "[시황분석] 코스피, 기관 수급 유입에 하방 경직성 확보… 반도체·금융주 강세", press: "한양경제", date: "2026.11.02 13:15", timestamp: Date.now() - 9000000, url: "https://www.hanyangeconomy.com/news/articleView.html?idxno=10531", tags: ["매크로"] },
-        { title: "세제개편안 핵심 점검: 종합부동산세·가업상속공제 최대 1,000억 한도 활용 전략", press: "세무리포트", date: "2026.11.01 16:00", timestamp: Date.now() - 14400000, url: "https://www.heumtax.com/contents/posts/2026-tax-reform-property-inheritance", tags: ["TAX", "부동산"] },
-        { title: "공익재단·유언대용신탁 형태 패밀리오피스 지분 승계 과세 기준 및 글로벌 투자 동향", press: "서울경제 시그널", date: "2026.11.01 11:30", timestamp: Date.now() - 18000000, url: "https://signalm.sedaily.com/NewsView/2GZ949T8MT/GX11", tags: ["TAX"] },
-        { title: "채권시장 전문가 93% 기준금리 동결 전망… 절세형 저쿠폰 국고채 수요 확대", press: "메트로경제", date: "2026.10.31 15:17", timestamp: Date.now() - 21600000, url: "https://www.metroseoul.co.kr/article/20261020500165", tags: ["매크로"] },
-        { title: "초고액자산가 강남·한남 상업용 빌딩 및 토지거래허가구역 수익형 부동산 매입 분석", press: "매일경제", date: "2026.10.31 10:40", timestamp: Date.now() - 25200000, url: "https://www.mk.co.kr/news/realestate/11154210", tags: ["부동산", "TAX"] },
-        { title: "글로벌 패밀리오피스, 금(Gold) 현물 ETF 및 사모크레딧(Private Credit) 비중 35% 확대", press: "한국경제", date: "2026.10.30 18:10", timestamp: Date.now() - 28800000, url: "https://www.hankyung.com/article/2026102811421", tags: ["대체투자", "매크로"] },
-        { title: "엔·원 환율 900원대 초반 공방… 자산가 엔화 분할 매수 및 달러 환헤지 전략", press: "연합뉴스", date: "2026.10.30 14:25", timestamp: Date.now() - 32400000, url: "https://www.yna.co.kr/view/AKR20261029051200002", tags: ["외환"] },
-        { title: "비상장 법인 오너를 위한 차등배당·자사주 소각 및 가업승계 증여세 특례 시뮬레이션", press: "머니투데이", date: "2026.10.29 15:00", timestamp: Date.now() - 36000000, url: "https://news.mt.co.kr/mtview.php?no=20261028142210", tags: ["TAX"] }
-      ],
-      archiveTemplates: [
-        { title: "패밀리오피스 가업승계 컨설팅: 가업상속공제 사후관리 요건 완화 및 지배구조 개편 분석", press: "한국경제", url: "https://www.hankyung.com/article/2026102591021", tags: ["TAX"] },
-        { title: "미 연준 기준금리 인하 사이클 속 초고액자산가 장기 국채 및 회사채 듀레이션 전략", press: "매일경제", url: "https://www.mk.co.kr/news/economy/11149820", tags: ["매크로"] },
-        { title: "강남·서초 프라임급 꼬마빌딩 및 상업용 오피스 캡레이트(수익률) 추이와 법인 매입 절세", press: "서울경제", url: "https://www.sedaily.com/article/14128940", tags: ["부동산", "TAX"] },
-        { title: "달러·원 환율 변동성 확대 국면에서의 해외 주식·채권 환헤지(FX Hedge) 비중 가이드", press: "연합뉴스", url: "https://www.yna.co.kr/view/AKR20261024088100002", tags: ["외환", "매크로"] },
-        { title: "글로벌 패밀리오피스 대체투자 트렌드: 세컨더리 사모펀드(PEF) 및 인프라 다이렉트 딜", press: "머니투데이", url: "https://news.mt.co.kr/mtview.php?no=20261023110920", tags: ["대체투자"] },
-        { title: "유언대용신탁을 활용한 미성년 손자녀 세대생략증여 및 가문 자산 분쟁 예방 사례", press: "한국경제", url: "https://www.hankyung.com/article/2026102277311", tags: ["TAX"] },
-        { title: "국제 금값 온스당 2,750달러 안착… 중앙은행 금 매수세와 골드바·금 현물 ETF 절세 비교", press: "매일경제", url: "https://www.mk.co.kr/news/economy/11142310", tags: ["대체투자", "TAX"] },
-        { title: "종합부동산세 합산배제 요건 및 고가 1주택·다주택자 보유세 시뮬레이션 리포트", press: "서울경제", url: "https://www.sedaily.com/article/14121055", tags: ["부동산", "TAX"] },
-        { title: "미국 빅테크 AI 데이터센터 전력 인프라 투자 확대와 반도체 HBM 공급망 수혜 분석", press: "동아일보", url: "https://weekly.donga.com/economy/article/all/11/6435120/1", tags: ["매크로"] },
-        { title: "엔화 강세 전환 시점 점검… 엔화 예금 및 일본 증시 ETF 환차익 비과세 활용 전략", press: "한국경제", url: "https://www.hankyung.com/article/2026101955102", tags: ["외환", "TAX"] }
+        { url: 'https://www.mk.co.kr/rss/50200011/', press: '매일경제', cat: '매크로' },
+        { url: 'https://www.mk.co.kr/rss/50300009/', press: '매일경제', cat: '부동산' },
+        { url: 'https://www.yna.co.kr/rss/economy.xml', press: '연합뉴스', cat: '매크로' },
+        { url: 'https://www.fnnews.com/rss/r20/fn_realnews_economy.xml', press: '파이낸셜뉴스', cat: '매크로' }
       ],
       baseInsights: [
         { stars: '★★★★★', category: '국내 부자보고서', title: '2025 한국 부자 보고서 (Korea Wealth Report — 15주년 특집)', desc: '금융자산 10억 원 이상 한국 부자의 자산 구조, 부동산·금융 비중, 부의 원천 및 차세대 승계 방식 심층 분석', org: 'KB금융지주 경영연구소', date: '연례 핵심백서', btnText: '📥 PDF 다운로드', url: 'https://files-scs.pstatic.net/2025/12/23/FhQP9SHDXS/2025%20%ED%95%9C%EA%B5%AD%20%EB%B6%80%EC%9E%90%20%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf' },
@@ -1104,7 +1088,7 @@
     };
 
     /* =========================================================================
-       Module 2: STATE (Application State & Real-Data Cache)
+       Module 2: STATE (Application State — News List Starts Empty & Uses Real RSS Only)
        ========================================================================= */
     const STATE = {
       edition: (new Date().getHours() >= 15) ? 'EVENING' : 'MORNING',
@@ -1113,24 +1097,23 @@
       symbolIdx: 0,
       range: '1mo',
       interval: '1d',
-      quoteCache: StorageUtil.get('hana_fo_live_quotes_v30', {}),
+      quoteCache: StorageUtil.get('hana_fo_live_quotes_v31', {}),
       chartCache: {},
       inFlight: {},
-      newsList: [...DATA.initialNews],
+      newsList: [], // 더미 기사를 완전히 제거하고 100% 실제 RSS 수집 기사로만 채움
       newsFilter: 'ALL',
       newsCount: 10,
       histStep: 0,
       isFetchingNews: false,
       openedWin: null,
-      clickMap: StorageUtil.get('hana_fo_news_clicks_v2', {}),
-      scrapMap: StorageUtil.get('hana_fo_scrapped_news_v1', {}),
+      clickMap: StorageUtil.get('hana_fo_news_clicks_v3', {}),
+      scrapMap: StorageUtil.get('hana_fo_scrapped_news_v2', {}),
       insights: [...DATA.baseInsights],
       insightFilter: 'ALL',
       extraInsightsCollected: false,
       boardKey: 'hana_fo_board_posts_v1'
     };
 
-    // 검증된 6대 핵심 지표를 초기 캐시에도 세팅하여 ^SOX 누락 방지
     DATA.confirmed6.forEach(c => {
       STATE.quoteCache[c.symbol] = {
         priceStr: c.priceStr,
@@ -1140,7 +1123,7 @@
     });
 
     /* =========================================================================
-       Module 3: NET (100% Real Live Data Engine & Exact US->KST Date Calculator)
+       Module 3: NET (100% Real Live Data Engine & Exact Original RSS Parser)
        ========================================================================= */
     const NET = {
       formatValue(val, item) {
@@ -1151,7 +1134,6 @@
         return (item && item.suffix) ? str + item.suffix : str;
       },
 
-      // [핵심 수정] 미국 현지 장 마감일(16:00 ET)과 한국 마감 시각(미국 거래일 + 1일 새벽 05:00/06:00 KST)을 세트로 정확히 계산
       calcUSCloseDualTime(unixSec, isGlobal) {
         if (!unixSec) {
           return isGlobal
@@ -1161,7 +1143,6 @@
         const dt = new Date(unixSec * 1000);
 
         if (isGlobal) {
-          // 1) 뉴욕 시간대 기준 거래 연·월·일 추출
           const nyParts = new Intl.DateTimeFormat('en-US', {
             timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', timeZoneName: 'short'
           }).formatToParts(dt);
@@ -1173,7 +1154,6 @@
           const localMM = String(nyM).padStart(2, '0');
           const localDD = String(nyD).padStart(2, '0');
 
-          // 2) 미국 정규장 16:00 마감은 한국시간으로 정확히 '미국 거래일 + 1일' 새벽 05:00(EDT) 또는 06:00(EST)
           const kstNextDay = new Date(nyY, nyM - 1, nyD + 1);
           const kstMM = String(kstNextDay.getMonth() + 1).padStart(2, '0');
           const kstDD = String(kstNextDay.getDate()).padStart(2, '0');
@@ -1194,6 +1174,36 @@
             kst: `한국 ${krMM}.${krDD} 15:30 마감`
           };
         }
+      },
+
+      // [핵심 수정] RSS 원문의 <pubDate>를 한국시간(KST)으로 오차 없이 변환하며, 날짜가 없는 기사에 오늘 날짜(Date.now)를 임의로 찍지 않음!
+      parseExactPubDate(rawDateStr, isRss2JsonUtc = false) {
+        if (!rawDateStr || typeof rawDateStr !== 'string') return null;
+        let clean = rawDateStr.trim();
+        let ts = NaN;
+
+        if (isRss2JsonUtc && /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$/.test(clean)) {
+          // rss2json은 'YYYY-MM-DD HH:MM:SS' 형태(UTC)로 반환하므로 반드시 'Z'(UTC)를 붙여 KST(+9시간)로 정확히 변환
+          ts = new Date(clean.replace(/\s+/, 'T') + 'Z').getTime();
+        } else {
+          ts = new Date(clean).getTime();
+        }
+
+        if (isNaN(ts) || ts <= 0) return null;
+
+        // KST(Asia/Seoul) 기준으로 정확히 YYYY.MM.DD HH:mm 포맷팅
+        const dt = new Date(ts);
+        const parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'Asia/Seoul',
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', hour12: false
+        }).formatToParts(dt);
+        const get = (t) => parts.find(p => p.type === t)?.value || '00';
+        const hh = get('hour') === '24' ? '00' : get('hour');
+        return {
+          timestamp: ts,
+          formatted: `${get('year')}.${get('month')}.${get('day')} ${hh}:${get('minute')}`
+        };
       },
 
       async fetchProxyRace(targetUrl, responseType = 'json', timeoutMs = 4500) {
@@ -1224,7 +1234,6 @@
         return (json && json.chart && json.chart.result && json.chart.result[0]) ? json.chart.result[0] : null;
       },
 
-      // 야후 API에서 ^SOX 등이 누락될 때를 대비한 네이버 해외지수 실시간 API 백업 호출기
       async fetchNaverWorldIndex(naverCode) {
         if (!naverCode) return null;
         const url = `https://api.stock.naver.com/index/${encodeURIComponent(naverCode)}/basic`;
@@ -1245,7 +1254,6 @@
       async syncAccurateTickerAndDashboard() {
         let sedailySuccess = false;
 
-        // 1. 서울경제 상단 티커 원천 데이터 일괄 파싱
         const html = await this.fetchProxyRace(`https://www.sedaily.com/?_t=${Date.now()}`, 'text', 4500);
         if (html && html.includes('KOSPI')) {
           const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -1281,9 +1289,7 @@
           UI.renderDashboard6Tiles();
         }
 
-        // 2. 대시보드 6대 핵심 지표 라이브 동기화 (Yahoo Finance + Naver World Index 이중 검증)
         await Promise.all(DATA.confirmed6.map(async (card) => {
-          // 글로벌 지수(특히 ^SOX)는 네이버 해외지수 API를 우선/병행 조회하여 누락 방지
           if (card.naverWorldCode) {
             const nv = await this.fetchNaverWorldIndex(card.naverWorldCode);
             if (nv && !isNaN(nv.price) && nv.price > 100) {
@@ -1333,7 +1339,7 @@
         if (!sedailySuccess) {
           DATA.ticker.mode = 'LIVE_API';
         }
-        StorageUtil.set('hana_fo_live_quotes_v30', STATE.quoteCache);
+        StorageUtil.set('hana_fo_live_quotes_v31', STATE.quoteCache);
         UI.renderTicker();
         UI.renderDashboard();
       },
@@ -1355,7 +1361,7 @@
                 }
               }
             });
-            StorageUtil.set('hana_fo_live_quotes_v30', STATE.quoteCache);
+            StorageUtil.set('hana_fo_live_quotes_v31', STATE.quoteCache);
             if (STATE.category === 'crypto') UI.renderInstrumentList();
           }
         } catch (e) {}
@@ -1393,7 +1399,6 @@
               return obj;
             }
           }
-          // 만약 Yahoo에서 ^SOX 등이 실패하면 Naver 해외지수 API로 즉시 백업 조회
           if (item.naverWorldCode && item.naverWorldCode.startsWith('.')) {
             const nv = await this.fetchNaverWorldIndex(item.naverWorldCode);
             if (nv && !isNaN(nv.price)) {
@@ -1431,53 +1436,89 @@
         return arr.length > 0 ? arr.slice(0, 3) : [primaryCat || '매크로'];
       },
 
+      // [핵심 수정] 원문 RSS XML 직접 파싱을 최우선으로 수행하여 원문 제목·원문 링크·원문 출고일(pubDate)을 100% 일치시킴
       async fetchRssItems(rssUrl, defaultCat, defaultPress = '') {
+        // 1순위: 원문 XML 직접 파싱 (가장 정확한 <title>, <link>, <pubDate> 보존)
+        const xmlText = await this.fetchProxyRace(rssUrl, 'text', 4000);
+        if (xmlText && xmlText.includes('<item>')) {
+          const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+          const parsedItems = [];
+
+          Array.from(doc.querySelectorAll('item')).forEach(item => {
+            let rawTitle = item.querySelector('title')?.textContent || '';
+            const link = (item.querySelector('link')?.textContent || '').trim();
+            const pubDateRaw = item.querySelector('pubDate')?.textContent || item.querySelector('dc\\:date')?.textContent || '';
+            let press = item.querySelector('source')?.textContent || item.querySelector('dc\\:creator')?.textContent || defaultPress || '';
+
+            rawTitle = decodeHtmlEntities(rawTitle);
+            press = decodeHtmlEntities(press);
+
+            // 구글 뉴스 RSS의 경우 제목 끝에 붙은 " - 언론사명"만 깔끔하게 분리하고 본래 제목은 100% 그대로 보존
+            if (!defaultPress && rawTitle.lastIndexOf(' - ') !== -1) {
+              const candidatePress = rawTitle.substring(rawTitle.lastIndexOf(' - ') + 3).trim();
+              if (candidatePress.length <= 18) {
+                press = press || candidatePress;
+                rawTitle = rawTitle.substring(0, rawTitle.lastIndexOf(' - ')).trim();
+              }
+            }
+            if (!press) press = '경제뉴스';
+
+            // 실제 원문 출고일(pubDate) 파싱 — 만약 출고일이 없으면 임의 날짜를 찍지 않고 제외
+            const parsedDate = this.parseExactPubDate(pubDateRaw, false);
+            if (!parsedDate || !rawTitle || !this.isDirectArticleUrl(link)) return;
+
+            parsedItems.push({
+              id: link,
+              title: rawTitle,
+              press: press,
+              date: parsedDate.formatted,
+              timestamp: parsedDate.timestamp,
+              url: link,
+              tags: this.classifyTags(rawTitle, defaultCat)
+            });
+          });
+
+          if (parsedItems.length > 0) return parsedItems;
+        }
+
+        // 2순위 백업: rss2json API (UTC 타임존 정확 보정 적용)
         try {
           const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
           if (res.ok) {
             const data = await res.json();
             if (data?.status === 'ok' && Array.isArray(data.items)) {
-              return data.items.map(item => {
-                let title = (item.title || '').trim();
-                let press = defaultPress || data.feed?.title || '경제뉴스';
-                if (title.lastIndexOf(' - ') !== -1) {
-                  press = title.substring(title.lastIndexOf(' - ') + 3).trim();
-                  title = title.substring(0, title.lastIndexOf(' - ')).trim();
+              const backupItems = [];
+              data.items.forEach(item => {
+                let rawTitle = decodeHtmlEntities(item.title || '');
+                let press = defaultPress || decodeHtmlEntities(data.feed?.title || '경제뉴스');
+                const link = (item.link || '').trim();
+
+                if (!defaultPress && rawTitle.lastIndexOf(' - ') !== -1) {
+                  const candidatePress = rawTitle.substring(rawTitle.lastIndexOf(' - ') + 3).trim();
+                  if (candidatePress.length <= 18) {
+                    press = candidatePress;
+                    rawTitle = rawTitle.substring(0, rawTitle.lastIndexOf(' - ')).trim();
+                  }
                 }
-                const ts = item.pubDate ? new Date(item.pubDate.replace(/-/g, '/')).getTime() : Date.now();
-                const d = new Date(isNaN(ts) ? Date.now() : ts);
-                const dateStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-                return {
-                  id: item.link || title, title, press: press.length > 12 ? (defaultPress || '주요언론') : press,
-                  date: dateStr, timestamp: isNaN(ts) ? Date.now() : ts, url: item.link,
-                  tags: this.classifyTags(title, defaultCat)
-                };
-              }).filter(a => this.isDirectArticleUrl(a.url));
+
+                const parsedDate = this.parseExactPubDate(item.pubDate, true);
+                if (!parsedDate || !rawTitle || !this.isDirectArticleUrl(link)) return;
+
+                backupItems.push({
+                  id: link,
+                  title: rawTitle,
+                  press: press.length > 14 ? (defaultPress || '경제뉴스') : press,
+                  date: parsedDate.formatted,
+                  timestamp: parsedDate.timestamp,
+                  url: link,
+                  tags: this.classifyTags(rawTitle, defaultCat)
+                });
+              });
+              return backupItems;
             }
           }
         } catch (e) {}
 
-        const xmlText = await this.fetchProxyRace(rssUrl, 'text', 3800);
-        if (xmlText && xmlText.includes('<item>')) {
-          const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
-          return Array.from(doc.querySelectorAll('item')).map(item => {
-            let title = item.querySelector('title')?.textContent || '';
-            const link = item.querySelector('link')?.textContent || '';
-            const pub = item.querySelector('pubDate')?.textContent || '';
-            let press = item.querySelector('source')?.textContent || defaultPress || '주요언론';
-            if (title.lastIndexOf(' - ') !== -1) {
-              press = title.substring(title.lastIndexOf(' - ') + 3).trim();
-              title = title.substring(0, title.lastIndexOf(' - ')).trim();
-            }
-            const ts = pub ? new Date(pub).getTime() : Date.now();
-            const d = new Date(isNaN(ts) ? Date.now() : ts);
-            const dateStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-            return {
-              id: link || title, title, press, date: dateStr, timestamp: isNaN(ts) ? Date.now() : ts,
-              url: link, tags: this.classifyTags(title, defaultCat)
-            };
-          }).filter(a => this.isDirectArticleUrl(a.url));
-        }
         return [];
       },
 
@@ -1487,28 +1528,60 @@
       },
 
       mergeArticles(items) {
-        const seen = new Set(STATE.newsList.map(a => a.title));
+        const seenUrls = new Set(STATE.newsList.map(a => a.url));
+        const seenTitles = new Set(STATE.newsList.map(a => a.title));
         items.forEach(item => {
-          if (item.title && this.isDirectArticleUrl(item.url) && !seen.has(item.title)) {
-            seen.add(item.title);
+          if (item.title && item.timestamp && this.isDirectArticleUrl(item.url) && !seenUrls.has(item.url) && !seenTitles.has(item.title)) {
+            seenUrls.add(item.url);
+            seenTitles.add(item.title);
             STATE.newsList.push(item);
           }
         });
+        // 오직 원문 기사의 실제 출고 시각(timestamp) 역순(최신순)으로만 정렬!
         STATE.newsList.sort((a, b) => b.timestamp - a.timestamp);
       },
 
-      async initNewsroom() {
-        UI.renderNewsroom();
+      async initNewsroom(force = false) {
+        const badge = $('news-status-badge');
+        if (badge) badge.textContent = '● 언론사 실시간 원문 RSS 수집중...';
+
+        // 세션 캐시에 방금 수집한 실제 RSS 기사가 있으면 먼저 표시
+        if (!force && STATE.newsList.length === 0) {
+          const cachedRealNews = StorageUtil.get('hana_fo_real_rss_news_v31', []);
+          if (Array.isArray(cachedRealNews) && cachedRealNews.length > 0) {
+            STATE.newsList = cachedRealNews;
+            UI.renderNewsroom();
+            UI.renderTop5News();
+          }
+        }
+
+        if (force) {
+          STATE.newsList = [];
+          UI.renderNewsroom();
+        }
+
+        // 1) 국내 주요 경제지 공식 RSS 실시간 수집
         await Promise.all(DATA.directRssFeeds.map(async (f) => {
           const items = await this.fetchRssItems(f.url, f.cat, f.press);
-          if (items.length) { this.mergeArticles(items); UI.renderNewsroom(); UI.renderTop5News(); }
+          if (items.length) {
+            this.mergeArticles(items);
+            UI.renderNewsroom();
+            UI.renderTop5News();
+          }
         }));
+
+        // 2) 5대 핵심 키워드 구글 뉴스 RSS 실시간 수집
         await Promise.all(DATA.newsCategoryRules.map(async (r) => {
           const items = await this.fetchGoogleNews(r.query, r.cat);
-          if (items.length) { this.mergeArticles(items); UI.renderNewsroom(); UI.renderTop5News(); }
+          if (items.length) {
+            this.mergeArticles(items);
+            UI.renderNewsroom();
+            UI.renderTop5News();
+          }
         }));
-        const badge = $('news-status-badge');
-        if (badge) badge.textContent = `● 멀티 RSS 가동중 (총 ${STATE.newsList.length}건 실시간 아카이브 확보)`;
+
+        StorageUtil.set('hana_fo_real_rss_news_v31', STATE.newsList.slice(0, 120));
+        if (badge) badge.textContent = `● 원문 RSS 동기화 완료 (실제 원문 기사 ${STATE.newsList.length}건 · 출고일 100% 일치)`;
       }
     };
 
@@ -1649,7 +1722,12 @@
       renderTop5News() {
         const box = $('dashboard-top5-news');
         if (!box) return;
-        box.innerHTML = this.getTop5News().map((n, idx) => {
+        const top5 = this.getTop5News();
+        if (top5.length === 0) {
+          box.innerHTML = `<div style="padding:24px; text-align:center; color:#004B49; font-size:13.5px; font-weight:700;">⏳ 실시간 언론사 원문 뉴스를 수집하여 Top 5를 구성하고 있습니다...</div>`;
+          return;
+        }
+        box.innerHTML = top5.map((n, idx) => {
           const rCls = idx < 2 ? 'rank-badge top-rank' : 'rank-badge';
           const tags = n.tags.slice(0, 2).map(t => `<span class="badge-tag ${this.tagClass(t)}">${t}</span>`).join('');
           const safeUrl = n.url.replace(/'/g, "\\'");
@@ -1662,7 +1740,7 @@
                   <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap;">
                     ${tags}
                     <span style="font-size:11.5px; font-weight:800; color:#004B49;">${n.press}</span>
-                    <span style="font-size:11px; color:#94a3b8;">${n.date}</span>
+                    <span style="font-size:11px; color:#64748b; font-weight:600;">원문 출고: ${n.date}</span>
                   </div>
                   <div style="font-size:14px; font-weight:700; color:#0f172a; line-height:1.35;">${n.title}</div>
                 </div>
@@ -1898,7 +1976,7 @@
             }
           }
         }));
-        StorageUtil.set('hana_fo_live_quotes_v30', STATE.quoteCache);
+        StorageUtil.set('hana_fo_live_quotes_v31', STATE.quoteCache);
       },
 
       selectAssetCategory(catKey, btn) {
@@ -1938,7 +2016,7 @@
         const all = this.getFilteredNews();
         const visible = all.slice(0, STATE.newsCount);
         if (!visible.length) {
-          box.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#64748b; font-size:14px;">표시할 기사가 없습니다.</div>`;
+          box.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#004B49; font-size:14px; font-weight:700;">⏳ 언론사 실시간 원문 RSS 기사를 불러오고 있습니다...</div>`;
           return;
         }
 
@@ -1953,7 +2031,8 @@
               <a href="${n.url}" target="_blank" rel="noopener noreferrer" class="news-title-link" onclick="event.preventDefault(); Actions.recordClick('${safeTitle}'); Actions.openArticle('${safeUrl}');">${n.title}</a>
               <div class="news-meta-info">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span class="news-press">${n.press}</span><span>${n.date}</span>
+                  <span class="news-press">${n.press}</span>
+                  <span style="font-weight:600; color:#475569;">원문 출고일: ${n.date}</span>
                 </div>
                 <div style="display:flex; gap:6px;">
                   <button type="button" class="btn-news-util ${scrapped ? 'scrapped' : ''}" onclick="Actions.toggleScrap(${idx})">${scrapped ? '★ 스크랩됨' : '☆ 스크랩'}</button>
@@ -1963,7 +2042,7 @@
             </article>
           `;
         }).join('');
-        $('news-count-info').textContent = `현재 표시된 기사: ${visible.length}건 (수집된 전체 아카이브: ${all.length}건)`;
+        $('news-count-info').textContent = `현재 표시된 원문 기사: ${visible.length}건 (수집된 실제 원문 아카이브: ${all.length}건)`;
       },
 
       filterNews(key, btn) {
@@ -1972,7 +2051,7 @@
         document.querySelectorAll('#news-filter-bar .filter-pill-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
         this.renderNewsroom();
-        if (key !== 'ALL' && key !== 'SCRAP' && this.getFilteredNews().length < 15) {
+        if (key !== 'ALL' && key !== 'SCRAP' && this.getFilteredNews().length < 10) {
           Actions.fetchHistoricalNews(key);
         }
       },
@@ -2073,7 +2152,7 @@
       recordClick(title) {
         if (!title) return;
         STATE.clickMap[title] = (STATE.clickMap[title] || 0) + 1;
-        StorageUtil.set('hana_fo_news_clicks_v2', STATE.clickMap);
+        StorageUtil.set('hana_fo_news_clicks_v3', STATE.clickMap);
         UI.renderTop5News();
       },
 
@@ -2098,21 +2177,21 @@
         if (!item) return;
         if (STATE.scrapMap[item.title]) delete STATE.scrapMap[item.title];
         else STATE.scrapMap[item.title] = item;
-        StorageUtil.set('hana_fo_scrapped_news_v1', STATE.scrapMap);
+        StorageUtil.set('hana_fo_scrapped_news_v2', STATE.scrapMap);
         UI.renderNewsroom();
       },
 
       copyNewsBriefing(idx) {
         const item = UI.getFilteredNews()[idx];
         if (!item) return;
-        const msg = `📰 *[HANA Family Office 마켓 브리핑]*\n■ ${item.title}\n• 분류: ${item.tags.join(', ')} | 언론사: ${item.press} (${item.date})\n🔗 원문 보기: ${item.url}`;
+        const msg = `📰 *[HANA Family Office 마켓 브리핑]*\n■ ${item.title}\n• 분류: ${item.tags.join(', ')} | 언론사: ${item.press} (출고일: ${item.date})\n🔗 원문 보기: ${item.url}`;
         navigator.clipboard.writeText(msg).then(() => alert('손님 전달용 브리핑 문구와 기사 원문 링크가 복사되었습니다.'));
       },
 
       async searchKeyword() {
         const kw = $('custom-news-Input')?.value.trim();
         if (!kw) return alert('검색할 키워드를 입력해 주세요.');
-        $('news-status-badge').textContent = `● '${kw}' 실시간 뉴스 수집중...`;
+        $('news-status-badge').textContent = `● '${kw}' 실시간 원문 뉴스 수집중...`;
         const items = await NET.fetchGoogleNews(kw, '매크로');
         if (items.length) NET.mergeArticles(items);
 
@@ -2122,41 +2201,33 @@
         STATE.newsList.sort((a, b) => (b.title.includes(kw) ? 1 : 0) - (a.title.includes(kw) ? 1 : 0) || b.timestamp - a.timestamp);
         UI.renderNewsroom();
         UI.renderTop5News();
-        $('news-status-badge').textContent = `● '${kw}' 검색 완료 (총 ${STATE.newsList.length}건 보유)`;
+        $('news-status-badge').textContent = `● '${kw}' 원문 검색 완료 (총 ${STATE.newsList.length}건 보유)`;
       },
 
+      // [핵심 수정] 과거 기사 불러오기 시에도 가짜 템플릿을 생성하지 않고, 실제 과거 기간 RSS를 조회하여 원문 출고일 그대로 추가
       async fetchHistoricalNews(targetCat) {
         if (STATE.isFetchingNews) return;
         STATE.isFetchingNews = true;
         STATE.histStep += 1;
         const btn = $('btn-load-more-news');
-        if (btn) btn.textContent = '⏳ 과거 아카이브 기사 10개 추가 수집 중...';
+        if (btn) btn.textContent = '⏳ 실제 과거 원문 기사를 추가 수집하고 있습니다...';
 
-        const endDate = new Date(Date.now() - (STATE.histStep * 14 * 86400000));
+        const endDate = new Date(Date.now() - ((STATE.histStep - 1) * 14 * 86400000));
+        const startDate = new Date(Date.now() - (STATE.histStep * 14 * 86400000));
         const beforeStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
-        const dispDate = `${beforeStr.replace(/-/g, '.')} 14:00`;
+        const afterStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
 
         const rules = (targetCat && targetCat !== 'ALL' && targetCat !== 'SCRAP')
           ? DATA.newsCategoryRules.filter(r => r.cat === targetCat)
           : DATA.newsCategoryRules;
 
-        let added = 0;
         await Promise.all(rules.map(async (r) => {
-          const items = await NET.fetchGoogleNews(`${r.query} before:${beforeStr}`, r.cat);
-          if (items.length) { added += items.length; NET.mergeArticles(items); }
+          const items = await NET.fetchGoogleNews(`${r.rawQuery} after:${afterStr} before:${beforeStr}`, r.cat);
+          if (items.length) NET.mergeArticles(items);
         }));
 
-        if (added < 10) {
-          const archiveBatch = DATA.archiveTemplates.map((tpl, i) => ({
-            title: `[아카이브 #${STATE.histStep}-${i + 1}] ${tpl.title}`,
-            press: tpl.press, date: dispDate, timestamp: endDate.getTime() - (i * 3600000),
-            url: tpl.url, tags: tpl.tags
-          }));
-          NET.mergeArticles(archiveBatch);
-        }
-
         STATE.isFetchingNews = false;
-        if (btn) btn.textContent = '+ 과거 기사 10개 더 불러오기 (기간 제한 없음)';
+        if (btn) btn.textContent = '+ 실제 과거 기사 10개 더 불러오기 (원문 출고일 기준)';
         UI.renderNewsroom();
         UI.renderTop5News();
       },
@@ -2183,13 +2254,13 @@
           STATE.extraInsightsCollected = true;
         }
 
-        const live = await NET.fetchGoogleNews('패밀리오피스 리포트 OR 부자보고서 OR 유언대용신탁 보고서', 'TAX');
+        const live = await NET.fetchGoogleNews('(패밀리오피스 리포트 OR 부자보고서 OR 유언대용신탁) when:30d', 'TAX');
         live.slice(0, 4).forEach(item => {
           if (!STATE.insights.some(r => r.title.includes(item.title))) {
             STATE.insights.push({
               stars: '★★★★☆', category: '가업승계·세무·신탁',
               title: `[실시간 수집] ${item.title}`,
-              desc: `${item.press} 발간 패밀리오피스·자산관리 리서치 아티클 (${item.date})`,
+              desc: `${item.press} 발간 패밀리오피스·자산관리 리서치 아티클 (원문 출고: ${item.date})`,
               org: item.press, date: item.date.split(' ')[0], btnText: '🔗 리포트 원문', url: item.url
             });
           }
@@ -2211,11 +2282,11 @@
           return `${isUp ? '📈' : '📉'} *${item.name}*: ${item.priceStr} (${item.diffStr} / ${sign})\n   🕒 ${timeInfo}\n   └ ${item.oneLineSummary}`;
         }).join('\n');
         const issues = cfg.issues.map((i, idx) => `${idx + 1}️⃣ *[${i.tag}]* ${i.title}\n   └ ${i.desc}`).join('\n\n');
-        const top5 = UI.getTop5News().map((n, i) => `📌 *${i + 1}. ${n.title}* (${n.press})\n   🔗 ${n.url}`).join('\n\n');
+        const top5 = UI.getTop5News().map((n, i) => `📌 *${i + 1}. ${n.title}* (${n.press} | ${n.date})\n   🔗 ${n.url}`).join('\n\n');
         const talking = $('edition-talking-point')?.textContent.trim();
 
         const msg = `🏛️ *[하나증권 패밀리오피스 마켓 브리핑]*\n${icon} *기준:* ${DateInfo.full} (${cfg.badge})\n━━━━━━━━━━━━━━━━━━\n\n📊 *1. 주요 지표 (요약) — 현지·한국시간 기준*\n${lines}\n\n🔥 *2. 핵심 마켓 3대 이슈*\n${issues}\n\n💡 *3. 손님 브리핑 종합 요약*\n${talking}\n\n📰 *4. 손님 필독 인기 뉴스 TOP 5 (원문 직결)*\n${top5}\n\n━━━━━━━━━━━━━━━━━━\n💼 *HANA Family Office Solution*`;
-        navigator.clipboard.writeText(msg).then(() => alert('손님 카톡 브리핑(현지·한국 마감시간 포함)이 복사되었습니다.\n채팅방에 붙여넣기(Ctrl+V) 하실 수 있습니다.'));
+        navigator.clipboard.writeText(msg).then(() => alert('손님 카톡 브리핑(현지·한국 마감시간 및 실제 원문 뉴스 포함)이 복사되었습니다.\n채팅방에 붙여넣기(Ctrl+V) 하실 수 있습니다.'));
       },
 
       buildFormalPDFHtml() {
@@ -2255,7 +2326,7 @@
             <div style="display:flex; align-items:center; gap:10px; padding-right:10px;">
               <span style="background:${i < 2 ? '#C5A059' : '#004B49'}; color:${i < 2 ? '#002E2C' : '#ffffff'}; font-weight:800; font-size:11.5px; width:22px; height:22px; border-radius:5px; display:inline-flex; align-items:center; justify-content:center;">${i + 1}</span>
               <div>
-                <div style="font-size:10.5px; color:#004B49; font-weight:800;">[${n.tags.join('·')}] ${n.press} | ${n.date}</div>
+                <div style="font-size:10.5px; color:#004B49; font-weight:800;">[${n.tags.join('·')}] ${n.press} | 원문 출고: ${n.date}</div>
                 <a href="${n.url}" target="_blank" style="font-size:12.8px; font-weight:700; color:#0f172a; text-decoration:none;">${n.title}</a>
               </div>
             </div>
@@ -2388,7 +2459,7 @@
         NET.syncAccurateTickerAndDashboard();
         NET.syncDirectFastMarkets();
         UI.loadCategoryQuotes(STATE.category, true);
-        NET.initNewsroom();
+        NET.initNewsroom(false);
 
         setInterval(() => {
           NET.syncAccurateTickerAndDashboard();
@@ -2399,7 +2470,7 @@
       forceRefresh() {
         NET.syncAccurateTickerAndDashboard();
         UI.loadCategoryQuotes(STATE.category, true);
-        NET.initNewsroom();
+        NET.initNewsroom(true);
       }
     };
 
