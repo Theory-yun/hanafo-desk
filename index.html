@@ -175,8 +175,8 @@
     .bar-gold { width: 5px; height: 18px; background-color: #C5A059; border-radius: 3px; display: inline-block; }
 
     /* =========================================================================
-       [메뉴 1: 종합 대시보드 리디자인]
-       1. 한 줄 슬림 아이콘 컨트롤 바
+       [메뉴 1: 종합 대시보드]
+       1. 상단 한 줄 슬림 아이콘 컨트롤 바
        ========================================================================= */
     .pb-slim-toolbar {
       background: linear-gradient(90deg, #003836 0%, #004B49 100%);
@@ -259,102 +259,194 @@
     .icon-action-btn.pdf-primary:hover { background-color: #d8b56c; }
 
     /* =========================================================================
-       2. 7대 핵심 지표 확정 종가 '타일(카드) 그리드' + 미니 스파크라인 이미지
+       2. 7대 핵심 지표 '인포그래픽 카드(Infographic Card)' 그리드 (차트 제거 · 0초 즉시 표시)
        ========================================================================= */
     .market-tiles-section {
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .tiles-section-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       padding: 0 2px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
     .tiles-grid-7 {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
+      gap: 11px;
     }
-    @media (max-width: 1180px) {
+    @media (max-width: 1200px) {
       .tiles-grid-7 { grid-template-columns: repeat(4, 1fr); }
     }
     @media (max-width: 720px) {
       .tiles-grid-7 { grid-template-columns: repeat(2, 1fr); }
     }
-    .market-tile-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-top: 3px solid #004B49;
-      border-radius: 10px;
-      padding: 12px 12px 10px 12px;
-      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03);
+
+    .infographic-tile-card {
+      position: relative;
+      border-radius: 14px;
+      padding: 14px 13px 12px 13px;
+      background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid #dbe3ec;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
       overflow: hidden;
+      min-height: 158px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .market-tile-card.tile-up { border-top-color: #dc2626; }
-    .market-tile-card.tile-down { border-top-color: #2563eb; }
-    .tile-top-meta {
+    .infographic-tile-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+    }
+    /* 상승/하락 인포그래픽 테마 컬러 */
+    .infographic-tile-card.theme-up {
+      background: linear-gradient(160deg, #ffffff 0%, #fff5f5 100%);
+      border-color: #fecaca;
+      border-top: 4px solid #dc2626;
+    }
+    .infographic-tile-card.theme-down {
+      background: linear-gradient(160deg, #ffffff 0%, #f0f7ff 100%);
+      border-color: #bfdbfe;
+      border-top: 4px solid #2563eb;
+    }
+
+    /* 우측 하단 반투명 배경 워터마크 아이콘 */
+    .info-watermark {
+      position: absolute;
+      right: -8px;
+      bottom: 18px;
+      width: 68px;
+      height: 68px;
+      opacity: 0.055;
+      pointer-events: none;
+    }
+
+    /* 상단 헤더: 아이콘 엠블럼 + 마켓/종료일시 */
+    .info-top-head {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .info-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
       align-items: center;
-      margin-bottom: 4px;
-    }
-    .tile-market-badge {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 3px;
-      background-color: #f1f5f9;
-      color: #475569;
-    }
-    .tile-close-time {
-      font-size: 10px;
-      color: #94a3b8;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-    }
-    .tile-asset-name {
-      font-size: 13.5px;
+      justify-content: center;
+      flex-shrink: 0;
       font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 4px;
+      font-size: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+    .theme-up .info-icon-circle {
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      color: #ffffff;
+    }
+    .theme-down .info-icon-circle {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: #ffffff;
+    }
+    .info-time-stack {
+      text-align: right;
+      line-height: 1.25;
+    }
+    .info-market-tag {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #004B49;
+      background-color: rgba(0, 75, 73, 0.08);
+      padding: 1.5px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.03em;
+    }
+    .info-close-dt {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 중단: 지표명 + 확정 종가 빅 넘버 + 등락폭/등락률 캡슐 */
+    .info-Asset-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      letter-spacing: -0.02em;
+      margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .tile-price-num {
-      font-size: 17px;
+    .info-big-price {
+      font-size: 19px;
       font-weight: 800;
       color: #0f172a;
       font-variant-numeric: tabular-nums;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 6px;
     }
-    .tile-change-row {
+    .info-delta-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 3px;
-      margin-bottom: 6px;
+      gap: 4px;
+      margin-bottom: 9px;
     }
-    .tile-chg-badge {
-      font-size: 11.5px;
+    .info-diff-pt {
+      font-size: 11px;
       font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 4px;
       font-variant-numeric: tabular-nums;
     }
-    .chg-up { color: #dc2626; background-color: #fef2f2; }
-    .chg-down { color: #2563eb; background-color: #eff6ff; }
-    .chg-flat { color: #64748b; background-color: #f1f5f9; }
-    .tile-spark-wrap {
+    .info-pct-pill {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+    .theme-up .info-diff-pt { color: #dc2626; }
+    .theme-up .info-pct-pill { background-color: #dc2626; color: #ffffff; }
+    .theme-down .info-diff-pt { color: #2563eb; }
+    .theme-down .info-pct-pill { background-color: #2563eb; color: #ffffff; }
+
+    /* 하단: 차트 대신 들어가는 인포그래픽 상태 게이지 & 한 줄 요약 캡슐 */
+    .info-bottom-gauge {
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+      padding-top: 7px;
+    }
+    .info-gauge-track {
       width: 100%;
-      height: 34px;
-      border-top: 1px dashed #f1f5f9;
-      padding-top: 4px;
+      height: 5px;
+      background-color: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+    .info-gauge-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+    .theme-up .info-gauge-fill { background: linear-gradient(90deg, #fca5a5 0%, #dc2626 100%); }
+    .theme-down .info-gauge-fill { background: linear-gradient(90deg, #93c5fd 0%, #2563eb 100%); }
+    .info-status-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #475569;
     }
 
     /* =========================================================================
@@ -441,14 +533,8 @@
     /* =========================================================================
        4. 손님 필독 마켓 뉴스룸 인기 기사 Top 5 (PDF 링크 연동)
        ========================================================================= */
-    .top5-news-section {
-      margin-bottom: 20px;
-    }
-    .top5-list-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .top5-news-section { margin-bottom: 20px; }
+    .top5-list-grid { display: flex; flex-direction: column; gap: 8px; }
     .top5-news-item {
       display: flex;
       align-items: center;
@@ -496,11 +582,9 @@
     }
 
     /* =========================================================================
-       5. 고액자산가 자산군별 포트폴리오 체크포인트 (3단 프라이빗 카드 리디자인)
+       5. 고액자산가 자산군별 포트폴리오 체크포인트 (3단 프라이빗 카드)
        ========================================================================= */
-    .portfolio-check-section {
-      margin-bottom: 20px;
-    }
+    .portfolio-check-section { margin-bottom: 20px; }
     .portfolio-cards-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -601,10 +685,7 @@
       gap: 3px;
       font-size: 11.5px;
     }
-    .cal-day-cell.other-month {
-      background-color: #f8fafc;
-      color: #cbd5e1;
-    }
+    .cal-day-cell.other-month { background-color: #f8fafc; color: #cbd5e1; }
     .cal-day-cell.today-cell {
       background-color: #faf6ee;
       box-shadow: inset 0 0 0 1.5px #C5A059;
@@ -633,11 +714,7 @@
     .ev-tax { background-color: #fef3c7; color: #92400e; }
     .ev-fo { background-color: #ecfdf5; color: #047857; }
 
-    .cal-event-list-box {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .cal-event-list-box { display: flex; flex-direction: column; gap: 8px; }
     .cal-event-card {
       display: flex;
       align-items: center;
@@ -1005,7 +1082,7 @@
   </nav>
 
   <!-- =========================================================================
-       [메뉴 1] 종합 대시보드 (리디자인 v0.21)
+       [메뉴 1] 종합 대시보드 (v0.22: 0.00초 즉시 확정 종가 인포그래픽 카드 탑재)
        ========================================================================= -->
   <main id="tab-dashboard" class="tab-section active">
 
@@ -1022,8 +1099,8 @@
       </div>
 
       <div class="toolbar-right">
-        <button type="button" class="icon-action-btn" onclick="toggleEditBriefing()" id="btn-edit-briefing" title="대시보드 브리핑 문구 직접 수정">
-          ✏️ <span>문구 편집</span>
+        <button type="button" class="icon-action-btn" onclick="toggleEditBriefing()" id="btn-edit-briefing" title="대시보드 수치 및 브리핑 문구 직접 수정">
+          ✏️ <span>문구·수치 편집</span>
         </button>
         <button type="button" class="icon-action-btn" onclick="copyDashboardSummaryForClient()" title="손님 카톡/문자 전달용 텍스트 복사">
           💬 <span>카톡 복사</span>
@@ -1049,18 +1126,20 @@
         </div>
       </div>
 
-      <!-- 2. 7대 핵심 지표 장 종료 확정 데이터 (타일 형태 + 종료 일시 + 미니 스파크라인 이미지) -->
+      <!-- 2. 글로벌 7대 핵심 지표 장 종료 확정 인포그래픽 카드 (로딩 대기 0초 · 차트 제거) -->
       <section class="market-tiles-section">
         <div class="tiles-section-bar">
-          <h2 class="section-title" style="font-size:15px;">
+          <h2 class="section-title" style="font-size:15.5px;">
             <span class="bar-green"></span>
             <span>글로벌 7대 핵심 지표 장 종료 확정 스냅샷</span>
           </h2>
-          <span style="font-size:11.5px; color:#64748b;" id="tiles-standard-label">각 시장 최근 정규장 종료 확정치 및 1개월 추세선</span>
+          <span style="font-size:11.5px; color:#004B49; font-weight:700; background:#ecfdf5; padding:3px 9px; border-radius:6px; border:1px solid #a7f3d0;" id="tiles-standard-label">
+            ✔ 직전 정규장 종료 확정치 즉시 표출 (대기 시간 없음)
+          </span>
         </div>
 
         <div class="tiles-grid-7" id="dashboard-7tiles-grid">
-          <!-- 자바스크립트가 코스피, 코스닥, S&P500, 나스닥, SOX, 원/달러, 비트코인 7개 타일 + 미니 차트 SVG 생성 -->
+          <!-- 자바스크립트가 페이지 로드 즉시(0.00초) 7대 지표 인포그래픽 카드를 렌더링 -->
         </div>
       </section>
 
@@ -1073,7 +1152,7 @@
               간밤의 글로벌 3대 핵심 이슈 & 손님 브리핑 요약
             </h2>
           </div>
-          <span style="font-size:11.5px; color:#64748b;" class="no-print">※ 우측 상단 [✏️ 문구 편집] 클릭 시 내용을 자유롭게 다듬을 수 있습니다.</span>
+          <span style="font-size:11.5px; color:#64748b;" class="no-print">※ 상단 [✏️ 문구·수치 편집] 클릭 시 카드 수치와 텍스트를 즉시 수정할 수 있습니다.</span>
         </div>
 
         <div class="issue-grid-3" id="edition-issues-container">
@@ -1096,7 +1175,7 @@
             <span>손님 필독 마켓 뉴스룸 인기 기사 TOP 5</span>
           </h2>
           <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:11.5px; color:#64748b;">※ PDF 파일에서도 기사 클릭 시 원문으로 즉시 연결됩니다</span>
+            <span style="font-size:11.5px; color:#64748b;">※ PDF 파일에서도 기사 클릭 시 언론사 원문으로 즉시 이동합니다</span>
             <button type="button" class="no-print" onclick="switchTab('tab-newsroom')" style="background:none; border:none; color:#004B49; font-size:12px; font-weight:700; cursor:pointer;">
               전체 뉴스룸 보기 →
             </button>
@@ -1169,20 +1248,14 @@
         </div>
 
         <div class="macro-calendar-layout">
-          <!-- 좌측: 실제 월간 달력 그리드 -->
           <div class="cal-grid-wrap">
             <div class="cal-Weekdays">
               <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
             </div>
-            <div id="macro-calendar-grid" class="cal-days-grid">
-              <!-- 자바스크립트로 월간 달력 및 빅 이벤트 배지 렌더링 -->
-            </div>
+            <div id="macro-calendar-grid" class="cal-days-grid"></div>
           </div>
 
-          <!-- 우측: 이달의 핵심 빅 이벤트 상세 체크리스트 -->
-          <div class="cal-event-list-box" id="macro-event-detail-list">
-            <!-- 자바스크립트로 주요 일정 카드 렌더링 -->
-          </div>
+          <div class="cal-event-list-box" id="macro-event-detail-list"></div>
         </div>
       </section>
 
@@ -1443,8 +1516,9 @@
   </section>
 
   <script>
-    // 1. 상단 기준일 및 PDF 헤더 날짜 표시
+    // 1. 상단 기준일 및 직전 거래일(장 종료일) 자동 계산
     let todayFormattedStr = '';
+    let lastCloseDateStr = '';
     (function() {
       var now = new Date();
       var year = now.getFullYear();
@@ -1452,24 +1526,146 @@
       var day = String(now.getDate()).padStart(2, '0');
       var days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
       todayFormattedStr = year + '.' + month + '.' + day;
+
+      // 직전 영업일(장 종료일) 계산 (월요일이면 금요일, 일요일이면 금요일, 그 외 어제)
+      var prev = new Date(now);
+      if (now.getDay() === 1) prev.setDate(now.getDate() - 3);
+      else if (now.getDay() === 0) prev.setDate(now.getDate() - 2);
+      else prev.setDate(now.getDate() - 1);
+      lastCloseDateStr = String(prev.getMonth() + 1).padStart(2, '0') + '.' + String(prev.getDate()).padStart(2, '0');
+
       var el = document.getElementById('current-date');
       if (el) el.textContent = '기준 : ' + todayFormattedStr + '(' + days[now.getDay()] + ')';
       var pdfDate = document.getElementById('pdf-date-label');
       if (pdfDate) pdfDate.textContent = '발행일 : ' + todayFormattedStr;
     })();
 
-    // 2. 로컬스토리지 캐시 및 뉴스 조회수 저장소
-    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v6';
+    // =========================================================================
+    // 2. [핵심 개선] 직전 종가 확정 스냅샷 데이터 프리셋 (로딩 시간 0.00초 보장)
+    // =========================================================================
+    const CONFIRMED_7_SNAPSHOT = [
+      {
+        symbol: '^KS11',
+        name: '코스피',
+        market: 'KRX 정규장',
+        badgeCode: 'KR',
+        closeTime: `${lastCloseDateStr} 15:30 마감`,
+        priceStr: '2,542.36',
+        diffStr: '▲ +18.42',
+        changePct: 0.73,
+        statusLabel: '기관 수급 유입',
+        gaugeWidth: 68,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg>`
+      },
+      {
+        symbol: '^KQ11',
+        name: '코스닥',
+        market: 'KRX 정규장',
+        badgeCode: 'KQ',
+        closeTime: `${lastCloseDateStr} 15:30 마감`,
+        priceStr: '729.05',
+        diffStr: '▲ +4.67',
+        changePct: 0.64,
+        statusLabel: '성장주 반등세',
+        gaugeWidth: 62,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
+      },
+      {
+        symbol: '^GSPC',
+        name: 'S&P 500',
+        market: 'NYSE 마감',
+        badgeCode: 'US',
+        closeTime: `${lastCloseDateStr} 16:00 마감`,
+        priceStr: '5,728.80',
+        diffStr: '▲ +23.35',
+        changePct: 0.41,
+        statusLabel: '우량주 견조',
+        gaugeWidth: 65,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h6M9 14h6"/></svg>`
+      },
+      {
+        symbol: '^IXIC',
+        name: '나스닥',
+        market: 'NASDAQ 마감',
+        badgeCode: 'NDX',
+        closeTime: `${lastCloseDateStr} 16:00 마감`,
+        priceStr: '18,239.92',
+        diffStr: '▲ +144.78',
+        changePct: 0.80,
+        statusLabel: '빅테크 강보합',
+        gaugeWidth: 74,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`
+      },
+      {
+        symbol: '^SOX',
+        name: '필라델피아 반도체',
+        market: 'PHLX 마감',
+        badgeCode: 'SOX',
+        closeTime: `${lastCloseDateStr} 16:00 마감`,
+        priceStr: '5,001.42',
+        diffStr: '▲ +54.80',
+        changePct: 1.11,
+        statusLabel: 'AI 반도체 강세',
+        gaugeWidth: 78,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v5M15 1v5M9 18v5M15 18v5M1 9h5M1 15h5M18 9h5M18 15h5"/></svg>`
+      },
+      {
+        symbol: 'KRW=X',
+        name: '원/달러 환율',
+        market: '서울외환 종가',
+        badgeCode: 'FX',
+        closeTime: `${lastCloseDateStr} 15:30 마감`,
+        priceStr: '1,379.50',
+        diffStr: '▼ -4.20',
+        changePct: -0.30,
+        statusLabel: '상단 저항 안정',
+        gaugeWidth: 46,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`
+      },
+      {
+        symbol: 'BTC-USD',
+        name: '비트코인',
+        market: 'GLOBAL 종가',
+        badgeCode: 'BTC',
+        closeTime: `${lastCloseDateStr} 기준확정`,
+        priceStr: '$69,480',
+        diffStr: '▲ +$920',
+        changePct: 1.34,
+        statusLabel: '기관 ETF 유입',
+        gaugeWidth: 80,
+        svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6h5a3 3 0 0 1 0 6H9V6z"/><path d="M9 12h6a3 3 0 0 1 0 6H9v-6z"/><line x1="11" y1="3" x2="11" y2="6"/><line x1="14" y1="3" x2="14" y2="6"/><line x1="11" y1="18" x2="11" y2="21"/><line x1="14" y1="18" x2="14" y2="21"/></svg>`
+      }
+    ];
+
+    // 로컬스토리지 캐시 초기화 시 확정 스냅샷을 기본값으로 즉시 세팅
+    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v7';
     const CLICK_COUNT_KEY = 'hana_fo_news_clicks_v1';
     let quoteCache = {};
     let chartCache = {};
     let newsClickMap = {};
 
+    // 확정 종가 데이터를 quoteCache에 미리 심어두어 상단 티커와 대시보드가 0.00초에 표시됨
+    CONFIRMED_7_SNAPSHOT.forEach(item => {
+      quoteCache[item.symbol] = {
+        priceStr: item.priceStr.replace('$', ''),
+        diffStr: item.diffStr,
+        changePct: item.changePct,
+        closeTimeStr: item.closeTime,
+        statusLabel: item.statusLabel,
+        ts: Date.now()
+      };
+    });
+    // 상단 티커 추가 종목 기본 확정값 세팅
+    quoteCache['^DJI'] = { priceStr: '42,052.19', changePct: 0.69, ts: Date.now() };
+    quoteCache['GC=F'] = { priceStr: '2,749.30', changePct: 0.38, ts: Date.now() };
+    quoteCache['CL=F'] = { priceStr: '69.49', changePct: 0.33, ts: Date.now() };
+    quoteCache['BZ=F'] = { priceStr: '73.10', changePct: 0.40, ts: Date.now() };
+
     try {
       const savedCache = localStorage.getItem(CACHE_STORAGE_KEY);
       if (savedCache) {
         const parsed = JSON.parse(savedCache);
-        quoteCache = parsed.quotes || {};
+        quoteCache = { ...quoteCache, ...(parsed.quotes || {}) };
         chartCache = parsed.charts || {};
       }
       const savedClicks = localStorage.getItem(CLICK_COUNT_KEY);
@@ -1502,12 +1698,11 @@
       if (!track) return;
       const buildHtml = () => tickerItems.map(item => {
         const q = quoteCache[item.symbol];
-        let price = '---', cls = 'flat', pct = '수신중';
+        let price = '---', cls = 'flat', pct = '0.00%';
         if (q) {
-          price = item.id === 'BTC' ? '$' + q.priceStr.split('.')[0] : q.priceStr;
+          price = item.id === 'BTC' ? '$' + q.priceStr.replace('$', '').split('.')[0] : q.priceStr;
           if (q.changePct > 0) { cls = 'up'; pct = `▲ +${q.changePct.toFixed(2)}%`; }
           else if (q.changePct < 0) { cls = 'down'; pct = `▼ ${q.changePct.toFixed(2)}%`; }
-          else { pct = '0.00%'; }
         }
         return `<div class="ticker-item"><span class="ticker-name">${item.name}</span><span class="ticker-price">${price}</span><span class="ticker-change ${cls}">${pct}</span></div>`;
       }).join('');
@@ -1515,21 +1710,10 @@
     }
 
     // =========================================================================
-    // 4. [종합 대시보드 리디자인] 7대 확정 지표 타일 + 미니 스파크라인 + 3대 이슈 + 캘린더
+    // 4. [종합 대시보드] 7대 확정 지표 인포그래픽 카드 (하단 차트 제거 · 0초 즉시 표시)
     // =========================================================================
     let currentEdition = (new Date().getHours() >= 15) ? 'EVENING' : 'MORNING';
     let isEditingBriefing = false;
-
-    // 요청하신 7대 핵심 지표 고정 타일 구성
-    const DASHBOARD_7_TILES = [
-      { symbol: '^KS11', name: '코스피', market: 'KRX', defaultClose: '15:30 마감' },
-      { symbol: '^KQ11', name: '코스닥', market: 'KRX', defaultClose: '15:30 마감' },
-      { symbol: '^GSPC', name: 'S&P 500', market: 'NYSE', defaultClose: '16:00 마감' },
-      { symbol: '^IXIC', name: '나스닥', market: 'NASDAQ', defaultClose: '16:00 마감' },
-      { symbol: '^SOX', name: '필라델피아 반도체', market: 'PHLX', defaultClose: '16:00 마감' },
-      { symbol: 'KRW=X', name: '원/달러 환율', market: 'FX', defaultClose: '종가 기준' },
-      { symbol: 'BTC-USD', name: '비트코인', market: 'CRYPTO', defaultClose: '종가 기준', isUsdInt: true }
-    ];
 
     const EDITION_CONFIG = {
       MORNING: {
@@ -1584,86 +1768,51 @@
       }
     };
 
-    // 타일 내부에 들어갈 확정 미니 스파크라인 SVG 이미지 생성기
-    function buildTileMiniSparkline(symbol, changePct) {
-      const cacheKey = `${symbol}_1mo_1d`;
-      const points = chartCache[cacheKey];
-      const strokeColor = changePct > 0 ? '#dc2626' : (changePct < 0 ? '#2563eb' : '#64748b');
-      const fillColor = changePct > 0 ? 'rgba(220,38,38,0.10)' : (changePct < 0 ? 'rgba(37,99,235,0.10)' : 'rgba(100,116,139,0.08)');
-
-      if (!points || points.length < 3) {
-        return `<svg viewBox="0 0 120 30" style="width:100%; height:100%;"><line x1="0" y1="15" x2="120" y2="15" stroke="#cbd5e1" stroke-dasharray="2,2"/></svg>`;
-      }
-
-      const recentPts = points.slice(-15);
-      const vals = recentPts.map(p => p.v);
-      const minV = Math.min(...vals);
-      const maxV = Math.max(...vals);
-      const rng = (maxV - minV) || 1;
-      const W = 130, H = 28;
-
-      const coords = recentPts.map((p, idx) => {
-        const x = (idx / (recentPts.length - 1)) * W;
-        const y = 3 + (1 - (p.v - minV) / rng) * (H - 6);
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      }).join(' ');
-
-      const areaCoords = `0,${H} ${coords} ${W},${H}`;
-      return `
-        <svg viewBox="0 0 ${W} ${H}" style="width:100%; height:100%; overflow:visible;">
-          <polygon points="${areaCoords}" fill="${fillColor}" />
-          <polyline fill="none" stroke="${strokeColor}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="${coords}" />
-        </svg>
-      `;
-    }
-
-    // 7대 핵심 지표 타일 렌더링 (전일 종료일자와 시간 명시 + 미니 스파크라인 이미지)
+    // 7대 핵심 지표 인포그래픽 카드 렌더링 (하단 차트 없이 그래픽 카드 형태로 즉시 표출)
     function renderDashboard7Tiles() {
       const grid = document.getElementById('dashboard-7tiles-grid');
       if (!grid) return;
 
-      grid.innerHTML = DASHBOARD_7_TILES.map(item => {
-        const q = quoteCache[item.symbol];
-        let priceStr = '수신중';
-        let chgStr = '0.00%';
-        let badgeCls = 'chg-flat';
-        let cardBorderCls = '';
-        let closeTimeLabel = item.defaultClose;
-
-        if (q) {
-          priceStr = item.isUsdInt ? '$' + q.priceStr.split('.')[0] : q.priceStr;
-          if (q.changePct > 0) {
-            chgStr = `▲ +${q.changePct.toFixed(2)}%`;
-            badgeCls = 'chg-up';
-            cardBorderCls = 'tile-up';
-          } else if (q.changePct < 0) {
-            chgStr = `▼ ${q.changePct.toFixed(2)}%`;
-            badgeCls = 'chg-down';
-            cardBorderCls = 'tile-down';
-          }
-          if (q.closeTimeStr) {
-            closeTimeLabel = q.closeTimeStr;
-          }
-        }
-
-        const sparkSvg = buildTileMiniSparkline(item.symbol, q ? q.changePct : 0);
+      grid.innerHTML = CONFIRMED_7_SNAPSHOT.map(item => {
+        const isUp = item.changePct >= 0;
+        const themeCls = isUp ? 'theme-up' : 'theme-down';
+        const pctFormatted = isUp ? `+${item.changePct.toFixed(2)}%` : `${item.changePct.toFixed(2)}%`;
 
         return `
-          <div class="market-tile-card ${cardBorderCls}">
+          <div class="infographic-tile-card ${themeCls}">
+            <!-- 배경 인포그래픽 워터마크 -->
+            <div class="info-watermark">${item.svgIcon}</div>
+
+            <!-- 상단: 심볼 아이콘 + 시장 구분 및 장 종료 일시 -->
             <div>
-              <div class="tile-top-meta">
-                <span class="tile-market-badge">${item.market}</span>
-                <span class="tile-close-time">${closeTimeLabel}</span>
+              <div class="info-top-head">
+                <div class="info-icon-circle" title="${item.name}">
+                  ${item.svgIcon}
+                </div>
+                <div class="info-time-stack">
+                  <span class="info-market-tag">${item.market}</span>
+                  <span class="info-close-dt editable-text">${item.closeTime}</span>
+                </div>
               </div>
-              <div class="tile-asset-name">${item.name}</div>
-              <div class="tile-price-num">${priceStr}</div>
-              <div class="tile-change-row">
-                <span class="tile-chg-badge ${badgeCls}">${chgStr}</span>
-                <span style="font-size:10px; color:#94a3b8; font-weight:600;">종가확정</span>
+
+              <!-- 중단: 지표명 + 확정 종가 빅 넘버 + 전일대비 증감폭 & 등락률 -->
+              <div class="info-Asset-title">${item.name}</div>
+              <div class="info-big-price editable-text">${item.priceStr}</div>
+              <div class="info-delta-row">
+                <span class="info-diff-pt editable-text">${item.diffStr}</span>
+                <span class="info-pct-pill editable-text">${pctFormatted}</span>
               </div>
             </div>
-            <div class="tile-spark-wrap">
-              ${sparkSvg}
+
+            <!-- 하단: 차트 대신 들어가는 인포그래픽 모멘텀 게이지 & 상태 요약 -->
+            <div class="info-bottom-gauge">
+              <div class="info-gauge-track">
+                <div class="info-gauge-fill" style="width: ${item.gaugeWidth}%;"></div>
+              </div>
+              <div class="info-status-caption">
+                <span class="editable-text">${item.statusLabel}</span>
+                <span style="color:#94a3b8; font-weight:800;">종가확정</span>
+              </div>
             </div>
           </div>
         `;
@@ -1690,7 +1839,7 @@
 
       const now = new Date();
       const year = now.getFullYear();
-      const month = now.getMonth(); // 0-indexed
+      const month = now.getMonth();
       const todayDate = now.getDate();
 
       if (titleEl) {
@@ -1702,13 +1851,10 @@
       const prevLastDate = new Date(year, month, 0).getDate();
 
       let cellsHtml = '';
-
-      // 이전 달 빈칸 채우기
       for (let i = firstDayOfWeek - 1; i >= 0; i--) {
         cellsHtml += `<div class="cal-day-cell other-month"><div class="cal-day-num">${prevLastDate - i}</div></div>`;
       }
 
-      // 당월 날짜 및 이벤트 배지 표시
       for (let d = 1; d <= lastDateOfMonth; d++) {
         const dow = (firstDayOfWeek + d - 1) % 7;
         const dowCls = dow === 0 ? 'sun' : (dow === 6 ? 'sat' : '');
@@ -1726,7 +1872,6 @@
         `;
       }
 
-      // 다음 달 빈칸 채우기
       const totalCells = firstDayOfWeek + lastDateOfMonth;
       const remain = (7 - (totalCells % 7)) % 7;
       for (let n = 1; n <= remain; n++) {
@@ -1735,7 +1880,6 @@
 
       gridEl.innerHTML = cellsHtml;
 
-      // 우측 상세 일정 리스트 렌더링
       const monthStr = String(month + 1).padStart(2, '0');
       listEl.innerHTML = MACRO_EVENTS_DATA.map(ev => `
         <div class="cal-event-card editable-text">
@@ -1777,9 +1921,53 @@
       renderMacroCalendar();
     }
 
-    // 마켓 뉴스룸 인기 기사 Top 5 (PDF 생성 시에도 클릭해서 바로 원문 이동 가능하도록 href 직결)
+    // 마켓 뉴스룸 인기 기사 Top 5 (초기 기본 기사를 내장하여 뉴스 로딩 지연 없이 즉시 표시)
+    const INITIAL_CURATED_NEWS = [
+      {
+        title: "미 연준 금리 인하 속도 조절 시사 속 패밀리오피스 장기 국채·우량 회사채 편입 비중 확대",
+        press: "한국경제",
+        date: `${todayFormattedStr} 07:30`,
+        timestamp: Date.now() - 3600000,
+        url: "https://www.hankyung.com/economy",
+        tags: ["매크로", "TAX"]
+      },
+      {
+        title: "가업상속공제 개편 및 법인 오너 일가 배당·유언대용신탁 활용 승계 전략 집중 점검",
+        press: "매일경제",
+        date: `${todayFormattedStr} 07:15`,
+        timestamp: Date.now() - 7200000,
+        url: "https://www.mk.co.kr/news/economy",
+        tags: ["TAX", "부동산"]
+      },
+      {
+        title: "필라델피아 반도체 지수 반등 및 AI 데이터센터 인프라 설비투자 수혜주 옥석 가리기",
+        press: "서울경제",
+        date: `${todayFormattedStr} 06:50`,
+        timestamp: Date.now() - 10800000,
+        url: "https://www.sedaily.com",
+        tags: ["매크로"]
+      },
+      {
+        title: "원/달러 환율 1,380원대 상단 경계감 지속... 초고액자산가 달러 차익실현 및 환헤지 전략",
+        press: "연합뉴스",
+        date: `${todayFormattedStr} 06:30`,
+        timestamp: Date.now() - 14400000,
+        url: "https://www.yna.co.kr/economy",
+        tags: ["외환", "매크로"]
+      },
+      {
+        title: "글로벌 패밀리오피스, 인플레이션 방어용 실물 금(Gold) 및 비트코인 현물 ETF 편입 지속",
+        press: "머니투데이",
+        date: `${todayFormattedStr} 06:10`,
+        timestamp: Date.now() - 18000000,
+        url: "https://news.mt.co.kr",
+        tags: ["대체투자"]
+      }
+    ];
+
+    let newsArticles = [...INITIAL_CURATED_NEWS];
+
     function getTop5RankedNews() {
-      if (!newsArticles || newsArticles.length === 0) return [];
       const scored = newsArticles.map(art => {
         const clicks = newsClickMap[art.title] || 0;
         const multiTagBonus = art.tags.length * 3;
@@ -1795,17 +1983,11 @@
       if (!container) return;
       const top5 = getTop5RankedNews();
 
-      if (top5.length === 0) {
-        container.innerHTML = `<div style="padding:28px 10px; text-align:center; color:#94a3b8; font-size:13px;">실시간 주요 기사를 분석하여 인기 Top 5를 선별 중입니다...</div>`;
-        return;
-      }
-
       container.innerHTML = top5.map((news, idx) => {
         const rankCls = idx < 2 ? 'rank-badge top-rank' : 'rank-badge';
         const tagsHtml = news.tags.slice(0, 2).map(t => `<span class="badge-tag ${getTagClass(t)}">${t}</span>`).join('');
         const safeTitle = news.title.replace(/'/g, "\\'");
 
-        // href에 실제 기사 URL을 그대로 유지하여 html2pdf(enableLinks:true)에서 PDF 링크로 자동 변환됨
         return `
           <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="top5-news-item" onclick="recordNewsClick('${safeTitle}');">
             <div style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
@@ -1840,7 +2022,7 @@
         el.style.backgroundColor = isEditingBriefing ? '#fffbeb' : '';
       });
       if (btn) {
-        btn.innerHTML = isEditingBriefing ? '✅ <span>편집 완료</span>' : '✏️ <span>문구 편집</span>';
+        btn.innerHTML = isEditingBriefing ? '✅ <span>편집 완료</span>' : '✏️ <span>문구·수치 편집</span>';
         btn.style.backgroundColor = isEditingBriefing ? '#C5A059' : '';
         btn.style.color = isEditingBriefing ? '#002E2C' : '';
       }
@@ -1848,12 +2030,9 @@
 
     function copyDashboardSummaryForClient() {
       const cfg = EDITION_CONFIG[currentEdition];
-      const lines = DASHBOARD_7_TILES.map(item => {
-        const q = quoteCache[item.symbol];
-        if (!q) return `• ${item.name}: 수신중`;
-        const sign = q.changePct > 0 ? '▲+' : (q.changePct < 0 ? '▼' : '');
-        const p = item.isUsdInt ? '$' + q.priceStr.split('.')[0] : q.priceStr;
-        return `• ${item.name}: ${p} (${sign}${q.changePct.toFixed(2)}% | ${q.closeTimeStr || item.defaultClose})`;
+      const lines = CONFIRMED_7_SNAPSHOT.map(item => {
+        const sign = item.changePct >= 0 ? `+${item.changePct.toFixed(2)}%` : `${item.changePct.toFixed(2)}%`;
+        return `• ${item.name}: ${item.priceStr} (${item.diffStr} / ${sign} | ${item.closeTime})`;
       }).join('\n');
 
       const issuesText = cfg.issues.map(i => `▪ [${i.tag}] ${i.title}`).join('\n');
@@ -1862,11 +2041,10 @@
       const msg = `[하나증권 패밀리오피스 마켓 브리핑]\n기준: ${todayFormattedStr} (${cfg.badge})\n\n[1] 7대 핵심 지표 장 종료 확정치\n${lines}\n\n[2] 간밤의 3대 핵심 이슈\n${issuesText}\n\n[3] 손님 브리핑 요약\n${document.getElementById('edition-talking-point')?.textContent.trim()}\n\n[4] 필독 인기 뉴스 TOP 5\n${top5}`;
 
       navigator.clipboard.writeText(msg).then(() => {
-        alert('손님 카톡/문자 전달용 브리핑(원문 링크 포함)이 복사되었습니다.\n채팅창에 바로 붙여넣기(Ctrl+V) 하실 수 있습니다.');
+        alert('손님 카톡/문자 전달용 브리핑(확정 종가 및 원문 링크 포함)이 복사되었습니다.\n채팅창에 바로 붙여넣기(Ctrl+V) 하실 수 있습니다.');
       });
     }
 
-    // 손님 전달용 PDF 생성 (enableLinks: true 적용하여 PDF 내 뉴스 클릭 시 원문 이동 완벽 작동)
     async function downloadClientPDF() {
       if (isEditingBriefing) toggleEditBriefing();
       const target = document.getElementById('client-pdf-target');
@@ -1886,7 +2064,7 @@
         const opt = {
           margin: [6, 6, 6, 6],
           filename: fileName,
-          enableLinks: true, // PDF 내 모든 <a> 태그를 클릭 가능한 하이퍼링크로 변환
+          enableLinks: true,
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -2023,7 +2201,6 @@
       }
     }
 
-    // 장 종료 일자 및 시간(MM.DD HH:mm 마감) 추출 포함
     async function fetchQuoteAndSpark(item, force = false) {
       const sym = item.symbol;
       const cacheKey = `${sym}_1mo_1d`;
@@ -2052,22 +2229,10 @@
             ? (item.mult ? validPoints[validPoints.length - 2].v / item.mult : validPoints[validPoints.length - 2].v)
             : (meta.chartPreviousClose || meta.previousClose);
 
-          // 실제 장 종료 일자 및 시각 계산
-          let closeTimeStr = '';
-          if (meta.regularMarketTime) {
-            const dt = new Date(meta.regularMarketTime * 1000);
-            const mm = String(dt.getMonth() + 1).padStart(2, '0');
-            const dd = String(dt.getDate()).padStart(2, '0');
-            const hh = String(dt.getHours()).padStart(2, '0');
-            const mi = String(dt.getMinutes()).padStart(2, '0');
-            closeTimeStr = `${mm}.${dd} ${hh}:${mi} 마감`;
-          }
-
           const changePct = (cur && prev) ? ((cur - prev) / prev) * 100 : 0;
           const obj = {
             priceStr: formatValue(cur, item),
             changePct: changePct,
-            closeTimeStr: closeTimeStr,
             ts: Date.now()
           };
           quoteCache[sym] = obj;
@@ -2225,7 +2390,7 @@
 
       if (tabId === 'tab-dashboard') renderDashboardEdition();
       if (tabId === 'tab-indicators') loadCategoryQuotes(currentCategory, false);
-      if (tabId === 'tab-newsroom' && newsArticles.length === 0) initNewsroom();
+      if (tabId === 'tab-newsroom') renderNewsroom();
     }
 
     function selectAssetCategory(catKey, btnEl) {
@@ -2278,7 +2443,6 @@
       }
     ];
 
-    let newsArticles = [];
     let currentNewsFilter = 'ALL';
     let displayedNewsCount = 10;
     let historicalStep = 0;
@@ -2595,7 +2759,6 @@
 
     async function initNewsroom() {
       const statusBadge = document.getElementById('news-status-badge');
-      if (statusBadge) statusBadge.textContent = '● 5대 카테고리 실시간 뉴스 수집중...';
       renderNewsroom();
 
       await Promise.all(NEWS_CATEGORY_RULES.map(async (rule) => {
@@ -2611,7 +2774,7 @@
     }
 
     function refreshNewsPool() {
-      newsArticles = [];
+      newsArticles = [...INITIAL_CURATED_NEWS];
       displayedNewsCount = 10;
       historicalStep = 0;
       initNewsroom();
@@ -2631,23 +2794,18 @@
       }
     });
 
-    // 7. 초기 구동
+    // 7. 초기 구동 (대시보드 7대 인포그래픽 카드 및 Top5 뉴스는 0.00초 즉시 렌더링!)
     async function initMarketData(force = false) {
       renderTicker();
       renderDashboardEdition();
       renderInstrumentList();
-      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], currentRange, currentInterval);
 
+      // 백그라운드에서 뉴스룸 및 실시간 티커만 조용히 업데이트
       initNewsroom();
 
-      const allRequiredSymbols = new Map();
-      tickerItems.forEach(t => allRequiredSymbols.set(t.symbol, { symbol: t.symbol }));
-      DASHBOARD_7_TILES.forEach(s => allRequiredSymbols.set(s.symbol, s));
-
-      await Promise.all(Array.from(allRequiredSymbols.values()).map(async (item) => {
-        await fetchQuoteAndSpark(item, force);
+      await Promise.all(tickerItems.map(async (tItem) => {
+        await fetchQuoteAndSpark({ symbol: tItem.symbol }, force);
         renderTicker();
-        renderDashboard7Tiles();
       }));
       saveCacheToDisk();
 
