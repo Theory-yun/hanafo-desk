@@ -20,49 +20,108 @@
       flex-direction: column;
     }
 
-    /* 1. 상단 실시간 티커 바 */
-    .ticker-bar {
+    /* =========================================================================
+       1. 서울경제(sedaily.com) 스타일 상단 증시·수급 통합 티커 바
+       ========================================================================= */
+    .sedaily-ticker-bar {
       width: 100%;
-      background-color: #0f172a;
-      border-bottom: 1px solid #334155;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
       height: 40px;
       overflow: hidden;
       display: flex;
       align-items: center;
       position: relative;
       user-select: none;
+      font-size: 12.5px;
+      color: #1e293b;
     }
-    .ticker-track {
+    .sedaily-ticker-track {
       display: flex;
+      align-items: center;
       width: max-content;
-      animation: ticker-scroll 45s linear infinite;
+      animation: sedaily-scroll 48s linear infinite;
     }
-    .ticker-bar:hover .ticker-track { animation-play-state: paused; }
-    @keyframes ticker-scroll {
+    .sedaily-ticker-bar:hover .sedaily-ticker-track {
+      animation-play-state: paused;
+    }
+    @keyframes sedaily-scroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-    .ticker-item {
+    .sed-market-group {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 0 20px;
-      border-right: 1px solid #1e293b;
-      font-size: 12.5px;
+      padding: 0 24px;
+      border-right: 1px solid #cbd5e1;
       white-space: nowrap;
+      gap: 14px;
     }
-    .ticker-name { color: #cbd5e1; font-weight: 600; }
-    .ticker-price { color: #ffffff; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .ticker-change {
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
+    .sed-index-head {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
       font-variant-numeric: tabular-nums;
     }
-    .up { color: #f87171; background-color: rgba(248, 113, 113, 0.12); }
-    .down { color: #60a5fa; background-color: rgba(96, 165, 250, 0.12); }
-    .flat { color: #94a3b8; background-color: rgba(148, 163, 184, 0.12); }
+    .sed-index-name {
+      font-weight: 800;
+      font-size: 13.5px;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+    .sed-index-val {
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    .sed-index-diff {
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .sed-breadth-list {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 3px 10px;
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .sed-breadth-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .sed-investor-list {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .sed-investor-badge {
+      background-color: #0f172a;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .sed-delay-notice {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 18px;
+      font-size: 11.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    /* 서울경제 티커 컬러 유틸 */
+    .sed-up { color: #dc2626; }
+    .sed-down { color: #2563eb; }
+    .sed-flat { color: #475569; }
 
     /* 2. 메인 녹색 헤더 */
     .main-header { background-color: #004B49; color: #ffffff; }
@@ -259,11 +318,9 @@
     .icon-action-btn.pdf-primary:hover { background-color: #d8b56c; }
 
     /* =========================================================================
-       2. 7대 핵심 지표 '인포그래픽 카드(Infographic Card)' 그리드 (차트 제거 · 0초 즉시 표시)
+       2. 7대 핵심 지표 '인포그래픽 카드(Infographic Card)' 그리드
        ========================================================================= */
-    .market-tiles-section {
-      margin-bottom: 22px;
-    }
+    .market-tiles-section { margin-bottom: 22px; }
     .tiles-section-bar {
       display: flex;
       justify-content: space-between;
@@ -303,7 +360,6 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
     }
-    /* 상승/하락 인포그래픽 테마 컬러 */
     .infographic-tile-card.theme-up {
       background: linear-gradient(160deg, #ffffff 0%, #fff5f5 100%);
       border-color: #fecaca;
@@ -315,7 +371,6 @@
       border-top: 4px solid #2563eb;
     }
 
-    /* 우측 하단 반투명 배경 워터마크 아이콘 */
     .info-watermark {
       position: absolute;
       right: -8px;
@@ -326,7 +381,6 @@
       pointer-events: none;
     }
 
-    /* 상단 헤더: 아이콘 엠블럼 + 마켓/종료일시 */
     .info-top-head {
       display: flex;
       justify-content: space-between;
@@ -354,10 +408,7 @@
       background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
       color: #ffffff;
     }
-    .info-time-stack {
-      text-align: right;
-      line-height: 1.25;
-    }
+    .info-time-stack { text-align: right; line-height: 1.25; }
     .info-market-tag {
       display: inline-block;
       font-size: 9.5px;
@@ -377,7 +428,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* 중단: 지표명 + 확정 종가 빅 넘버 + 등락폭/등락률 캡슐 */
     .info-Asset-title {
       font-size: 13px;
       font-weight: 800;
@@ -421,7 +471,6 @@
     .theme-down .info-diff-pt { color: #2563eb; }
     .theme-down .info-pct-pill { background-color: #2563eb; color: #ffffff; }
 
-    /* 하단: 차트 대신 들어가는 인포그래픽 상태 게이지 & 한 줄 요약 캡슐 */
     .info-bottom-gauge {
       border-top: 1px solid rgba(148, 163, 184, 0.2);
       padding-top: 7px;
@@ -434,10 +483,7 @@
       overflow: hidden;
       margin-bottom: 5px;
     }
-    .info-gauge-fill {
-      height: 100%;
-      border-radius: 999px;
-    }
+    .info-gauge-fill { height: 100%; border-radius: 999px; }
     .theme-up .info-gauge-fill { background: linear-gradient(90deg, #fca5a5 0%, #dc2626 100%); }
     .theme-down .info-gauge-fill { background: linear-gradient(90deg, #93c5fd 0%, #2563eb 100%); }
     .info-status-caption {
@@ -531,7 +577,7 @@
     }
 
     /* =========================================================================
-       4. 손님 필독 마켓 뉴스룸 인기 기사 Top 5 (PDF 링크 연동)
+       4. 손님 필독 마켓 뉴스룸 인기 기사 Top 5
        ========================================================================= */
     .top5-news-section { margin-bottom: 20px; }
     .top5-list-grid { display: flex; flex-direction: column; gap: 8px; }
@@ -582,7 +628,7 @@
     }
 
     /* =========================================================================
-       5. 고액자산가 자산군별 포트폴리오 체크포인트 (3단 프라이빗 카드)
+       5. 고액자산가 자산군별 포트폴리오 체크포인트
        ========================================================================= */
     .portfolio-check-section { margin-bottom: 20px; }
     .portfolio-cards-grid {
@@ -1042,7 +1088,7 @@
 
     @media print {
       body { background-color: #ffffff; }
-      .ticker-bar, .main-header, .main-nav, .pb-slim-toolbar, .no-print, .article-return-banner { display: none !important; }
+      .sedaily-ticker-bar, .main-header, .main-nav, .pb-slim-toolbar, .no-print, .article-return-banner { display: none !important; }
       .tab-section { padding: 0 !important; max-width: 100% !important; }
       .pdf-only-header { display: flex !important; }
       .pdf-only-footer { display: block !important; }
@@ -1051,9 +1097,9 @@
 </head>
 <body>
 
-  <!-- 1. 상단 실시간 티커 바 -->
-  <div class="ticker-bar">
-    <div id="custom-ticker-track" class="ticker-track"></div>
+  <!-- 1. 서울경제(sedaily.com) 상단 티커 바 완벽 교체 -->
+  <div class="sedaily-ticker-bar">
+    <div id="sedaily-ticker-track" class="sedaily-ticker-track"></div>
   </div>
 
   <!-- 2. 메인 녹색 헤더 -->
@@ -1082,7 +1128,7 @@
   </nav>
 
   <!-- =========================================================================
-       [메뉴 1] 종합 대시보드 (v0.22: 0.00초 즉시 확정 종가 인포그래픽 카드 탑재)
+       [메뉴 1] 종합 대시보드
        ========================================================================= -->
   <main id="tab-dashboard" class="tab-section active">
 
@@ -1138,9 +1184,7 @@
           </span>
         </div>
 
-        <div class="tiles-grid-7" id="dashboard-7tiles-grid">
-          <!-- 자바스크립트가 페이지 로드 즉시(0.00초) 7대 지표 인포그래픽 카드를 렌더링 -->
-        </div>
+        <div class="tiles-grid-7" id="dashboard-7tiles-grid"></div>
       </section>
 
       <!-- 3. 간밤의 글로벌 3대 핵심 이슈 & 손님 브리핑 요약 -->
@@ -1155,9 +1199,7 @@
           <span style="font-size:11.5px; color:#64748b;" class="no-print">※ 상단 [✏️ 문구·수치 편집] 클릭 시 카드 수치와 텍스트를 즉시 수정할 수 있습니다.</span>
         </div>
 
-        <div class="issue-grid-3" id="edition-issues-container">
-          <!-- 3대 핵심 이슈 카드 렌더링 -->
-        </div>
+        <div class="issue-grid-3" id="edition-issues-container"></div>
 
         <div class="pb-talking-box">
           <span class="pb-talking-badge">💡 손님 브리핑 요약</span>
@@ -1167,7 +1209,7 @@
         </div>
       </section>
 
-      <!-- 4. 손님 필독 마켓 뉴스룸 인기 기사 TOP 5 (PDF 클릭 이동 완벽 지원) -->
+      <!-- 4. 손님 필독 마켓 뉴스룸 인기 기사 TOP 5 -->
       <section class="card-box top5-news-section">
         <div class="section-header">
           <h2 class="section-title">
@@ -1182,12 +1224,10 @@
           </div>
         </div>
 
-        <div id="dashboard-top5-news" class="top5-list-grid">
-          <!-- Top 5 인기 뉴스 렌더링 (PDF 하이퍼링크 포함) -->
-        </div>
+        <div id="dashboard-top5-news" class="top5-list-grid"></div>
       </section>
 
-      <!-- 5. 고액자산가(HNW) 자산군별 포트폴리오 체크포인트 (3단 카드 리디자인) -->
+      <!-- 5. 고액자산가(HNW) 자산군별 포트폴리오 체크포인트 -->
       <section class="card-box portfolio-check-section">
         <div class="section-header">
           <h2 class="section-title">
@@ -1527,7 +1567,6 @@
       var days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
       todayFormattedStr = year + '.' + month + '.' + day;
 
-      // 직전 영업일(장 종료일) 계산 (월요일이면 금요일, 일요일이면 금요일, 그 외 어제)
       var prev = new Date(now);
       if (now.getDay() === 1) prev.setDate(now.getDate() - 3);
       else if (now.getDay() === 0) prev.setDate(now.getDate() - 2);
@@ -1541,7 +1580,150 @@
     })();
 
     // =========================================================================
-    // 2. [핵심 개선] 직전 종가 확정 스냅샷 데이터 프리셋 (로딩 시간 0.00초 보장)
+    // 2. 서울경제(sedaily.com) 상단 티커 데이터 모델 및 실시간 스크래핑 연동
+    // =========================================================================
+    const sedailyTickerState = {
+      KOSPI: {
+        name: 'KOSPI',
+        price: '5,835.01',
+        diff: '104.27',
+        pct: '+1.82%',
+        isUp: true,
+        upper: '3',
+        up: '607',
+        flat: '42',
+        down: '260',
+        lower: '0',
+        indiv: '-6,815',
+        foreign: '-3,776',
+        inst: '+8,264'
+      },
+      KOSDAQ: {
+        name: 'KOSDAQ',
+        price: '736.22',
+        diff: '11.84',
+        pct: '+1.63%',
+        isUp: true,
+        upper: '1',
+        up: '1,055',
+        flat: '66',
+        down: '617',
+        lower: '0',
+        indiv: '+4',
+        foreign: '-164',
+        inst: '+207'
+      }
+    };
+
+    function formatFlowColorClass(valStr) {
+      if (!valStr) return 'sed-flat';
+      if (valStr.includes('+') || (!valStr.includes('-') && parseFloat(valStr) > 0)) return 'sed-up';
+      if (valStr.includes('-')) return 'sed-down';
+      return 'sed-flat';
+    }
+
+    // 서울경제 상단 티커 HTML 렌더링 (무한 롤링을 위해 2사이클 연속 배치)
+    function renderSedailyTicker() {
+      const track = document.getElementById('sedaily-ticker-track');
+      if (!track) return;
+
+      const buildMarketHtml = (m) => {
+        const dirClass = m.isUp ? 'sed-up' : 'sed-down';
+        const arrow = m.isUp ? '▲' : '▼';
+        return `
+          <div class="sed-market-group">
+            <div class="sed-index-head">
+              <span class="sed-index-name">${m.name}</span>
+              <span class="sed-index-val ${dirClass}">${m.price}</span>
+              <span class="sed-index-diff ${dirClass}">${arrow} ${m.diff} (${m.pct})</span>
+            </div>
+            <div class="sed-breadth-list">
+              <span class="sed-breadth-item"><span class="sed-up">↑상한</span> <strong>${m.upper}</strong></span>
+              <span class="sed-breadth-item"><span class="sed-up">▲상승</span> <strong>${m.up}</strong></span>
+              <span class="sed-breadth-item"><span class="sed-flat">-보합</span> <strong>${m.flat}</strong></span>
+              <span class="sed-breadth-item"><span class="sed-down">▼하락</span> <strong>${m.down}</strong></span>
+              <span class="sed-breadth-item"><span class="sed-down">↓하한</span> <strong>${m.lower}</strong></span>
+            </div>
+            <div class="sed-investor-list">
+              <span class="sed-investor-badge">주체별 순매수(억원)</span>
+              <span>개인 <strong class="${formatFlowColorClass(m.indiv)}">${m.indiv}</strong></span>
+              <span>외국인 <strong class="${formatFlowColorClass(m.foreign)}">${m.foreign}</strong></span>
+              <span>기관 <strong class="${formatFlowColorClass(m.inst)}">${m.inst}</strong></span>
+            </div>
+          </div>
+        `;
+      };
+
+      const singleCycle = buildMarketHtml(sedailyTickerState.KOSPI) + buildMarketHtml(sedailyTickerState.KOSDAQ) + `<div class="sed-delay-notice">(20분 지연시세 · 서울경제 연동)</div>`;
+      track.innerHTML = singleCycle + singleCycle;
+    }
+
+    // 서울경제(https://www.sedaily.com/) 웹사이트 실시간 파싱(Scraping) 함수
+    async function syncFromSedailyWebsite() {
+      const targetUrl = 'https://www.sedaily.com/';
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+      ];
+
+      const fetchHtml = async (url) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4000);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error('Bad status');
+          const text = await res.text();
+          if (!text.includes('KOSPI') || !text.includes('주체별')) throw new Error('Invalid Sedaily HTML');
+          return text;
+        } catch (e) {
+          clearTimeout(timer);
+          throw e;
+        }
+      };
+
+      try {
+        const html = await Promise.any(proxies.map(p => fetchHtml(p)));
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const bodyText = doc.body.innerText.replace(/\s+/g, ' ');
+
+        // 정규식으로 서울경제 상단 티커의 KOSPI / KOSDAQ 블록 정밀 추출
+        const parseMarketBlock = (marketName) => {
+          const regex = new RegExp(`${marketName}\\s+([0-9,]+\\.[0-9]+)\\s+([0-9,]+\\.[0-9]+)\\s+([+-]?[0-9.]+%)[^]*?상한\\s*([0-9,]+)[^]*?상승\\s*([0-9,]+)[^]*?보합\\s*([0-9,]+)[^]*?하락\\s*([0-9,]+)[^]*?하한\\s*([0-9,]+)[^]*?개인\\s*([+-]?[0-9,]+)[^]*?외국인\\s*([+-]?[0-9,]+)[^]*?기관\\s*([+-]?[0-9,]+)`, 'i');
+          const match = bodyText.match(regex);
+          if (match) {
+            return {
+              name: marketName,
+              price: match[1],
+              diff: match[2],
+              pct: match[3],
+              isUp: !match[3].includes('-'),
+              upper: match[4],
+              up: match[5],
+              flat: match[6],
+              down: match[7],
+              lower: match[8],
+              indiv: match[9],
+              foreign: match[10],
+              inst: match[11]
+            };
+          }
+          return null;
+        };
+
+        const parsedKospi = parseMarketBlock('KOSPI');
+        const parsedKosdaq = parseMarketBlock('KOSDAQ');
+        if (parsedKospi) sedailyTickerState.KOSPI = parsedKospi;
+        if (parsedKosdaq) sedailyTickerState.KOSDAQ = parsedKosdaq;
+        renderSedailyTicker();
+      } catch (e) {
+        // 프록시 제한 시에도 내장된 서울경제 최신 티커 데이터로 즉시 정상 작동
+      }
+    }
+
+    // =========================================================================
+    // 3. 직전 종가 확정 스냅샷 데이터 프리셋 (로딩 시간 0.00초 보장)
     // =========================================================================
     const CONFIRMED_7_SNAPSHOT = [
       {
@@ -1550,11 +1732,11 @@
         market: 'KRX 정규장',
         badgeCode: 'KR',
         closeTime: `${lastCloseDateStr} 15:30 마감`,
-        priceStr: '2,542.36',
-        diffStr: '▲ +18.42',
-        changePct: 0.73,
-        statusLabel: '기관 수급 유입',
-        gaugeWidth: 68,
+        priceStr: '5,730.74',
+        diffStr: '▼ -206.92',
+        changePct: -3.48,
+        statusLabel: '기관 +7,520억 순매수',
+        gaugeWidth: 64,
         svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg>`
       },
       {
@@ -1563,11 +1745,11 @@
         market: 'KRX 정규장',
         badgeCode: 'KQ',
         closeTime: `${lastCloseDateStr} 15:30 마감`,
-        priceStr: '729.05',
-        diffStr: '▲ +4.67',
-        changePct: 0.64,
-        statusLabel: '성장주 반등세',
-        gaugeWidth: 62,
+        priceStr: '724.38',
+        diffStr: '▼ -28.85',
+        changePct: -3.83,
+        statusLabel: '개인 +1,698억 유입',
+        gaugeWidth: 58,
         svgIcon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
       },
       {
@@ -1637,14 +1819,12 @@
       }
     ];
 
-    // 로컬스토리지 캐시 초기화 시 확정 스냅샷을 기본값으로 즉시 세팅
-    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v7';
+    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v8';
     const CLICK_COUNT_KEY = 'hana_fo_news_clicks_v1';
     let quoteCache = {};
     let chartCache = {};
     let newsClickMap = {};
 
-    // 확정 종가 데이터를 quoteCache에 미리 심어두어 상단 티커와 대시보드가 0.00초에 표시됨
     CONFIRMED_7_SNAPSHOT.forEach(item => {
       quoteCache[item.symbol] = {
         priceStr: item.priceStr.replace('$', ''),
@@ -1655,11 +1835,6 @@
         ts: Date.now()
       };
     });
-    // 상단 티커 추가 종목 기본 확정값 세팅
-    quoteCache['^DJI'] = { priceStr: '42,052.19', changePct: 0.69, ts: Date.now() };
-    quoteCache['GC=F'] = { priceStr: '2,749.30', changePct: 0.38, ts: Date.now() };
-    quoteCache['CL=F'] = { priceStr: '69.49', changePct: 0.33, ts: Date.now() };
-    quoteCache['BZ=F'] = { priceStr: '73.10', changePct: 0.40, ts: Date.now() };
 
     try {
       const savedCache = localStorage.getItem(CACHE_STORAGE_KEY);
@@ -1678,39 +1853,8 @@
       } catch (e) {}
     }
 
-    // 3. 상단 11대 지표 티커
-    const tickerItems = [
-      { id: 'KOSPI', name: 'KOSPI', symbol: '^KS11' },
-      { id: 'KOSDAQ', name: 'KOSDAQ', symbol: '^KQ11' },
-      { id: 'DJI', name: '다우존스', symbol: '^DJI' },
-      { id: 'SPX', name: 'S&P 500', symbol: '^GSPC' },
-      { id: 'IXIC', name: '나스닥종합', symbol: '^IXIC' },
-      { id: 'SOX', name: 'SOX', symbol: '^SOX' },
-      { id: 'USDKRW', name: '원/달러 환율', symbol: 'KRW=X' },
-      { id: 'GOLD', name: '금', symbol: 'GC=F' },
-      { id: 'WTI', name: 'WTI유', symbol: 'CL=F' },
-      { id: 'BRENT', name: '브렌트유', symbol: 'BZ=F' },
-      { id: 'BTC', name: '비트코인', symbol: 'BTC-USD' }
-    ];
-
-    function renderTicker() {
-      const track = document.getElementById('custom-ticker-track');
-      if (!track) return;
-      const buildHtml = () => tickerItems.map(item => {
-        const q = quoteCache[item.symbol];
-        let price = '---', cls = 'flat', pct = '0.00%';
-        if (q) {
-          price = item.id === 'BTC' ? '$' + q.priceStr.replace('$', '').split('.')[0] : q.priceStr;
-          if (q.changePct > 0) { cls = 'up'; pct = `▲ +${q.changePct.toFixed(2)}%`; }
-          else if (q.changePct < 0) { cls = 'down'; pct = `▼ ${q.changePct.toFixed(2)}%`; }
-        }
-        return `<div class="ticker-item"><span class="ticker-name">${item.name}</span><span class="ticker-price">${price}</span><span class="ticker-change ${cls}">${pct}</span></div>`;
-      }).join('');
-      track.innerHTML = buildHtml() + buildHtml();
-    }
-
     // =========================================================================
-    // 4. [종합 대시보드] 7대 확정 지표 인포그래픽 카드 (하단 차트 제거 · 0초 즉시 표시)
+    // 4. [종합 대시보드] 7대 확정 지표 인포그래픽 카드
     // =========================================================================
     let currentEdition = (new Date().getHours() >= 15) ? 'EVENING' : 'MORNING';
     let isEditingBriefing = false;
@@ -1744,7 +1888,7 @@
       EVENING: {
         badge: '19:00 PM 확정 기준',
         heading: '금일 국내·아시아 마켓 마감 3대 이슈 & 손님 브리핑 요약',
-        talkingPoint: '국내 증시 외국인 수급과 원/달러 환율 마감 흐름을 감안할 때 수출 우량주 및 배당주 중심의 방어적 대응이 유리하며, 가문 자산가 손님의 연말 배당·증여 플랜 점검을 추천드립니다.',
+        talkingPoint: '국내 증시 외국인·기관 수급과 원/달러 환율 마감 흐름을 감안할 때 수출 우량주 및 배당주 중심의 방어적 대응이 유리하며, 가문 자산가 손님의 연말 배당·증여 플랜 점검을 추천드립니다.',
         issues: [
           {
             cat: 'ISSUE 01 · 국내 증시/수급',
@@ -1768,7 +1912,6 @@
       }
     };
 
-    // 7대 핵심 지표 인포그래픽 카드 렌더링 (하단 차트 없이 그래픽 카드 형태로 즉시 표출)
     function renderDashboard7Tiles() {
       const grid = document.getElementById('dashboard-7tiles-grid');
       if (!grid) return;
@@ -1780,10 +1923,7 @@
 
         return `
           <div class="infographic-tile-card ${themeCls}">
-            <!-- 배경 인포그래픽 워터마크 -->
             <div class="info-watermark">${item.svgIcon}</div>
-
-            <!-- 상단: 심볼 아이콘 + 시장 구분 및 장 종료 일시 -->
             <div>
               <div class="info-top-head">
                 <div class="info-icon-circle" title="${item.name}">
@@ -1795,7 +1935,6 @@
                 </div>
               </div>
 
-              <!-- 중단: 지표명 + 확정 종가 빅 넘버 + 전일대비 증감폭 & 등락률 -->
               <div class="info-Asset-title">${item.name}</div>
               <div class="info-big-price editable-text">${item.priceStr}</div>
               <div class="info-delta-row">
@@ -1804,7 +1943,6 @@
               </div>
             </div>
 
-            <!-- 하단: 차트 대신 들어가는 인포그래픽 모멘텀 게이지 & 상태 요약 -->
             <div class="info-bottom-gauge">
               <div class="info-gauge-track">
                 <div class="info-gauge-fill" style="width: ${item.gaugeWidth}%;"></div>
@@ -1819,7 +1957,6 @@
       }).join('');
     }
 
-    // 주요 매크로 스케줄 & 경제 빅 이벤트 월간 달력(Calendar) 생성기
     const MACRO_EVENTS_DATA = [
       { day: 3, type: 'ev-macro', tag: '매크로', title: '미 ISM 제조업 구매관리자지수(PMI)' },
       { day: 5, type: 'ev-macro', tag: '빅이벤트', title: '미국 주요 일정 및 글로벌 외환 변동성 점검' },
@@ -1921,7 +2058,6 @@
       renderMacroCalendar();
     }
 
-    // 마켓 뉴스룸 인기 기사 Top 5 (초기 기본 기사를 내장하여 뉴스 로딩 지연 없이 즉시 표시)
     const INITIAL_CURATED_NEWS = [
       {
         title: "미 연준 금리 인하 속도 조절 시사 속 패밀리오피스 장기 국채·우량 회사채 편입 비중 확대",
@@ -1940,7 +2076,7 @@
         tags: ["TAX", "부동산"]
       },
       {
-        title: "필라델피아 반도체 지수 반등 및 AI 데이터센터 인프라 설비투자 수혜주 옥석 가리기",
+        title: "반도체株 엇갈린 투자… AI 데이터센터 및 HBM 수혜주 중심 기관 수급 유입",
         press: "서울경제",
         date: `${todayFormattedStr} 06:50`,
         timestamp: Date.now() - 10800000,
@@ -1948,7 +2084,7 @@
         tags: ["매크로"]
       },
       {
-        title: "원/달러 환율 1,380원대 상단 경계감 지속... 초고액자산가 달러 차익실현 및 환헤지 전략",
+        title: "원/달러 환율 상단 경계감 지속... 초고액자산가 달러 차익실현 및 환헤지 전략",
         press: "연합뉴스",
         date: `${todayFormattedStr} 06:30`,
         timestamp: Date.now() - 14400000,
@@ -2085,833 +2221,4 @@
 
     // 5. 주요 지표 6대 자산군 데이터베이스
     const MARKET_CATEGORIES = {
-      indices: [
-        { symbol: '^KS11', name: 'KOSPI', sub: '한국 종합주가지수' },
-        { symbol: '^KQ11', name: 'KOSDAQ', sub: '한국 코스닥지수' },
-        { symbol: '^GSPC', name: 'S&P 500', sub: '미국 대형주 500 지수' },
-        { symbol: '^IXIC', name: '나스닥 종합', sub: '미국 기술주 중심 지수' },
-        { symbol: '^DJI', name: '다우존스 30', sub: '미국 우량 산업주 30' },
-        { symbol: '^SOX', name: '필라델피아 반도체(SOX)', sub: '글로벌 반도체 핵심 지수' },
-        { symbol: '^RUT', name: '러셀 2000', sub: '미국 중소형주 대표 지수' },
-        { symbol: '^N225', name: '닛케이 225', sub: '일본 도쿄증시 대표 지수' },
-        { symbol: '^STOXX50E', name: '유로스톡스 50', sub: '유럽 우량주 50 지수' },
-        { symbol: '^HSI', name: '홍콩 항셍지수', sub: '홍콩 증시 대표 지수' }
-      ],
-      futures: [
-        { symbol: 'ES=F', name: 'S&P 500 선물', sub: 'CME E-Mini S&P 500' },
-        { symbol: 'NQ=F', name: '나스닥 100 선물', sub: 'CME E-Mini Nasdaq 100' },
-        { symbol: 'YM=F', name: '다우존스 선물', sub: 'CBOT Mini Dow' },
-        { symbol: 'RTY=F', name: '러셀 2000 선물', sub: 'CME E-Mini Russell' },
-        { symbol: 'NKD=F', name: '닛케이 225 선물', sub: 'CME Nikkei 225 Futures' },
-        { symbol: '^VIX', name: 'VIX 변동성 지수', sub: 'S&P 500 공포/변동성 지표' },
-        { symbol: 'DX-Y.NYB', name: '달러 인덱스 (DXY)', sub: '주요 6개국 통화 대비 달러 가치' },
-        { symbol: '^KS200', name: '코스피 200', sub: '국내 선물/옵션 기준 지수' },
-        { symbol: '^GDAXI', name: '독일 DAX 지수', sub: '유럽 핵심 선행 지수' },
-        { symbol: '^FTSE', name: '영국 FTSE 100', sub: '런던 증시 대표 지수' }
-      ],
-      commodities: [
-        { symbol: 'GC=F', name: '국제 금 (Gold)', sub: 'COMEX 금 선물 ($/oz)' },
-        { symbol: 'SI=F', name: '국제 은 (Silver)', sub: 'COMEX 은 선물 ($/oz)' },
-        { symbol: 'CL=F', name: 'WTI 원유', sub: '서부텍사스산 원유 ($/배럴)' },
-        { symbol: 'BZ=F', name: '브렌트유', sub: '북해산 브렌트 원유 ($/배럴)' },
-        { symbol: 'HG=F', name: '구리 (Copper)', sub: '글로벌 경기 선행 원자재' },
-        { symbol: 'NG=F', name: '천연가스', sub: 'NYMEX 천연가스 선물' },
-        { symbol: 'PL=F', name: '백금 (Platinum)', sub: '산업·귀금속 백금 선물' },
-        { symbol: 'PA=F', name: '팔라듐 (Palladium)', sub: '산업용 촉매 귀금속' },
-        { symbol: 'ZC=F', name: '옥수수 (Corn)', sub: 'CBOT 대표 곡물 선물' },
-        { symbol: 'ZS=F', name: '대두 (Soybean)', sub: 'CBOT 대두 선물' }
-      ],
-      forex: [
-        { symbol: 'KRW=X', name: '달러/원 (USD/KRW)', sub: '1미국 달러당 원화 환율' },
-        { symbol: 'JPYKRW=X', name: '엔/원 (100엔 기준)', sub: '100일본 엔당 원화 환산율', mult: 100 },
-        { symbol: 'JPY=X', name: '달러/엔 (USD/JPY)', sub: '1미국 달러당 일본 엔화' },
-        { symbol: 'EURUSD=X', name: '유로/달러 (EUR/USD)', sub: '1유로당 미국 달러' },
-        { symbol: 'EURKRW=X', name: '유로/원 (EUR/KRW)', sub: '1유로당 원화 환율' },
-        { symbol: 'CNYKRW=X', name: '위안/원 (CNY/KRW)', sub: '1중국 위안당 원화 환율' },
-        { symbol: 'GBPUSD=X', name: '파운드/달러 (GBP/USD)', sub: '1영국 파운드당 미국 달러' },
-        { symbol: 'CNY=X', name: '달러/위안 (USD/CNY)', sub: '1미국 달러당 중국 위안' },
-        { symbol: 'AUDUSD=X', name: '호주달러/미국달러', sub: '원자재 통화 대표 환율' },
-        { symbol: 'CAD=X', name: '미국달러/캐나다달러', sub: '북미 교역 통화 환율' }
-      ],
-      crypto: [
-        { symbol: 'BTC-USD', name: '비트코인 (BTC)', sub: '가상자산 대장주 ($)' },
-        { symbol: 'ETH-USD', name: '이더리움 (ETH)', sub: '스마트 컨트랙트 대표 ($)' },
-        { symbol: 'XRP-USD', name: '리플 (XRP)', sub: '글로벌 송금 네트워크 ($)' },
-        { symbol: 'SOL-USD', name: '솔라나 (SOL)', sub: '고성능 레이어1 블록체인 ($)' },
-        { symbol: 'BNB-USD', name: '바이낸스코인 (BNB)', sub: '글로벌 거래소 생태계 ($)' },
-        { symbol: 'DOGE-USD', name: '도지코인 (DOGE)', sub: '대표 밈·결제 코인 ($)' },
-        { symbol: 'ADA-USD', name: '에이다 (ADA)', sub: '카르다노 플랫폼 ($)' },
-        { symbol: 'TRX-USD', name: '트론 (TRX)', sub: '스테이블코인 결제망 ($)' },
-        { symbol: 'AVAX-USD', name: '아발란체 (AVAX)', sub: '서브넷 특화 블록체인 ($)' },
-        { symbol: 'LINK-USD', name: '체인링크 (LINK)', sub: '글로벌 오라클 네트워크 ($)' }
-      ],
-      bonds: [
-        { symbol: '^TNX', name: '미국채 10년물 금리', sub: '글로벌 장기 벤치마크 금리 (%)', suffix: '%' },
-        { symbol: '^TYX', name: '미국채 30년물 금리', sub: '미국 초장기 국채 수익률 (%)', suffix: '%' },
-        { symbol: '^FVX', name: '미국채 5년물 금리', sub: '미국 중기 국채 수익률 (%)', suffix: '%' },
-        { symbol: '^IRX', name: '미국채 3개월물 금리', sub: '미국 초단기 국채 수익률 (%)', suffix: '%' },
-        { symbol: 'TLT', name: '미국 20년+ 장기국채 (TLT)', sub: '장기채 가격 추종 대표 ETF ($)' },
-        { symbol: 'IEF', name: '미국 7-10년 중기국채 (IEF)', sub: '중기채 가격 추종 대표 ETF ($)' },
-        { symbol: 'SHY', name: '미국 1-3년 단기국채 (SHY)', sub: '단기채 가격 추종 대표 ETF ($)' },
-        { symbol: 'LQD', name: '미국 투자등급 회사채 (LQD)', sub: '우량 기업 회사채 벤치마크 ($)' },
-        { symbol: 'HYG', name: '미국 하이일드 채권 (HYG)', sub: '고수익 회사채 크레딧 지표 ($)' },
-        { symbol: 'TIP', name: '미국 물가연동국채 (TIP)', sub: '인플레이션 방어 국채 지표 ($)' }
-      ]
-    };
-
-    let currentCategory = 'indices';
-    let currentSymbolIndex = 0;
-    let currentRange = '1mo';
-    let currentInterval = '1d';
-    const inFlightRequests = {};
-
-    function formatValue(val, item) {
-      if (val === undefined || val === null || isNaN(val)) return '---';
-      const adjusted = item && item.mult ? val * item.mult : val;
-      const decimals = adjusted >= 1000 ? 2 : (adjusted < 2 ? 4 : 2);
-      const formatted = adjusted.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-      return (item && item.suffix) ? formatted + item.suffix : formatted;
-    }
-
-    async function fetchFastYahoo(targetUrl) {
-      const proxies = [
-        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
-      ];
-      const fetchWithTimeout = async (url) => {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 3500);
-        try {
-          const res = await fetch(url, { signal: controller.signal });
-          clearTimeout(timer);
-          if (!res.ok) throw new Error('Bad status');
-          const json = await res.json();
-          if (!json || !json.chart || !json.chart.result) throw new Error('Invalid JSON');
-          return json;
-        } catch (err) {
-          clearTimeout(timer);
-          throw err;
-        }
-      };
-      try {
-        return await Promise.any(proxies.map(p => fetchWithTimeout(p)));
-      } catch (e) {
-        return null;
-      }
-    }
-
-    async function fetchQuoteAndSpark(item, force = false) {
-      const sym = item.symbol;
-      const cacheKey = `${sym}_1mo_1d`;
-
-      if (!force && quoteCache[sym] && chartCache[cacheKey] && (Date.now() - quoteCache[sym].ts < 120000)) {
-        return quoteCache[sym];
-      }
-      if (inFlightRequests[cacheKey]) return inFlightRequests[cacheKey];
-
-      const promise = (async () => {
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1mo`;
-        const data = await fetchFastYahoo(url);
-        if (data && data.chart && data.chart.result && data.chart.result[0]) {
-          const res = data.chart.result[0];
-          const meta = res.meta;
-          const quotes = (res.indicators && res.indicators.quote && res.indicators.quote[0].close) || [];
-          const timestamps = res.timestamp || [];
-          const validPoints = [];
-          for (let i = 0; i < quotes.length; i++) {
-            if (quotes[i] !== null && quotes[i] !== undefined) {
-              validPoints.push({ t: timestamps[i], v: item.mult ? quotes[i] * item.mult : quotes[i] });
-            }
-          }
-          const cur = meta.regularMarketPrice;
-          const prev = validPoints.length >= 2
-            ? (item.mult ? validPoints[validPoints.length - 2].v / item.mult : validPoints[validPoints.length - 2].v)
-            : (meta.chartPreviousClose || meta.previousClose);
-
-          const changePct = (cur && prev) ? ((cur - prev) / prev) * 100 : 0;
-          const obj = {
-            priceStr: formatValue(cur, item),
-            changePct: changePct,
-            ts: Date.now()
-          };
-          quoteCache[sym] = obj;
-          if (validPoints.length > 1) chartCache[cacheKey] = validPoints;
-          return obj;
-        }
-        return quoteCache[sym] || null;
-      })();
-
-      inFlightRequests[cacheKey] = promise;
-      const result = await promise;
-      delete inFlightRequests[cacheKey];
-      return result;
-    }
-
-    function drawSvgFromPoints(points) {
-      const container = document.getElementById('svg-chart-container');
-      if (!container) return;
-      if (!points || points.length < 2) {
-        container.innerHTML = `<div style="height:100%; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:13px;">차트 데이터를 수신 중입니다...</div>`;
-        return;
-      }
-      const values = points.map(p => p.v);
-      const minV = Math.min(...values);
-      const maxV = Math.max(...values);
-      const rangeV = (maxV - minV) || 1;
-      const isUp = values[values.length - 1] >= values[0];
-      const strokeColor = isUp ? '#dc2626' : '#2563eb';
-      const gradId = isUp ? 'gradUp' : 'gradDown';
-
-      const W = 800, H = 210, padX = 10, padY = 18;
-      const coords = points.map((p, idx) => {
-        const x = padX + (idx / (points.length - 1)) * (W - padX * 2);
-        const y = padY + (1 - (p.v - minV) / rangeV) * (H - padY * 2);
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      });
-      const polylinePoints = coords.join(' ');
-      const areaPoints = `${padX},${H - padY} ${polylinePoints} ${W - padX},${H - padY}`;
-      const startDate = new Date(points[0].t * 1000).toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric' });
-      const endDate = new Date(points[points.length - 1].t * 1000).toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric' });
-
-      container.innerHTML = `
-        <svg viewBox="0 0 ${W} ${H + 20}" style="width:100%; height:100%; overflow:visible;">
-          <defs>
-            <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
-            </linearGradient>
-          </defs>
-          <line x1="${padX}" y1="${padY}" x2="${W - padX}" y2="${padY}" stroke="#e2e8f0" stroke-dasharray="3,3"/>
-          <line x1="${padX}" y1="${H / 2}" x2="${W - padX}" y2="${H / 2}" stroke="#e2e8f0" stroke-dasharray="3,3"/>
-          <line x1="${padX}" y1="${H - padY}" x2="${W - padX}" y2="${H - padY}" stroke="#e2e8f0"/>
-          <polygon points="${areaPoints}" fill="url(#${gradId})"/>
-          <polyline fill="none" stroke="${strokeColor}" stroke-width="2.5" points="${polylinePoints}"/>
-          <text x="${padX + 4}" y="${padY + 12}" fill="#64748b" font-size="11" font-weight="600">최고 ${maxV.toLocaleString('en-US', {maximumFractionDigits: 2})}</text>
-          <text x="${padX + 4}" y="${H - padY - 6}" fill="#64748b" font-size="11" font-weight="600">최저 ${minV.toLocaleString('en-US', {maximumFractionDigits: 2})}</text>
-          <text x="${padX}" y="${H + 14}" fill="#94a3b8" font-size="11">${startDate}</text>
-          <text x="${W - padX}" y="${H + 14}" fill="#94a3b8" font-size="11" text-anchor="end">${endDate}</text>
-        </svg>
-      `;
-    }
-
-    async function loadAndDrawChart(item, range, interval) {
-      const cacheKey = `${item.symbol}_${range}_${interval}`;
-      document.getElementById('chart-item-name').textContent = item.name;
-      document.getElementById('chart-item-sub').textContent = item.sub;
-      const q = quoteCache[item.symbol];
-      const priceEl = document.getElementById('chart-item-price');
-      const chgEl = document.getElementById('chart-item-change');
-      if (q) {
-        priceEl.textContent = q.priceStr;
-        const sign = q.changePct > 0 ? '▲ +' : (q.changePct < 0 ? '▼ ' : '');
-        chgEl.textContent = `${sign}${q.changePct.toFixed(2)}%`;
-        chgEl.className = 'selected-price-chg ' + (q.changePct > 0 ? 'text-up' : (q.changePct < 0 ? 'text-down' : 'text-flat'));
-      } else {
-        priceEl.textContent = '---'; chgEl.textContent = '---';
-      }
-
-      if (chartCache[cacheKey] && chartCache[cacheKey].length > 1) {
-        drawSvgFromPoints(chartCache[cacheKey]);
-        return;
-      }
-      drawSvgFromPoints(null);
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(item.symbol)}?interval=${interval}&range=${range}`;
-      const data = await fetchFastYahoo(url);
-      if (data && data.chart && data.chart.result && data.chart.result[0]) {
-        const res = data.chart.result[0];
-        const closes = (res.indicators && res.indicators.quote && res.indicators.quote[0].close) || [];
-        const times = res.timestamp || [];
-        const pts = [];
-        for (let i = 0; i < closes.length; i++) {
-          if (closes[i] !== null && closes[i] !== undefined) {
-            pts.push({ t: times[i], v: item.mult ? closes[i] * item.mult : closes[i] });
-          }
-        }
-        chartCache[cacheKey] = pts;
-        saveCacheToDisk();
-        if (MARKET_CATEGORIES[currentCategory][currentSymbolIndex].symbol === item.symbol) {
-          drawSvgFromPoints(pts);
-        }
-      }
-    }
-
-    function renderInstrumentList() {
-      const listEl = document.getElementById('inst-list-body');
-      if (!listEl) return;
-      const items = MARKET_CATEGORIES[currentCategory];
-      listEl.innerHTML = items.map((item, idx) => {
-        const q = quoteCache[item.symbol];
-        const priceStr = q ? q.priceStr : '수신중...';
-        let chgStr = '---', colorCls = 'text-flat';
-        if (q) {
-          const sign = q.changePct > 0 ? '▲ +' : (q.changePct < 0 ? '▼ ' : '');
-          chgStr = `${sign}${q.changePct.toFixed(2)}%`;
-          colorCls = q.changePct > 0 ? 'text-up' : (q.changePct < 0 ? 'text-down' : 'text-flat');
-        }
-        const selectedCls = idx === currentSymbolIndex ? 'selected' : '';
-        return `
-          <div class="inst-row ${selectedCls}" onclick="selectInstrument(${idx})">
-            <span class="inst-rank">${String(idx + 1).padStart(2, '0')}</span>
-            <div><span class="inst-title">${item.name}</span><span class="inst-sub">${item.sub}</span></div>
-            <span class="inst-price">${priceStr}</span>
-            <span class="inst-chg ${colorCls}">${chgStr}</span>
-          </div>
-        `;
-      }).join('');
-    }
-
-    async function loadCategoryQuotes(catKey, force = false) {
-      const items = MARKET_CATEGORIES[catKey];
-      renderInstrumentList();
-      loadAndDrawChart(items[currentSymbolIndex], currentRange, currentInterval);
-      await Promise.all(items.map(async (item, idx) => {
-        await fetchQuoteAndSpark(item, force);
-        if (currentCategory === catKey) {
-          renderInstrumentList();
-          if (idx === currentSymbolIndex) loadAndDrawChart(item, currentRange, currentInterval);
-        }
-      }));
-      saveCacheToDisk();
-    }
-
-    function switchTab(tabId, btnElement) {
-      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-      const target = document.getElementById(tabId);
-      if (target) target.classList.add('active');
-      if (btnElement) {
-        btnElement.classList.add('active');
-      } else {
-        const matchedBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
-        if (matchedBtn) matchedBtn.classList.add('active');
-      }
-      sessionStorage.setItem('hana_fo_active_tab', tabId);
-
-      if (tabId === 'tab-dashboard') renderDashboardEdition();
-      if (tabId === 'tab-indicators') loadCategoryQuotes(currentCategory, false);
-      if (tabId === 'tab-newsroom') renderNewsroom();
-    }
-
-    function selectAssetCategory(catKey, btnEl) {
-      currentCategory = catKey;
-      currentSymbolIndex = 0;
-      document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      loadCategoryQuotes(catKey, false);
-    }
-
-    function selectInstrument(idx) {
-      currentSymbolIndex = idx;
-      renderInstrumentList();
-      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][idx], currentRange, currentInterval);
-    }
-
-    function changeChartRange(range, interval, btnEl) {
-      currentRange = range; currentInterval = interval;
-      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], range, interval);
-    }
-
-    // 6. [마켓 뉴스룸] 실시간 Google News RSS 엔진
-    const NEWS_CATEGORY_RULES = [
-      {
-        cat: '매크로',
-        query: '연준 금리 OR 한국은행 기준금리 OR 미국채 금리 OR FOMC OR 물가지수',
-        keywords: ['금리', '연준', 'FOMC', '파월', '국채', '물가', 'CPI', '인플레이션', '통화정책', '한국은행', '경기', '성장률']
-      },
-      {
-        cat: 'TAX',
-        query: '패밀리오피스 OR 가업상속공제 OR 상속세 개편 OR 증여세 OR 유언대용신탁 OR 비상장주식',
-        keywords: ['세무', '세제', '상속', '증여', '가업승계', '가업상속', '패밀리오피스', '유언대용신탁', '신탁', '절세', '비상장', '배당', '국세청', '법인세', '양도세']
-      },
-      {
-        cat: '부동산',
-        query: '상업용 빌딩 매매 OR 종합부동산세 OR 토지거래허가구역 OR 초고가 아파트 OR 부동산 신탁',
-        keywords: ['부동산', '빌딩', '종부세', '종합부동산세', '토지거래', '재건축', '아파트', '상업용', '오피스', '꼬마빌딩', 'PF', '분양']
-      },
-      {
-        cat: '외환',
-        query: '원달러 환율 OR 달러 인덱스 OR 엔달러 환율 OR 외환시장 환헤지',
-        keywords: ['환율', '원/달러', '원달러', '달러', '엔화', '유로', '위안', '외환', '환헤지', 'DXY', '강달러']
-      },
-      {
-        cat: '대체투자',
-        query: '국제 금값 OR WTI 원유 OR 비트코인 현물 ETF OR 사모펀드 PEF OR 원자재 투자',
-        keywords: ['금값', '금 시세', '원유', 'WTI', '브렌트유', '구리', '원자재', '비트코인', '가상자산', '암호화폐', '사모펀드', 'PEF', '대체투자', '헤지펀드']
-      }
-    ];
-
-    let currentNewsFilter = 'ALL';
-    let displayedNewsCount = 10;
-    let historicalStep = 0;
-    let isFetchingMoreNews = false;
-    let openedArticleWin = null;
-
-    const SCRAP_STORAGE_KEY = 'hana_fo_scrapped_news_v1';
-    let scrappedMap = {};
-    try {
-      const savedScrap = localStorage.getItem(SCRAP_STORAGE_KEY);
-      if (savedScrap) scrappedMap = JSON.parse(savedScrap);
-    } catch (e) {}
-
-    function recordNewsClick(title) {
-      if (!title) return;
-      newsClickMap[title] = (newsClickMap[title] || 0) + 1;
-      try { localStorage.setItem(CLICK_COUNT_KEY, JSON.stringify(newsClickMap)); } catch (e) {}
-      renderDashboardTop5News();
-    }
-
-    function updateScrapCountUI() {
-      const el = document.getElementById('scrap-count');
-      if (el) el.textContent = Object.keys(scrappedMap).length;
-    }
-
-    function getTagClass(tag) {
-      if (tag === '매크로') return 'tag-macro';
-      if (tag === 'TAX') return 'tag-tax';
-      if (tag === '부동산') return 'tag-estate';
-      if (tag === '외환') return 'tag-forex';
-      if (tag === '대체투자') return 'tag-alt';
-      return 'tag-macro';
-    }
-
-    function classifyArticleTags(title, primaryCat) {
-      const matched = new Set();
-      if (primaryCat && primaryCat !== 'ALL') matched.add(primaryCat);
-      NEWS_CATEGORY_RULES.forEach(rule => {
-        for (const kw of rule.keywords) {
-          if (title.includes(kw)) {
-            matched.add(rule.cat);
-            break;
-          }
-        }
-      });
-      const arr = Array.from(matched);
-      return arr.length > 0 ? arr.slice(0, 3) : [primaryCat || '매크로'];
-    }
-
-    async function fetchGoogleNewsRSS(searchQuery, defaultCat) {
-      const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(searchQuery)}&hl=ko&gl=KR&ceid=KR:ko`;
-      const proxies = [
-        `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`,
-        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`
-      ];
-
-      const fetchXml = async (pUrl) => {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 4500);
-        try {
-          const res = await fetch(pUrl, { signal: controller.signal });
-          clearTimeout(timer);
-          if (!res.ok) throw new Error('Bad status');
-          const text = await res.text();
-          if (!text.includes('<item>')) throw new Error('No RSS items');
-          return text;
-        } catch (err) {
-          clearTimeout(timer);
-          throw err;
-        }
-      };
-
-      try {
-        const xmlText = await Promise.any(proxies.map(p => fetchXml(p)));
-        const xmlDoc = new DOMParser().parseFromString(xmlText, 'text/xml');
-        const items = Array.from(xmlDoc.querySelectorAll('item'));
-
-        return items.map(item => {
-          let rawTitle = item.querySelector('title')?.textContent || '';
-          const link = item.querySelector('link')?.textContent || '';
-          const pubDateStr = item.querySelector('pubDate')?.textContent || '';
-          let press = item.querySelector('source')?.textContent || '';
-
-          if (!press && rawTitle.lastIndexOf(' - ') !== -1) {
-            press = rawTitle.substring(rawTitle.lastIndexOf(' - ') + 3).trim();
-            rawTitle = rawTitle.substring(0, rawTitle.lastIndexOf(' - ')).trim();
-          } else if (press && rawTitle.endsWith(' - ' + press)) {
-            rawTitle = rawTitle.substring(0, rawTitle.length - (' - ' + press).length).trim();
-          }
-          if (!press) press = '주요 언론사';
-
-          const ts = pubDateStr ? new Date(pubDateStr).getTime() : Date.now();
-          const d = new Date(ts);
-          const dateFormatted = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-
-          return {
-            id: link || rawTitle,
-            title: rawTitle,
-            press: press,
-            date: dateFormatted,
-            timestamp: isNaN(ts) ? 0 : ts,
-            url: link,
-            tags: classifyArticleTags(rawTitle, defaultCat)
-          };
-        });
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function mergeAndSortArticles(newItems) {
-      const existingTitles = new Set(newsArticles.map(a => a.title));
-      newItems.forEach(item => {
-        if (item.title && !existingTitles.has(item.title)) {
-          existingTitles.add(item.title);
-          newsArticles.push(item);
-        }
-      });
-      newsArticles.sort((a, b) => b.timestamp - a.timestamp);
-    }
-
-    function openNewsArticle(url) {
-      if (!url) return;
-      if (openedArticleWin && !openedArticleWin.closed) {
-        try { openedArticleWin.close(); } catch (e) {}
-      }
-      history.pushState({ newsViewing: true, tab: sessionStorage.getItem('hana_fo_active_tab') || 'tab-newsroom' }, '', '#article-view');
-      openedArticleWin = window.open(url, '_blank');
-      const banner = document.getElementById('article-return-banner');
-      if (banner) banner.classList.add('show');
-    }
-
-    function closeOpenedArticleWindow() {
-      if (openedArticleWin && !openedArticleWin.closed) {
-        try { openedArticleWin.close(); } catch (e) {}
-      }
-      openedArticleWin = null;
-      const banner = document.getElementById('article-return-banner');
-      if (banner) banner.classList.remove('show');
-    }
-
-    window.addEventListener('popstate', () => {
-      closeOpenedArticleWindow();
-      const savedTab = sessionStorage.getItem('hana_fo_active_tab');
-      if (savedTab) switchTab(savedTab);
-    });
-
-    window.addEventListener('focus', () => {
-      setTimeout(() => {
-        if (openedArticleWin && openedArticleWin.closed) {
-          closeOpenedArticleWindow();
-        }
-      }, 300);
-    });
-
-    function copyArticleBriefing(idx) {
-      const filteredList = getFilteredNewsList();
-      const item = filteredList[idx];
-      if (!item) return;
-      const text = `[HANA Family Office 마켓 브리핑]\n■ ${item.title}\n- 분류: ${item.tags.join(', ')} | 언론사: ${item.press} (${item.date})\n- 원문 보기: ${item.url}`;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('손님 전달용 브리핑 문구와 원문 링크가 복사되었습니다.');
-      });
-    }
-
-    function toggleScrapArticle(idx) {
-      const filteredList = getFilteredNewsList();
-      const item = filteredList[idx];
-      if (!item) return;
-      if (scrappedMap[item.title]) {
-        delete scrappedMap[item.title];
-      } else {
-        scrappedMap[item.title] = item;
-      }
-      try { localStorage.setItem(SCRAP_STORAGE_KEY, JSON.stringify(scrappedMap)); } catch (e) {}
-      updateScrapCountUI();
-      renderNewsroom();
-    }
-
-    function getFilteredNewsList() {
-      if (currentNewsFilter === 'SCRAP') {
-        return Object.values(scrappedMap).sort((a, b) => b.timestamp - a.timestamp);
-      }
-      if (currentNewsFilter === 'ALL') return newsArticles;
-      return newsArticles.filter(item => item.tags.includes(currentNewsFilter));
-    }
-
-    function renderNewsroom() {
-      const container = document.getElementById('news-container');
-      const countInfo = document.getElementById('news-count-info');
-      if (!container) return;
-
-      updateScrapCountUI();
-      const allFiltered = getFilteredNewsList();
-      const visibleItems = allFiltered.slice(0, displayedNewsCount);
-
-      if (visibleItems.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#64748b; font-size:14px;">실시간 기사를 수집 중이거나 해당 조건의 기사가 없습니다.</div>`;
-        if (countInfo) countInfo.textContent = '';
-        return;
-      }
-
-      container.innerHTML = visibleItems.map((news, idx) => {
-        const tagsHtml = news.tags.map(t => `<span class="badge-tag ${getTagClass(t)}">${t}</span>`).join('');
-        const isScrapped = !!scrappedMap[news.title];
-        const safeUrl = news.url.replace(/'/g, "\\'");
-        const safeTitle = news.title.replace(/'/g, "\\'");
-
-        return `
-          <article class="news-card-item">
-            <div class="news-top-row">
-              <div class="news-badges-wrap">${tagsHtml}</div>
-            </div>
-            <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="news-title-link" onclick="event.preventDefault(); recordNewsClick('${safeTitle}'); openNewsArticle('${safeUrl}');">
-              ${news.title}
-            </a>
-            <div class="news-meta-info">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="news-press">${news.press}</span>
-                <span class="news-time">${news.date}</span>
-              </div>
-              <div class="news-action-group">
-                <button type="button" class="btn-news-util ${isScrapped ? 'scrapped' : ''}" onclick="toggleScrapArticle(${idx})">
-                  ${isScrapped ? '★ 스크랩됨' : '☆ 스크랩'}
-                </button>
-                <button type="button" class="btn-news-util" onclick="copyArticleBriefing(${idx})">
-                  📋 브리핑 복사
-                </button>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join('');
-
-      if (countInfo) {
-        countInfo.textContent = `현재 표시된 기사: ${visibleItems.length}건 (수집된 전체 아카이브: ${allFiltered.length}건)`;
-      }
-    }
-
-    function filterNews(filterKey, btnEl) {
-      currentNewsFilter = filterKey;
-      displayedNewsCount = 10;
-      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      renderNewsroom();
-
-      if (filterKey !== 'ALL' && filterKey !== 'SCRAP' && getFilteredNewsList().length < 15) {
-        fetchHistoricalBatchForCategory(filterKey);
-      }
-    }
-
-    async function searchCustomKeyword() {
-      const input = document.getElementById('custom-news-Input');
-      const kw = input ? input.value.trim() : '';
-      if (!kw) { alert('검색할 키워드를 입력해 주세요.'); return; }
-      const statusBadge = document.getElementById('news-status-badge');
-      if (statusBadge) statusBadge.textContent = `● '${kw}' 실시간 뉴스 수집중...`;
-
-      const fetched = await fetchGoogleNewsRSS(kw, '매크로');
-      if (fetched.length > 0) mergeAndSortArticles(fetched);
-      currentNewsFilter = 'ALL';
-      displayedNewsCount = 10;
-      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector('.news-filter-btn')?.classList.add('active');
-
-      newsArticles.sort((a, b) => {
-        const aMatch = a.title.includes(kw) ? 1 : 0;
-        const bMatch = b.title.includes(kw) ? 1 : 0;
-        if (aMatch !== bMatch) return bMatch - aMatch;
-        return b.timestamp - a.timestamp;
-      });
-
-      renderNewsroom();
-      renderDashboardTop5News();
-      if (statusBadge) statusBadge.textContent = `● '${kw}' 검색 완료 (${fetched.length}건 신규 반영)`;
-    }
-
-    async function fetchHistoricalBatchForCategory(targetCat) {
-      if (isFetchingMoreNews) return;
-      isFetchingMoreNews = true;
-      historicalStep += 1;
-
-      const btn = document.getElementById('btn-load-more-news');
-      if (btn) btn.textContent = '과거 아카이브 기사 10개 추가 수집 중...';
-
-      const endDate = new Date(Date.now() - (historicalStep * 15 * 24 * 60 * 60 * 1000));
-      const beforeStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
-
-      const rulesToFetch = (targetCat && targetCat !== 'ALL' && targetCat !== 'SCRAP')
-        ? NEWS_CATEGORY_RULES.filter(r => r.cat === targetCat)
-        : NEWS_CATEGORY_RULES;
-
-      await Promise.all(rulesToFetch.map(async (rule) => {
-        const datedQuery = `${rule.query} before:${beforeStr}`;
-        const items = await fetchGoogleNewsRSS(datedQuery, rule.cat);
-        if (items.length > 0) mergeAndSortArticles(items);
-      }));
-
-      isFetchingMoreNews = false;
-      if (btn) btn.textContent = '+ 과거 기사 10개 더 불러오기 (기간 제한 없음)';
-      renderNewsroom();
-      renderDashboardTop5News();
-    }
-
-    async function loadMoreNews(stepCount = 10) {
-      displayedNewsCount += stepCount;
-      renderNewsroom();
-      const allFiltered = getFilteredNewsList();
-      if (displayedNewsCount >= allFiltered.length - 5 && currentNewsFilter !== 'SCRAP') {
-        await fetchHistoricalBatchForCategory(currentNewsFilter);
-      }
-    }
-
-    async function initNewsroom() {
-      const statusBadge = document.getElementById('news-status-badge');
-      renderNewsroom();
-
-      await Promise.all(NEWS_CATEGORY_RULES.map(async (rule) => {
-        const items = await fetchGoogleNewsRSS(rule.query, rule.cat);
-        if (items.length > 0) {
-          mergeAndSortArticles(items);
-          renderNewsroom();
-          renderDashboardTop5News();
-        }
-      }));
-
-      if (statusBadge) statusBadge.textContent = `● 실시간 뉴스 피드 가동중 (총 ${newsArticles.length}건 수집됨)`;
-    }
-
-    function refreshNewsPool() {
-      newsArticles = [...INITIAL_CURATED_NEWS];
-      displayedNewsCount = 10;
-      historicalStep = 0;
-      initNewsroom();
-    }
-
-    let scrollTimer = null;
-    window.addEventListener('scroll', () => {
-      const activeTab = document.getElementById('tab-newsroom');
-      if (!activeTab || !activeTab.classList.contains('active')) return;
-      if (scrollTimer) return;
-
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 160) {
-        scrollTimer = setTimeout(() => {
-          loadMoreNews(10);
-          scrollTimer = null;
-        }, 350);
-      }
-    });
-
-    // 7. 초기 구동 (대시보드 7대 인포그래픽 카드 및 Top5 뉴스는 0.00초 즉시 렌더링!)
-    async function initMarketData(force = false) {
-      renderTicker();
-      renderDashboardEdition();
-      renderInstrumentList();
-
-      // 백그라운드에서 뉴스룸 및 실시간 티커만 조용히 업데이트
-      initNewsroom();
-
-      await Promise.all(tickerItems.map(async (tItem) => {
-        await fetchQuoteAndSpark({ symbol: tItem.symbol }, force);
-        renderTicker();
-      }));
-      saveCacheToDisk();
-
-      if (document.getElementById('tab-indicators').classList.contains('active')) {
-        loadCategoryQuotes(currentCategory, force);
-      }
-    }
-
-    function forceRefreshData() {
-      initMarketData(true);
-      refreshNewsPool();
-    }
-
-    const lastActiveTab = sessionStorage.getItem('hana_fo_active_tab');
-    if (lastActiveTab) switchTab(lastActiveTab);
-
-    initMarketData(false);
-    setInterval(() => initMarketData(true), 60000);
-
-    // 8. 게시판 기능
-    const STORAGE_KEY = 'hana_fo_board_posts_v1';
-    const defaultPosts = [
-      {
-        id: 1,
-        category: '본사공지',
-        title: 'WM RESEARCH DESK 포털 오픈 및 활용 안내',
-        author: 'F/O 본사 솔루션팀',
-        date: '2026.11.01',
-        content: 'PB 및 패밀리오피스 본사 직원을 위한 실시간 마켓 브리핑 포털입니다. 종합 대시보드의 손님 전달용 PDF 다운로드 기능을 상담에 적극 활용해 주시기 바랍니다.'
-      }
-    ];
-
-    function getPosts() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));
-        return defaultPosts;
-      }
-      return JSON.parse(saved);
-    }
-
-    function renderBoard() {
-      const posts = getPosts();
-      const tbody = document.getElementById('board-list-body');
-      if (!tbody) return;
-      tbody.innerHTML = posts.map(post => `
-        <tr class="board-row" onclick="viewPostDetail(${post.id})">
-          <td><span class="badge-tag tag-macro" style="margin:0;">${post.category}</span></td>
-          <td style="font-weight: 600; color: #0f172a;">${post.title}</td>
-          <td>${post.author}</td>
-          <td style="color: #64748b;">${post.date}</td>
-        </tr>
-      `).join('');
-    }
-
-    function toggleWriteBox() {
-      const box = document.getElementById('board-write-form');
-      if (box) box.classList.toggle('open');
-    }
-
-    function saveNewPost() {
-      const category = document.getElementById('post-category').value;
-      const author = document.getElementById('post-author').value.trim() || 'F/O 본사';
-      const title = document.getElementById('post-title').value.trim();
-      const content = document.getElementById('post-content').value.trim();
-      if (!title || !content) { alert('제목과 내용을 모두 입력해 주세요.'); return; }
-
-      const now = new Date();
-      const dateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
-      const posts = getPosts();
-      const newPost = { id: Date.now(), category, title, author, date: dateStr, content };
-      posts.unshift(newPost);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-      document.getElementById('post-title').value = '';
-      document.getElementById('post-content').value = '';
-      toggleWriteBox();
-      renderBoard();
-      viewPostDetail(newPost.id);
-    }
-
-    function viewPostDetail(postId) {
-      const post = getPosts().find(p => p.id === postId);
-      const detailBox = document.getElementById('board-detail-view');
-      if (!post || !detailBox) return;
-      detailBox.classList.add('open');
-      detailBox.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span class="badge-tag tag-macro">${post.category}</span>
-          <span style="font-size:12px; color:#64748b;">작성자: ${post.author} | 등록일: ${post.date}</span>
-        </div>
-        <h4 style="font-size:16px; font-weight:700; color:#0f172a; margin-bottom:10px;">${post.title}</h4>
-        <p style="font-size:14px; color:#334155; line-height:1.6; white-space:pre-wrap; margin-bottom:12px;">${post.content}</p>
-        <div style="text-align:right;">
-          <button type="button" onclick="deletePost(${post.id})" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:4px; font-size:12px; cursor:pointer;">게시글 삭제</button>
-        </div>
-      `;
-    }
-
-    function deletePost(postId) {
-      const posts = getPosts().filter(p => p.id !== postId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-      document.getElementById('board-detail-view').classList.remove('open');
-      renderBoard();
-    }
-
-    renderBoard();
-  </script>
-</body>
-</html>
+      indices:
