@@ -2221,4 +2221,828 @@
 
     // 5. 주요 지표 6대 자산군 데이터베이스
     const MARKET_CATEGORIES = {
-      indices:
+      indices: [
+        { symbol: '^KS11', name: 'KOSPI', sub: '한국 종합주가지수' },
+        { symbol: '^KQ11', name: 'KOSDAQ', sub: '한국 코스닥지수' },
+        { symbol: '^GSPC', name: 'S&P 500', sub: '미국 대형주 500 지수' },
+        { symbol: '^IXIC', name: '나스닥 종합', sub: '미국 기술주 중심 지수' },
+        { symbol: '^DJI', name: '다우존스 30', sub: '미국 우량 산업주 30' },
+        { symbol: '^SOX', name: '필라델피아 반도체(SOX)', sub: '글로벌 반도체 핵심 지수' },
+        { symbol: '^RUT', name: '러셀 2000', sub: '미국 중소형주 대표 지수' },
+        { symbol: '^N225', name: '닛케이 225', sub: '일본 도쿄증시 대표 지수' },
+        { symbol: '^STOXX50E', name: '유로스톡스 50', sub: '유럽 우량주 50 지수' },
+        { symbol: '^HSI', name: '홍콩 항셍지수', sub: '홍콩 증시 대표 지수' }
+      ],
+      futures: [
+        { symbol: 'ES=F', name: 'S&P 500 선물', sub: 'CME E-Mini S&P 500' },
+        { symbol: 'NQ=F', name: '나스닥 100 선물', sub: 'CME E-Mini Nasdaq 100' },
+        { symbol: 'YM=F', name: '다우존스 선물', sub: 'CBOT Mini Dow' },
+        { symbol: 'RTY=F', name: '러셀 2000 선물', sub: 'CME E-Mini Russell' },
+        { symbol: 'NKD=F', name: '닛케이 225 선물', sub: 'CME Nikkei 225 Futures' },
+        { symbol: '^VIX', name: 'VIX 변동성 지수', sub: 'S&P 500 공포/변동성 지표' },
+        { symbol: 'DX-Y.NYB', name: '달러 인덱스 (DXY)', sub: '주요 6개국 통화 대비 달러 가치' },
+        { symbol: '^KS200', name: '코스피 200', sub: '국내 선물/옵션 기준 지수' },
+        { symbol: '^GDAXI', name: '독일 DAX 지수', sub: '유럽 핵심 선행 지수' },
+        { symbol: '^FTSE', name: '영국 FTSE 100', sub: '런던 증시 대표 지수' }
+      ],
+      commodities: [
+        { symbol: 'GC=F', name: '국제 금 (Gold)', sub: 'COMEX 금 선물 ($/oz)' },
+        { symbol: 'SI=F', name: '국제 은 (Silver)', sub: 'COMEX 은 선물 ($/oz)' },
+        { symbol: 'CL=F', name: 'WTI 원유', sub: '서부텍사스산 원유 ($/배럴)' },
+        { symbol: 'BZ=F', name: '브렌트유', sub: '북해산 브렌트 원유 ($/배럴)' },
+        { symbol: 'HG=F', name: '구리 (Copper)', sub: '글로벌 경기 선행 원자재' },
+        { symbol: 'NG=F', name: '천연가스', sub: 'NYMEX 천연가스 선물' },
+        { symbol: 'PL=F', name: '백금 (Platinum)', sub: '산업·귀금속 백금 선물' },
+        { symbol: 'PA=F', name: '팔라듐 (Palladium)', sub: '산업용 촉매 귀금속' },
+        { symbol: 'ZC=F', name: '옥수수 (Corn)', sub: 'CBOT 대표 곡물 선물' },
+        { symbol: 'ZS=F', name: '대두 (Soybean)', sub: 'CBOT 대두 선물' }
+      ],
+      forex: [
+        { symbol: 'KRW=X', name: '달러/원 (USD/KRW)', sub: '1미국 달러당 원화 환율' },
+        { symbol: 'JPYKRW=X', name: '엔/원 (100엔 기준)', sub: '100일본 엔당 원화 환산율', mult: 100 },
+        { symbol: 'JPY=X', name: '달러/엔 (USD/JPY)', sub: '1미국 달러당 일본 엔화' },
+        { symbol: 'EURUSD=X', name: '유로/달러 (EUR/USD)', sub: '1유로당 미국 달러' },
+        { symbol: 'EURKRW=X', name: '유로/원 (EUR/KRW)', sub: '1유로당 원화 환율' },
+        { symbol: 'CNYKRW=X', name: '위안/원 (CNY/KRW)', sub: '1중국 위안당 원화 환율' },
+        { symbol: 'GBPUSD=X', name: '파운드/달러 (GBP/USD)', sub: '1영국 파운드당 미국 달러' },
+        { symbol: 'CNY=X', name: '달러/위안 (USD/CNY)', sub: '1미국 달러당 중국 위안' },
+        { symbol: 'AUDUSD=X', name: '호주달러/미국달러', sub: '원자재 통화 대표 환율' },
+        { symbol: 'CAD=X', name: '미국달러/캐나다달러', sub: '북미 교역 통화 환율' }
+      ],
+      crypto: [
+        { symbol: 'BTC-USD', name: '비트코인 (BTC)', sub: '가상자산 대장주 ($)' },
+        { symbol: 'ETH-USD', name: '이더리움 (ETH)', sub: '스마트 컨트랙트 대표 ($)' },
+        { symbol: 'XRP-USD', name: '리플 (XRP)', sub: '글로벌 송금 네트워크 ($)' },
+        { symbol: 'SOL-USD', name: '솔라나 (SOL)', sub: '고성능 레이어1 블록체인 ($)' },
+        { symbol: 'BNB-USD', name: '바이낸스코인 (BNB)', sub: '글로벌 거래소 생태계 ($)' },
+        { symbol: 'DOGE-USD', name: '도지코인 (DOGE)', sub: '대표 밈·결제 코인 ($)' },
+        { symbol: 'ADA-USD', name: '에이다 (ADA)', sub: '카르다노 플랫폼 ($)' },
+        { symbol: 'TRX-USD', name: '트론 (TRX)', sub: '스테이블코인 결제망 ($)' },
+        { symbol: 'AVAX-USD', name: '아발란체 (AVAX)', sub: '서브넷 특화 블록체인 ($)' },
+        { symbol: 'LINK-USD', name: '체인링크 (LINK)', sub: '글로벌 오라클 네트워크 ($)' }
+      ],
+      bonds: [
+        { symbol: '^TNX', name: '미국채 10년물 금리', sub: '글로벌 장기 벤치마크 금리 (%)', suffix: '%' },
+        { symbol: '^TYX', name: '미국채 30년물 금리', sub: '미국 초장기 국채 수익률 (%)', suffix: '%' },
+        { symbol: '^FVX', name: '미국채 5년물 금리', sub: '미국 중기 국채 수익률 (%)', suffix: '%' },
+        { symbol: '^IRX', name: '미국채 3개월물 금리', sub: '미국 초단기 국채 수익률 (%)', suffix: '%' },
+        { symbol: 'TLT', name: '미국 20년+ 장기국채 (TLT)', sub: '장기채 가격 추종 대표 ETF ($)' },
+        { symbol: 'IEF', name: '미국 7-10년 중기국채 (IEF)', sub: '중기채 가격 추종 대표 ETF ($)' },
+        { symbol: 'SHY', name: '미국 1-3년 단기국채 (SHY)', sub: '단기채 가격 추종 대표 ETF ($)' },
+        { symbol: 'LQD', name: '미국 투자등급 회사채 (LQD)', sub: '우량 기업 회사채 벤치마크 ($)' },
+        { symbol: 'HYG', name: '미국 하이일드 채권 (HYG)', sub: '고수익 회사채 크레딧 지표 ($)' },
+        { symbol: 'TIP', name: '미국 물가연동국채 (TIP)', sub: '인플레이션 방어 국채 지표 ($)' }
+      ]
+    };
+
+    let currentCategory = 'indices';
+    let currentSymbolIndex = 0;
+    let currentRange = '1mo';
+    let currentInterval = '1d';
+    const inFlightRequests = {};
+
+    function formatValue(val, item) {
+      if (val === undefined || val === null || isNaN(val)) return '---';
+      const adjusted = item && item.mult ? val * item.mult : val;
+      const decimals = adjusted >= 1000 ? 2 : (adjusted < 2 ? 4 : 2);
+      const formatted = adjusted.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+      return (item && item.suffix) ? formatted + item.suffix : formatted;
+    }
+
+    async function fetchFastYahoo(targetUrl) {
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+      ];
+      const fetchWithTimeout = async (url) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 3500);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error('Bad status');
+          const json = await res.json();
+          if (!json || !json.chart || !json.chart.result) throw new Error('Invalid JSON');
+          return json;
+        } catch (err) {
+          clearTimeout(timer);
+          throw err;
+        }
+      };
+      try {
+        return await Promise.any(proxies.map(p => fetchWithTimeout(p)));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function fetchQuoteAndSpark(item, force = false) {
+      const sym = item.symbol;
+      const cacheKey = `${sym}_1mo_1d`;
+
+      if (!force && quoteCache[sym] && chartCache[cacheKey] && (Date.now() - quoteCache[sym].ts < 120000)) {
+        return quoteCache[sym];
+      }
+      if (inFlightRequests[cacheKey]) return inFlightRequests[cacheKey];
+
+      const promise = (async () => {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1mo`;
+        const data = await fetchFastYahoo(url);
+        if (data && data.chart && data.chart.result && data.chart.result[0]) {
+          const res = data.chart.result[0];
+          const meta = res.meta;
+          const quotes = (res.indicators && res.indicators.quote && res.indicators.quote[0].close) || [];
+          const timestamps = res.timestamp || [];
+          const validPoints = [];
+          for (let i = 0; i < quotes.length; i++) {
+            if (quotes[i] !== null && quotes[i] !== undefined) {
+              validPoints.push({ t: timestamps[i], v: item.mult ? quotes[i] * item.mult : quotes[i] });
+            }
+          }
+          const cur = meta.regularMarketPrice;
+          const prev = validPoints.length >= 2
+            ? (item.mult ? validPoints[validPoints.length - 2].v / item.mult : validPoints[validPoints.length - 2].v)
+            : (meta.chartPreviousClose || meta.previousClose);
+
+          const changePct = (cur && prev) ? ((cur - prev) / prev) * 100 : 0;
+          const obj = {
+            priceStr: formatValue(cur, item),
+            changePct: changePct,
+            ts: Date.now()
+          };
+          quoteCache[sym] = obj;
+          if (validPoints.length > 1) chartCache[cacheKey] = validPoints;
+          return obj;
+        }
+        return quoteCache[sym] || null;
+      })();
+
+      inFlightRequests[cacheKey] = promise;
+      const result = await promise;
+      delete inFlightRequests[cacheKey];
+      return result;
+    }
+
+    function drawSvgFromPoints(points) {
+      const container = document.getElementById('svg-chart-container');
+      if (!container) return;
+      if (!points || points.length < 2) {
+        container.innerHTML = `<div style="height:100%; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:13px;">차트 데이터를 수신 중입니다...</div>`;
+        return;
+      }
+      const values = points.map(p => p.v);
+      const minV = Math.min(...values);
+      const maxV = Math.max(...values);
+      const rangeV = (maxV - minV) || 1;
+      const isUp = values[values.length - 1] >= values[0];
+      const strokeColor = isUp ? '#dc2626' : '#2563eb';
+      const gradId = isUp ? 'gradUp' : 'gradDown';
+
+      const W = 800, H = 210, padX = 10, padY = 18;
+      const coords = points.map((p, idx) => {
+        const x = padX + (idx / (points.length - 1)) * (W - padX * 2);
+        const y = padY + (1 - (p.v - minV) / rangeV) * (H - padY * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+      const polylinePoints = coords.join(' ');
+      const areaPoints = `${padX},${H - padY} ${polylinePoints} ${W - padX},${H - padY}`;
+      const startDate = new Date(points[0].t * 1000).toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric' });
+      const endDate = new Date(points[points.length - 1].t * 1000).toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric' });
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${W} ${H + 20}" style="width:100%; height:100%; overflow:visible;">
+          <defs>
+            <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
+            </linearGradient>
+          </defs>
+          <line x1="${padX}" y1="${padY}" x2="${W - padX}" y2="${padY}" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+          <line x1="${padX}" y1="${H / 2}" x2="${W - padX}" y2="${H / 2}" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+          <line x1="${padX}" y1="${H - padY}" x2="${W - padX}" y2="${H - padY}" stroke="#e2e8f0"/>
+          <polygon points="${areaPoints}" fill="url(#${gradId})"/>
+          <polyline fill="none" stroke="${strokeColor}" stroke-width="2.5" points="${polylinePoints}"/>
+          <text x="${padX + 4}" y="${padY + 12}" fill="#64748b" font-size="11" font-weight="600">최고 ${maxV.toLocaleString('en-US', {maximumFractionDigits: 2})}</text>
+          <text x="${padX + 4}" y="${H - padY - 6}" fill="#64748b" font-size="11" font-weight="600">최저 ${minV.toLocaleString('en-US', {maximumFractionDigits: 2})}</text>
+          <text x="${padX}" y="${H + 14}" fill="#94a3b8" font-size="11">${startDate}</text>
+          <text x="${W - padX}" y="${H + 14}" fill="#94a3b8" font-size="11" text-anchor="end">${endDate}</text>
+        </svg>
+      `;
+    }
+
+    async function loadAndDrawChart(item, range, interval) {
+      const cacheKey = `${item.symbol}_${range}_${interval}`;
+      document.getElementById('chart-item-name').textContent = item.name;
+      document.getElementById('chart-item-sub').textContent = item.sub;
+      const q = quoteCache[item.symbol];
+      const priceEl = document.getElementById('chart-item-price');
+      const chgEl = document.getElementById('chart-item-change');
+      if (q) {
+        priceEl.textContent = q.priceStr;
+        const sign = q.changePct > 0 ? '▲ +' : (q.changePct < 0 ? '▼ ' : '');
+        chgEl.textContent = `${sign}${q.changePct.toFixed(2)}%`;
+        chgEl.className = 'selected-price-chg ' + (q.changePct > 0 ? 'text-up' : (q.changePct < 0 ? 'text-down' : 'text-flat'));
+      } else {
+        priceEl.textContent = '---'; chgEl.textContent = '---';
+      }
+
+      if (chartCache[cacheKey] && chartCache[cacheKey].length > 1) {
+        drawSvgFromPoints(chartCache[cacheKey]);
+        return;
+      }
+      drawSvgFromPoints(null);
+      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(item.symbol)}?interval=${interval}&range=${range}`;
+      const data = await fetchFastYahoo(url);
+      if (data && data.chart && data.chart.result && data.chart.result[0]) {
+        const res = data.chart.result[0];
+        const closes = (res.indicators && res.indicators.quote && res.indicators.quote[0].close) || [];
+        const times = res.timestamp || [];
+        const pts = [];
+        for (let i = 0; i < closes.length; i++) {
+          if (closes[i] !== null && closes[i] !== undefined) {
+            pts.push({ t: times[i], v: item.mult ? closes[i] * item.mult : closes[i] });
+          }
+        }
+        chartCache[cacheKey] = pts;
+        saveCacheToDisk();
+        if (MARKET_CATEGORIES[currentCategory][currentSymbolIndex].symbol === item.symbol) {
+          drawSvgFromPoints(pts);
+        }
+      }
+    }
+
+    function renderInstrumentList() {
+      const listEl = document.getElementById('inst-list-body');
+      if (!listEl) return;
+      const items = MARKET_CATEGORIES[currentCategory];
+      listEl.innerHTML = items.map((item, idx) => {
+        const q = quoteCache[item.symbol];
+        const priceStr = q ? q.priceStr : '수신중...';
+        let chgStr = '---', colorCls = 'text-flat';
+        if (q) {
+          const sign = q.changePct > 0 ? '▲ +' : (q.changePct < 0 ? '▼ ' : '');
+          chgStr = `${sign}${q.changePct.toFixed(2)}%`;
+          colorCls = q.changePct > 0 ? 'text-up' : (q.changePct < 0 ? 'text-down' : 'text-flat');
+        }
+        const selectedCls = idx === currentSymbolIndex ? 'selected' : '';
+        return `
+          <div class="inst-row ${selectedCls}" onclick="selectInstrument(${idx})">
+            <span class="inst-rank">${String(idx + 1).padStart(2, '0')}</span>
+            <div><span class="inst-title">${item.name}</span><span class="inst-sub">${item.sub}</span></div>
+            <span class="inst-price">${priceStr}</span>
+            <span class="inst-chg ${colorCls}">${chgStr}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadCategoryQuotes(catKey, force = false) {
+      const items = MARKET_CATEGORIES[catKey];
+      renderInstrumentList();
+      loadAndDrawChart(items[currentSymbolIndex], currentRange, currentInterval);
+      await Promise.all(items.map(async (item, idx) => {
+        await fetchQuoteAndSpark(item, force);
+        if (currentCategory === catKey) {
+          renderInstrumentList();
+          if (idx === currentSymbolIndex) loadAndDrawChart(item, currentRange, currentInterval);
+        }
+      }));
+      saveCacheToDisk();
+    }
+
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      if (btnElement) {
+        btnElement.classList.add('active');
+      } else {
+        const matchedBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
+        if (matchedBtn) matchedBtn.classList.add('active');
+      }
+      sessionStorage.setItem('hana_fo_active_tab', tabId);
+
+      if (tabId === 'tab-dashboard') renderDashboardEdition();
+      if (tabId === 'tab-indicators') loadCategoryQuotes(currentCategory, false);
+      if (tabId === 'tab-newsroom') renderNewsroom();
+    }
+
+    function selectAssetCategory(catKey, btnEl) {
+      currentCategory = catKey;
+      currentSymbolIndex = 0;
+      document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      loadCategoryQuotes(catKey, false);
+    }
+
+    function selectInstrument(idx) {
+      currentSymbolIndex = idx;
+      renderInstrumentList();
+      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][idx], currentRange, currentInterval);
+    }
+
+    function changeChartRange(range, interval, btnEl) {
+      currentRange = range; currentInterval = interval;
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], range, interval);
+    }
+
+    // 6. [마켓 뉴스룸] 실시간 Google News RSS 엔진
+    const NEWS_CATEGORY_RULES = [
+      {
+        cat: '매크로',
+        query: '연준 금리 OR 한국은행 기준금리 OR 미국채 금리 OR FOMC OR 물가지수',
+        keywords: ['금리', '연준', 'FOMC', '파월', '국채', '물가', 'CPI', '인플레이션', '통화정책', '한국은행', '경기', '성장률']
+      },
+      {
+        cat: 'TAX',
+        query: '패밀리오피스 OR 가업상속공제 OR 상속세 개편 OR 증여세 OR 유언대용신탁 OR 비상장주식',
+        keywords: ['세무', '세제', '상속', '증여', '가업승계', '가업상속', '패밀리오피스', '유언대용신탁', '신탁', '절세', '비상장', '배당', '국세청', '법인세', '양도세']
+      },
+      {
+        cat: '부동산',
+        query: '상업용 빌딩 매매 OR 종합부동산세 OR 토지거래허가구역 OR 초고가 아파트 OR 부동산 신탁',
+        keywords: ['부동산', '빌딩', '종부세', '종합부동산세', '토지거래', '재건축', '아파트', '상업용', '오피스', '꼬마빌딩', 'PF', '분양']
+      },
+      {
+        cat: '외환',
+        query: '원달러 환율 OR 달러 인덱스 OR 엔달러 환율 OR 외환시장 환헤지',
+        keywords: ['환율', '원/달러', '원달러', '달러', '엔화', '유로', '위안', '외환', '환헤지', 'DXY', '강달러']
+      },
+      {
+        cat: '대체투자',
+        query: '국제 금값 OR WTI 원유 OR 비트코인 현물 ETF OR 사모펀드 PEF OR 원자재 투자',
+        keywords: ['금값', '금 시세', '원유', 'WTI', '브렌트유', '구리', '원자재', '비트코인', '가상자산', '암호화폐', '사모펀드', 'PEF', '대체투자', '헤지펀드']
+      }
+    ];
+
+    let currentNewsFilter = 'ALL';
+    let displayedNewsCount = 10;
+    let historicalStep = 0;
+    let isFetchingMoreNews = false;
+    let openedArticleWin = null;
+
+    const SCRAP_STORAGE_KEY = 'hana_fo_scrapped_news_v1';
+    let scrappedMap = {};
+    try {
+      const savedScrap = localStorage.getItem(SCRAP_STORAGE_KEY);
+      if (savedScrap) scrappedMap = JSON.parse(savedScrap);
+    } catch (e) {}
+
+    function recordNewsClick(title) {
+      if (!title) return;
+      newsClickMap[title] = (newsClickMap[title] || 0) + 1;
+      try { localStorage.setItem(CLICK_COUNT_KEY, JSON.stringify(newsClickMap)); } catch (e) {}
+      renderDashboardTop5News();
+    }
+
+    function updateScrapCountUI() {
+      const el = document.getElementById('scrap-count');
+      if (el) el.textContent = Object.keys(scrappedMap).length;
+    }
+
+    function getTagClass(tag) {
+      if (tag === '매크로') return 'tag-macro';
+      if (tag === 'TAX') return 'tag-tax';
+      if (tag === '부동산') return 'tag-estate';
+      if (tag === '외환') return 'tag-forex';
+      if (tag === '대체투자') return 'tag-alt';
+      return 'tag-macro';
+    }
+
+    function classifyArticleTags(title, primaryCat) {
+      const matched = new Set();
+      if (primaryCat && primaryCat !== 'ALL') matched.add(primaryCat);
+      NEWS_CATEGORY_RULES.forEach(rule => {
+        for (const kw of rule.keywords) {
+          if (title.includes(kw)) {
+            matched.add(rule.cat);
+            break;
+          }
+        }
+      });
+      const arr = Array.from(matched);
+      return arr.length > 0 ? arr.slice(0, 3) : [primaryCat || '매크로'];
+    }
+
+    async function fetchGoogleNewsRSS(searchQuery, defaultCat) {
+      const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(searchQuery)}&hl=ko&gl=KR&ceid=KR:ko`;
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`
+      ];
+
+      const fetchXml = async (pUrl) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4500);
+        try {
+          const res = await fetch(pUrl, { signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error('Bad status');
+          const text = await res.text();
+          if (!text.includes('<item>')) throw new Error('No RSS items');
+          return text;
+        } catch (err) {
+          clearTimeout(timer);
+          throw err;
+        }
+      };
+
+      try {
+        const xmlText = await Promise.any(proxies.map(p => fetchXml(p)));
+        const xmlDoc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const items = Array.from(xmlDoc.querySelectorAll('item'));
+
+        return items.map(item => {
+          let rawTitle = item.querySelector('title')?.textContent || '';
+          const link = item.querySelector('link')?.textContent || '';
+          const pubDateStr = item.querySelector('pubDate')?.textContent || '';
+          let press = item.querySelector('source')?.textContent || '';
+
+          if (!press && rawTitle.lastIndexOf(' - ') !== -1) {
+            press = rawTitle.substring(rawTitle.lastIndexOf(' - ') + 3).trim();
+            rawTitle = rawTitle.substring(0, rawTitle.lastIndexOf(' - ')).trim();
+          } else if (press && rawTitle.endsWith(' - ' + press)) {
+            rawTitle = rawTitle.substring(0, rawTitle.length - (' - ' + press).length).trim();
+          }
+          if (!press) press = '주요 언론사';
+
+          const ts = pubDateStr ? new Date(pubDateStr).getTime() : Date.now();
+          const d = new Date(ts);
+          const dateFormatted = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+
+          return {
+            id: link || rawTitle,
+            title: rawTitle,
+            press: press,
+            date: dateFormatted,
+            timestamp: isNaN(ts) ? 0 : ts,
+            url: link,
+            tags: classifyArticleTags(rawTitle, defaultCat)
+          };
+        });
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function mergeAndSortArticles(newItems) {
+      const existingTitles = new Set(newsArticles.map(a => a.title));
+      newItems.forEach(item => {
+        if (item.title && !existingTitles.has(item.title)) {
+          existingTitles.add(item.title);
+          newsArticles.push(item);
+        }
+      });
+      newsArticles.sort((a, b) => b.timestamp - a.timestamp);
+    }
+
+    function openNewsArticle(url) {
+      if (!url) return;
+      if (openedArticleWin && !openedArticleWin.closed) {
+        try { openedArticleWin.close(); } catch (e) {}
+      }
+      history.pushState({ newsViewing: true, tab: sessionStorage.getItem('hana_fo_active_tab') || 'tab-newsroom' }, '', '#article-view');
+      openedArticleWin = window.open(url, '_blank');
+      const banner = document.getElementById('article-return-banner');
+      if (banner) banner.classList.add('show');
+    }
+
+    function closeOpenedArticleWindow() {
+      if (openedArticleWin && !openedArticleWin.closed) {
+        try { openedArticleWin.close(); } catch (e) {}
+      }
+      openedArticleWin = null;
+      const banner = document.getElementById('article-return-banner');
+      if (banner) banner.classList.remove('show');
+    }
+
+    window.addEventListener('popstate', () => {
+      closeOpenedArticleWindow();
+      const savedTab = sessionStorage.getItem('hana_fo_active_tab');
+      if (savedTab) switchTab(savedTab);
+    });
+
+    window.addEventListener('focus', () => {
+      setTimeout(() => {
+        if (openedArticleWin && openedArticleWin.closed) {
+          closeOpenedArticleWindow();
+        }
+      }, 300);
+    });
+
+    function copyArticleBriefing(idx) {
+      const filteredList = getFilteredNewsList();
+      const item = filteredList[idx];
+      if (!item) return;
+      const text = `[HANA Family Office 마켓 브리핑]\n■ ${item.title}\n- 분류: ${item.tags.join(', ')} | 언론사: ${item.press} (${item.date})\n- 원문 보기: ${item.url}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('손님 전달용 브리핑 문구와 원문 링크가 복사되었습니다.');
+      });
+    }
+
+    function toggleScrapArticle(idx) {
+      const filteredList = getFilteredNewsList();
+      const item = filteredList[idx];
+      if (!item) return;
+      if (scrappedMap[item.title]) {
+        delete scrappedMap[item.title];
+      } else {
+        scrappedMap[item.title] = item;
+      }
+      try { localStorage.setItem(SCRAP_STORAGE_KEY, JSON.stringify(scrappedMap)); } catch (e) {}
+      updateScrapCountUI();
+      renderNewsroom();
+    }
+
+    function getFilteredNewsList() {
+      if (currentNewsFilter === 'SCRAP') {
+        return Object.values(scrappedMap).sort((a, b) => b.timestamp - a.timestamp);
+      }
+      if (currentNewsFilter === 'ALL') return newsArticles;
+      return newsArticles.filter(item => item.tags.includes(currentNewsFilter));
+    }
+
+    function renderNewsroom() {
+      const container = document.getElementById('news-container');
+      const countInfo = document.getElementById('news-count-info');
+      if (!container) return;
+
+      updateScrapCountUI();
+      const allFiltered = getFilteredNewsList();
+      const visibleItems = allFiltered.slice(0, displayedNewsCount);
+
+      if (visibleItems.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#64748b; font-size:14px;">실시간 기사를 수집 중이거나 해당 조건의 기사가 없습니다.</div>`;
+        if (countInfo) countInfo.textContent = '';
+        return;
+      }
+
+      container.innerHTML = visibleItems.map((news, idx) => {
+        const tagsHtml = news.tags.map(t => `<span class="badge-tag ${getTagClass(t)}">${t}</span>`).join('');
+        const isScrapped = !!scrappedMap[news.title];
+        const safeUrl = news.url.replace(/'/g, "\\'");
+        const safeTitle = news.title.replace(/'/g, "\\'");
+
+        return `
+          <article class="news-card-item">
+            <div class="news-top-row">
+              <div class="news-badges-wrap">${tagsHtml}</div>
+            </div>
+            <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="news-title-link" onclick="event.preventDefault(); recordNewsClick('${safeTitle}'); openNewsArticle('${safeUrl}');">
+              ${news.title}
+            </a>
+            <div class="news-meta-info">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="news-press">${news.press}</span>
+                <span class="news-time">${news.date}</span>
+              </div>
+              <div class="news-action-group">
+                <button type="button" class="btn-news-util ${isScrapped ? 'scrapped' : ''}" onclick="toggleScrapArticle(${idx})">
+                  ${isScrapped ? '★ 스크랩됨' : '☆ 스크랩'}
+                </button>
+                <button type="button" class="btn-news-util" onclick="copyArticleBriefing(${idx})">
+                  📋 브리핑 복사
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      if (countInfo) {
+        countInfo.textContent = `현재 표시된 기사: ${visibleItems.length}건 (수집된 전체 아카이브: ${allFiltered.length}건)`;
+      }
+    }
+
+    function filterNews(filterKey, btnEl) {
+      currentNewsFilter = filterKey;
+      displayedNewsCount = 10;
+      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderNewsroom();
+
+      if (filterKey !== 'ALL' && filterKey !== 'SCRAP' && getFilteredNewsList().length < 15) {
+        fetchHistoricalBatchForCategory(filterKey);
+      }
+    }
+
+    async function searchCustomKeyword() {
+      const input = document.getElementById('custom-news-Input');
+      const kw = input ? input.value.trim() : '';
+      if (!kw) { alert('검색할 키워드를 입력해 주세요.'); return; }
+      const statusBadge = document.getElementById('news-status-badge');
+      if (statusBadge) statusBadge.textContent = `● '${kw}' 실시간 뉴스 수집중...`;
+
+      const fetched = await fetchGoogleNewsRSS(kw, '매크로');
+      if (fetched.length > 0) mergeAndSortArticles(fetched);
+      currentNewsFilter = 'ALL';
+      displayedNewsCount = 10;
+      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.news-filter-btn')?.classList.add('active');
+
+      newsArticles.sort((a, b) => {
+        const aMatch = a.title.includes(kw) ? 1 : 0;
+        const bMatch = b.title.includes(kw) ? 1 : 0;
+        if (aMatch !== bMatch) return bMatch - aMatch;
+        return b.timestamp - a.timestamp;
+      });
+
+      renderNewsroom();
+      renderDashboardTop5News();
+      if (statusBadge) statusBadge.textContent = `● '${kw}' 검색 완료 (${fetched.length}건 신규 반영)`;
+    }
+
+    async function fetchHistoricalBatchForCategory(targetCat) {
+      if (isFetchingMoreNews) return;
+      isFetchingMoreNews = true;
+      historicalStep += 1;
+
+      const btn = document.getElementById('btn-load-more-news');
+      if (btn) btn.textContent = '과거 아카이브 기사 10개 추가 수집 중...';
+
+      const endDate = new Date(Date.now() - (historicalStep * 15 * 24 * 60 * 60 * 1000));
+      const beforeStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
+
+      const rulesToFetch = (targetCat && targetCat !== 'ALL' && targetCat !== 'SCRAP')
+        ? NEWS_CATEGORY_RULES.filter(r => r.cat === targetCat)
+        : NEWS_CATEGORY_RULES;
+
+      await Promise.all(rulesToFetch.map(async (rule) => {
+        const datedQuery = `${rule.query} before:${beforeStr}`;
+        const items = await fetchGoogleNewsRSS(datedQuery, rule.cat);
+        if (items.length > 0) mergeAndSortArticles(items);
+      }));
+
+      isFetchingMoreNews = false;
+      if (btn) btn.textContent = '+ 과거 기사 10개 더 불러오기 (기간 제한 없음)';
+      renderNewsroom();
+      renderDashboardTop5News();
+    }
+
+    async function loadMoreNews(stepCount = 10) {
+      displayedNewsCount += stepCount;
+      renderNewsroom();
+      const allFiltered = getFilteredNewsList();
+      if (displayedNewsCount >= allFiltered.length - 5 && currentNewsFilter !== 'SCRAP') {
+        await fetchHistoricalBatchForCategory(currentNewsFilter);
+      }
+    }
+
+    async function initNewsroom() {
+      const statusBadge = document.getElementById('news-status-badge');
+      renderNewsroom();
+
+      await Promise.all(NEWS_CATEGORY_RULES.map(async (rule) => {
+        const items = await fetchGoogleNewsRSS(rule.query, rule.cat);
+        if (items.length > 0) {
+          mergeAndSortArticles(items);
+          renderNewsroom();
+          renderDashboardTop5News();
+        }
+      }));
+
+      if (statusBadge) statusBadge.textContent = `● 실시간 뉴스 피드 가동중 (총 ${newsArticles.length}건 수집됨)`;
+    }
+
+    function refreshNewsPool() {
+      newsArticles = [...INITIAL_CURATED_NEWS];
+      displayedNewsCount = 10;
+      historicalStep = 0;
+      initNewsroom();
+    }
+
+    let scrollTimer = null;
+    window.addEventListener('scroll', () => {
+      const activeTab = document.getElementById('tab-newsroom');
+      if (!activeTab || !activeTab.classList.contains('active')) return;
+      if (scrollTimer) return;
+
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 160) {
+        scrollTimer = setTimeout(() => {
+          loadMoreNews(10);
+          scrollTimer = null;
+        }, 350);
+      }
+    });
+
+    // 7. 초기 구동 (서울경제 티커 및 7대 인포그래픽 카드 0.00초 즉시 렌더링)
+    async function initMarketData(force = false) {
+      renderSedailyTicker();
+      renderDashboardEdition();
+      renderInstrumentList();
+
+      // 서울경제 사이트 실시간 수급·등락종목수 동기화 & 뉴스룸 프리패치
+      syncFromSedailyWebsite();
+      initNewsroom();
+
+      if (document.getElementById('tab-indicators').classList.contains('active')) {
+        loadCategoryQuotes(currentCategory, force);
+      }
+    }
+
+    function forceRefreshData() {
+      initMarketData(true);
+      refreshNewsPool();
+    }
+
+    const lastActiveTab = sessionStorage.getItem('hana_fo_active_tab');
+    if (lastActiveTab) switchTab(lastActiveTab);
+
+    initMarketData(false);
+    setInterval(() => syncFromSedailyWebsite(), 60000);
+
+    // 8. 게시판 기능
+    const STORAGE_KEY = 'hana_fo_board_posts_v1';
+    const defaultPosts = [
+      {
+        id: 1,
+        category: '본사공지',
+        title: 'WM RESEARCH DESK 포털 오픈 및 활용 안내',
+        author: 'F/O 본사 솔루션팀',
+        date: '2026.11.01',
+        content: 'PB 및 패밀리오피스 본사 직원을 위한 실시간 마켓 브리핑 포털입니다. 종합 대시보드의 손님 전달용 PDF 다운로드 기능을 상담에 적극 활용해 주시기 바랍니다.'
+      }
+    ];
+
+    function getPosts() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));
+        return defaultPosts;
+      }
+      return JSON.parse(saved);
+    }
+
+    function renderBoard() {
+      const posts = getPosts();
+      const tbody = document.getElementById('board-list-body');
+      if (!tbody) return;
+      tbody.innerHTML = posts.map(post => `
+        <tr class="board-row" onclick="viewPostDetail(${post.id})">
+          <td><span class="badge-tag tag-macro" style="margin:0;">${post.category}</span></td>
+          <td style="font-weight: 600; color: #0f172a;">${post.title}</td>
+          <td>${post.author}</td>
+          <td style="color: #64748b;">${post.date}</td>
+        </tr>
+      `).join('');
+    }
+
+    function toggleWriteBox() {
+      const box = document.getElementById('board-write-form');
+      if (box) box.classList.toggle('open');
+    }
+
+    function saveNewPost() {
+      const category = document.getElementById('post-category').value;
+      const author = document.getElementById('post-author').value.trim() || 'F/O 본사';
+      const title = document.getElementById('post-title').value.trim();
+      const content = document.getElementById('post-content').value.trim();
+      if (!title || !content) { alert('제목과 내용을 모두 입력해 주세요.'); return; }
+
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+      const posts = getPosts();
+      const newPost = { id: Date.now(), category, title, author, date: dateStr, content };
+      posts.unshift(newPost);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      document.getElementById('post-title').value = '';
+      document.getElementById('post-content').value = '';
+      toggleWriteBox();
+      renderBoard();
+      viewPostDetail(newPost.id);
+    }
+
+    function viewPostDetail(postId) {
+      const post = getPosts().find(p => p.id === postId);
+      const detailBox = document.getElementById('board-detail-view');
+      if (!post || !detailBox) return;
+      detailBox.classList.add('open');
+      detailBox.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="badge-tag tag-macro">${post.category}</span>
+          <span style="font-size:12px; color:#64748b;">작성자: ${post.author} | 등록일: ${post.date}</span>
+        </div>
+        <h4 style="font-size:16px; font-weight:700; color:#0f172a; margin-bottom:10px;">${post.title}</h4>
+        <p style="font-size:14px; color:#334155; line-height:1.6; white-space:pre-wrap; margin-bottom:12px;">${post.content}</p>
+        <div style="text-align:right;">
+          <button type="button" onclick="deletePost(${post.id})" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:4px; font-size:12px; cursor:pointer;">게시글 삭제</button>
+        </div>
+      `;
+    }
+
+    function deletePost(postId) {
+      const posts = getPosts().filter(p => p.id !== postId);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      document.getElementById('board-detail-view').classList.remove('open');
+      renderBoard();
+    }
+
+    renderBoard();
+  </script>
+</body>
+</html>
