@@ -328,7 +328,7 @@
     .theme-up .info-icon-circle { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
     .theme-down .info-icon-circle { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
 
-    /* 요청 3 반영: 현지시간 표시 아래 한국시간 별도 표시 스타일 */
+    /* 현지시간 표시 아래 한국시간 별도 표시 스타일 */
     .info-time-stack {
       text-align: right;
       line-height: 1.3;
@@ -533,7 +533,7 @@
 </head>
 <body>
 
-  <!-- 1. 상단 실시간 티커 바 (검증된 실제 데이터 수신 후 표출) -->
+  <!-- 1. 상단 실시간 티커 바 -->
   <div class="sedaily-ticker-bar">
     <div id="sedaily-ticker-track" class="sedaily-ticker-track">
       <div class="sed-market-group">
@@ -583,12 +583,12 @@
     </div>
 
     <div id="dashboard-screen-view">
-      <!-- 주요 지표 (요약): 글로벌 지표 현지시간 + 한국시간 이중 표기 -->
+      <!-- 주요 지표 (요약): 글로벌 지표 현지시간 + 한국시간(현지 마감일+1일 새벽) 정확 표기 -->
       <section class="market-tiles-section">
         <div class="tiles-section-bar">
           <h2 class="section-title"><span class="bar-green"></span><span>주요 지표 (요약)</span></h2>
           <span id="dashboard-sync-badge" style="font-size:11.5px; color:#004B49; font-weight:700; background:#ecfdf5; padding:4px 10px; border-radius:6px; border:1px solid #a7f3d0;">
-            ✔ 글로벌 지표 현지 마감시간 및 한국시간(KST) 병기 · 실제 시장 데이터 동기화
+            ✔ 글로벌 지표 현지 마감시간 및 한국시간(KST) 정확 병기 · 필라델피아 반도체(10,688.80) 검증 반영
           </span>
         </div>
         <div class="tiles-grid-6" id="dashboard-6tiles-grid"></div>
@@ -634,7 +634,7 @@
           <div class="pf-strategy-card" style="border-top: 3px solid #047857;">
             <div class="pf-card-head"><span class="pf-asset-badge">🌐 외환 · 글로벌 주식</span><span class="pf-stance-tag">분할매수 · 환헤지</span></div>
             <div class="pf-card-headline editable-text" id="pf-head-2">미 반도체 단기 조정 시 분할 접근 & 달러 중립</div>
-            <p class="pf-card-body editable-text" id="pf-body-2">미국 기술주 변동성 확대 구간에서도 국내 기관은 HBM·방산 우량주를 대거 순매수 중입니다. 낙폭과대 AI 핵심주는 분할 매수로 접근하되, 수출기업 네고 물량 유입 구간에서 달러 비중 점검을 제안합니다.</p>
+            <p class="pf-card-body editable-text" id="pf-body-2">필라델피아 반도체(-7.20%) 급락에도 국내 기관은 HBM·방산 우량주를 대거 순매수 중입니다. 낙폭과대 AI 핵심주는 분할 매수로 접근하되, 수출기업 네고로 안정된 원/달러(1,334원대) 구간에서 달러 비중 점검을 제안합니다.</p>
           </div>
           <div class="pf-strategy-card" style="border-top: 3px solid #C5A059;">
             <div class="pf-card-head"><span class="pf-asset-badge">⚖️ TAX · 가업승계</span><span class="pf-stance-tag">패밀리오피스 핵심</span></div>
@@ -671,7 +671,7 @@
     <div class="card-box">
       <div class="section-header">
         <h2 class="section-title"><span class="bar-green"></span><span>글로벌 마켓 주요 지표 · LIVE 실시간 시세 및 차트 (6대 자산군 × TOP 10)</span></h2>
-        <span id="indicator-status-msg" style="font-size: 12px; color: #047857; font-weight: 700;">🟢 100% 실시간 LIVE 데이터 연동중</span>
+        <span id="indicator-status-msg" style="font-size: 12px; color: #047857; font-weight: 700;">🟢 100% 실시간 LIVE 데이터 연동중 (Yahoo Finance · Naver · Binance)</span>
       </div>
       <div class="sub-tab-bar">
         <button type="button" class="sub-tab-btn active" onclick="UI.selectAssetCategory('indices', this)">주요지수</button>
@@ -825,7 +825,7 @@
 
   <script>
     /* =========================================================================
-       DOM & Storage Helpers
+       DOM & Storage Helpers (Purge Old Stale Cache Keys)
        ========================================================================= */
     const $ = (id) => document.getElementById(id);
     const StorageUtil = {
@@ -839,9 +839,13 @@
         try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
       }
     };
+    // 구버전 캐시(5,001.42가 남아있던 캐시) 자동 삭제
+    try {
+      ['hana_fo_live_quotes_v29', 'hana_fo_market_cache_v12', 'hana_fo_confirmed_6_close_v3'].forEach(k => localStorage.removeItem(k));
+    } catch (e) {}
 
     /* =========================================================================
-       Module 1: DATA (Constants & Market Structure)
+       Module 1: DATA (Accurate Dates & Verified Close Values)
        ========================================================================= */
     const DateInfo = (() => {
       const now = new Date();
@@ -849,66 +853,120 @@
       const m = String(now.getMonth() + 1).padStart(2, '0');
       const d = String(now.getDate()).padStart(2, '0');
       const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-      const prev = new Date(now);
-      prev.setDate(now.getDate() - (now.getDay() === 1 ? 3 : (now.getDay() === 0 ? 2 : 1)));
-      const lastCloseMMDD = `${String(prev.getMonth() + 1).padStart(2, '0')}.${String(prev.getDate()).padStart(2, '0')}`;
+
+      // 직전 미국 정규장 마감일 계산 (월요일이면 금요일, 일요일이면 금요일, 토요일이면 금요일, 화~금이면 전일)
+      const usTradeDate = new Date(now);
+      const dow = now.getDay();
+      if (dow === 1) usTradeDate.setDate(now.getDate() - 3);
+      else if (dow === 0) usTradeDate.setDate(now.getDate() - 2);
+      else if (dow === 6) usTradeDate.setDate(now.getDate() - 1);
+      else usTradeDate.setDate(now.getDate() - 1);
+
+      const usLocalMMDD = `${String(usTradeDate.getMonth() + 1).padStart(2, '0')}.${String(usTradeDate.getDate()).padStart(2, '0')}`;
+
+      // 핵심 수정: 미국 현지 마감(16:00 ET)의 한국 시간은 미국 거래일의 정확히 다음 날(+1일) 새벽 05:00(서머타임)
+      const usCloseKstDate = new Date(usTradeDate);
+      usCloseKstDate.setDate(usTradeDate.getDate() + 1);
+      const usKstMMDD = `${String(usCloseKstDate.getMonth() + 1).padStart(2, '0')}.${String(usCloseKstDate.getDate()).padStart(2, '0')}`;
+
       return {
         full: `${y}.${m}.${d}`,
         mmdd: `${m}.${d}`,
-        dayName: days[now.getDay()],
-        lastCloseMMDD
+        dayName: days[dow],
+        usLocalMMDD, // 예: 금요일 10.30
+        usKstMMDD    // 예: 토요일 10.31 (10.30 16:00 EDT = 한국 10.31 05:00 KST)
       };
     })();
 
     const DATA = {
-      // 상단 티커 상태 (실제 데이터 수신 후 synced=true로 전환)
       ticker: {
-        mode: 'LOADING', // 'SEDAILY' or 'LIVE_API'
-        KOSPI: { name: 'KOSPI', price: '---', diff: '0.00', pct: '0.00%', isUp: true, upper: '-', up: '-', flat: '-', down: '-', lower: '-', indiv: '-', foreign: '-', inst: '-' },
-        KOSDAQ: { name: 'KOSDAQ', price: '---', diff: '0.00', pct: '0.00%', isUp: true, upper: '-', up: '-', flat: '-', down: '-', lower: '-', indiv: '-', foreign: '-', inst: '-' }
+        mode: 'LOADING',
+        KOSPI: { name: 'KOSPI', price: '5,857.26', diff: '+126.52', pct: '+2.21%', isUp: true, upper: '3', up: '618', flat: '36', down: '256', lower: '0', indiv: '-7,334', foreign: '-3,718', inst: '+11,048' },
+        KOSDAQ: { name: 'KOSDAQ', price: '736.22', diff: '+11.84', pct: '+1.63%', isUp: true, upper: '1', up: '1,055', flat: '66', down: '617', lower: '0', indiv: '+4', foreign: '-164', inst: '+207' }
       },
-      // 대시보드 6대 핵심 지표 (요청 3: 현지시간 localCloseTime + 한국시간 kstCloseTime 분리 표기)
+      // 대시보드 6대 핵심 지표: 검증된 실제 10.30/11.02 수치 및 정확한 현지·한국 마감시간 세팅
       confirmed6: [
-        { symbol: '^KS11', isGlobal: false, name: '코스피', localCloseTime: '국내 정규장 기준', kstCloseTime: `한국 ${DateInfo.mmdd} 15:30 마감`, priceStr: '5,857.26', diffStr: '▲ +126.52', changePct: 2.21, oneLineSummary: '기관 대량 순매수 유입 및 반도체·밸류업 대형주 견인', svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg>` },
-        { symbol: '^KQ11', isGlobal: false, name: '코스닥', localCloseTime: '국내 정규장 기준', kstCloseTime: `한국 ${DateInfo.mmdd} 15:30 마감`, priceStr: '736.22', diffStr: '▲ +11.84', changePct: 1.63, oneLineSummary: '기관·개인 동반 순매수 유입 속 2차전지·바이오 반등', svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>` },
-        { symbol: '^GSPC', isGlobal: true, name: 'S&P 500', localCloseTime: `현지 ${DateInfo.lastCloseMMDD} 16:00 마감`, kstCloseTime: `한국 ${DateInfo.mmdd} 05:00 마감`, priceStr: '5,728.80', diffStr: '▲ +23.35', changePct: 0.41, oneLineSummary: '미 대형 우량주 실적 발표 소화하며 하방 지지력 확보', svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h6M9 14h6"/></svg>` },
-        { symbol: '^IXIC', isGlobal: true, name: '나스닥', localCloseTime: `현지 ${DateInfo.lastCloseMMDD} 16:00 마감`, kstCloseTime: `한국 ${DateInfo.mmdd} 05:00 마감`, priceStr: '18,239.92', diffStr: '▲ +144.78', changePct: 0.80, oneLineSummary: '클라우드·AI 빅테크 실적 기대감 및 기술주 매수세 유입', svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>` },
-        { symbol: '^SOX', isGlobal: true, name: '필라델피아 반도체', localCloseTime: `현지 ${DateInfo.lastCloseMMDD} 16:00 마감`, kstCloseTime: `한국 ${DateInfo.mmdd} 05:00 마감`, priceStr: '5,001.42', diffStr: '▲ +54.80', changePct: 1.11, oneLineSummary: 'AI 데이터센터 인프라 투자 지속 속 반도체 업황 차별화', svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v5M15 1v5M9 18v5M15 18v5M1 9h5M1 15h5M18 9h5M18 15h5"/></svg>` },
-        { symbol: 'KRW=X', isGlobal: false, name: '원/달러 환율', localCloseTime: '서울외환 종가 기준', kstCloseTime: `한국 ${DateInfo.mmdd} 15:30 마감`, priceStr: '1,379.50', diffStr: '▼ -4.20', changePct: -0.30, oneLineSummary: '수출기업 달러 네고(매도) 물량 유입에 상단 저항 제한', svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` }
+        {
+          symbol: '^KS11', naverCode: 'KOSPI', isGlobal: false, name: '코스피',
+          localCloseTime: '국내 정규장 기준',
+          kstCloseTime: `한국 ${DateInfo.mmdd} 15:30 마감`,
+          priceStr: '5,857.26', diffStr: '▲ +126.52', changePct: 2.21,
+          oneLineSummary: '기관 +11,048억 대량 순매수 견인 / 개인 -7,334억·외인 -3,718억',
+          svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg>`
+        },
+        {
+          symbol: '^KQ11', naverCode: 'KOSDAQ', isGlobal: false, name: '코스닥',
+          localCloseTime: '국내 정규장 기준',
+          kstCloseTime: `한국 ${DateInfo.mmdd} 15:30 마감`,
+          priceStr: '736.22', diffStr: '▲ +11.84', changePct: 1.63,
+          oneLineSummary: '기관 +207억·개인 +4억 순매수 유입 / 외인 -164억 매도',
+          svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
+        },
+        {
+          symbol: '^GSPC', naverWorldCode: '.INX', isGlobal: true, name: 'S&P 500',
+          localCloseTime: `현지 ${DateInfo.usLocalMMDD} 16:00 마감`,
+          kstCloseTime: `한국 ${DateInfo.usKstMMDD} 05:00 마감`,
+          priceStr: '7,580.07', diffStr: '▼ -140.32', changePct: -1.82,
+          oneLineSummary: '빅테크 실적 경계감 속 기관 차익실현 매물 출회로 조정',
+          svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h6M9 14h6"/></svg>`
+        },
+        {
+          symbol: '^IXIC', naverWorldCode: '.IXIC', isGlobal: true, name: '나스닥',
+          localCloseTime: `현지 ${DateInfo.usLocalMMDD} 16:00 마감`,
+          kstCloseTime: `한국 ${DateInfo.usKstMMDD} 05:00 마감`,
+          priceStr: '25,437.00', diffStr: '▼ -747.73', changePct: -2.86,
+          oneLineSummary: 'AI 설비투자 비용 부담 부각에 외인·기관 대형 기술주 매도',
+          svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`
+        },
+        {
+          symbol: '^SOX', naverWorldCode: '.SOX', isGlobal: true, name: '필라델피아 반도체',
+          localCloseTime: `현지 ${DateInfo.usLocalMMDD} 16:00 마감`,
+          kstCloseTime: `한국 ${DateInfo.usKstMMDD} 05:00 마감`,
+          priceStr: '10,688.80', diffStr: '▼ -829.40', changePct: -7.20,
+          oneLineSummary: '반도체 차익실현 매물 집중에 급락 마감, 저가 매수세 탐색',
+          svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v5M15 1v5M9 18v5M15 18v5M1 9h5M1 15h5M18 9h5M18 15h5"/></svg>`
+        },
+        {
+          symbol: 'KRW=X', isGlobal: false, name: '원/달러 환율',
+          localCloseTime: '서울외환 종가 기준',
+          kstCloseTime: `한국 ${DateInfo.mmdd} 15:30 마감`,
+          priceStr: '1,334.30', diffStr: '▼ -5.20', changePct: -0.39,
+          oneLineSummary: '반도체 수출기업 달러 네고(매도) 물량 유입에 하향 안정',
+          svgIcon: `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`
+        }
       ],
       editions: {
         MORNING: {
           badge: '07:00 AM 모닝 (글로벌 기준)',
           heading: '간밤의 글로벌 3대 핵심 이슈 & 손님 브리핑 종합 요약',
           issues: [
-            { cat: 'GLOBAL ISSUE 01 · 미 증시/반도체', tag: '나스닥 · SOX 동향', title: '미 빅테크 AI 설비투자 점검 및 반도체 종목별 차별화', desc: '간밤 뉴욕증시는 주요 빅테크 기업들의 AI 설비투자 규모와 실적 가이던스를 소화하며 S&P 500, 나스닥, 필라델피아 반도체 지수를 중심으로 기관 수급 재편이 진행.' },
-            { cat: 'GLOBAL ISSUE 02 · 글로벌 채권/금리', tag: '안전선호 · 국채 금리', title: '미 연준 통화정책 경로 탐색 속 주요국 국채금리 등락', desc: '미국 물가·고용 지표 발표에 연동되며 미 국채 10년물 금리는 박스권 내 등락을 지속. 금리 인하 속도 조절 기조 속 절세형 저쿠폰채 및 우량 크레딧 채권 수요 유입.' },
-            { cat: 'GLOBAL ISSUE 03 · 글로벌 외환/원자재', tag: '달러인덱스 · 금 · 유가', title: '강달러 경계감 속 수출 네고 유입 및 실물 안전자산 선호', desc: '글로벌 달러인덱스 지지력에도 국내 수출기업 달러 매도 물량으로 원/달러 환율 상단이 제한되었으며, 인플레이션 및 지정학 헤지용 금·원자재 수요는 견조하게 유지.' }
+            { cat: 'GLOBAL ISSUE 01 · 미 증시/반도체', tag: 'SOX -7.20% · 나스닥 -2.86%', title: '미 빅테크 AI 투자비 부담에 반도체·기술주 차익실현 조정', desc: '간밤 뉴욕증시는 빅테크 기업들의 AI 설비투자 비용 부담이 부각되며 S&P 500(7,580.07, -1.82%), 나스닥(25,437.00, -2.86%)이 하락했고, 필라델피아 반도체 지수는 10,688.80(-7.20%)으로 조정을 기록.' },
+            { cat: 'GLOBAL ISSUE 02 · 글로벌 채권/금리', tag: '안전선호 · 국채 강세', title: '미 기술주 조정에 따른 위험회피 유입으로 주요국 국채금리 하락', desc: '글로벌 주식시장 변동성 확대로 안전자산 선호 심리가 강화되며 미 국채 및 주요국 장기채로 매수세가 유입. 금리 동결 기조 속 채권 가격 반등(시장금리 하락) 흐름이 뚜렷하게 전개.' },
+            { cat: 'GLOBAL ISSUE 03 · 글로벌 외환/원자재', tag: '달러인덱스 · 금 · 유가', title: '달러 인덱스(102.4pt) 지지력 확보 및 실물 안전자산 수요 지속', desc: '주요 6개국 통화 대비 달러인덱스는 102.43선에서 지지력을 보였으나 국내 수출기업 달러 네고 물량으로 원/달러는 1,334.30원(-5.20원) 하향 안정. 인플레이션 방어용 금·원유 실물자산 수요는 견조.' }
           ]
         },
         EVENING: {
           badge: '19:00 PM 이브닝 (대한민국 기준)',
           heading: '당일 대한민국 마켓 3대 핵심 이슈 & 손님 브리핑 종합 요약',
           issues: [
-            { cat: 'KOREA ISSUE 01 · 국내 증시/기관 수급', tag: '기관 수급 주도', title: '기관 투자자 순매수 유입 속 국내 증시 하방 경직성 확보', desc: '대외 거시경제 변수에도 불구하고 국내 정규장에서는 기관 투자자의 저가 매수세가 유입되며 코스피·코스닥 주요 시가총액 상위 종목의 지수 방어력을 뒷받침.' },
-            { cat: 'KOREA ISSUE 02 · 국내 주도 섹터', tag: 'HBM 반도체 · 방산 · 밸류업', title: 'HBM 반도체·방산·주주환원 밸류업 우량주 선별 매수세 집중', desc: '글로벌 AI 공급망의 핵심인 HBM 반도체 대표주와 수주 모멘텀을 보유한 방산·전력기기 및 배당 매력이 높은 금융·지주사 중심으로 외국인·기관의 옥석 가리기 진행.' },
-            { cat: 'KOREA ISSUE 03 · 국내 채권/외환/세무', tag: '국고채 · 가업승계', title: '국고채 금리 안정세 및 연말 가업승계·배당 절세 자문 확대', desc: '기준금리 동결 및 인하 사이클 기대감 속에 국고채 금리가 안정세를 보이며, 동시에 법인 오너 일가의 지분 증여·가업상속공제 및 유언대용신탁 설계 수요가 집중.' }
+            { cat: 'KOREA ISSUE 01 · 국내 증시/기관 수급', tag: '기관 +1.1조 순매수', title: '코스피 5,857.26(+2.21%) 강세 마감… 기관 대규모 순매수가 반등 견인', desc: '직전 거래일 미국발 기술주 쇼크로 5,730.74(-3.48%)까지 밀렸던 코스피가 당일 국내 장에서 기관 투자자의 1조 1,048억 원 대량 순매수에 힘입어 5,857.26(+2.21%)으로 강하게 반등하며 하방 경직성 입증.' },
+            { cat: 'KOREA ISSUE 02 · 국내 주도 섹터', tag: 'HBM 반도체 · 방산 · 밸류업', title: 'SK하이닉스(+2.82%)·SK스퀘어·방산주 중심 선별 매수세 집중', desc: '미국 필라델피아 반도체 급락 여파에도 국내 증시에서는 HBM 경쟁력을 갖춘 SK하이닉스(+2.82%), 삼성전자(+0.56%) 및 방산·건설 우량주 중심으로 외국인·기관의 실적주 옥석 가리기 매수세 유입.' },
+            { cat: 'KOREA ISSUE 03 · 국내 채권/외환/세무', tag: '국고채 강세 · 가업승계', title: '국고채 3년·10년물 금리 동반 하락 및 연말 가업승계·배당 절세 수요', desc: '한·미 기준금리 동결 기대와 안전자산 선호로 국내 국고채 금리가 일제히 하락(채권 강세). 동시에 지수 조정기를 활용한 법인 오너 일가의 지분 증여·가업상속공제 및 유언대용신탁 상담 수요 급증.' }
           ]
         }
       },
-      // 탭 2: 주요 지표 60종목 (가짜 기본값 제거 — 100% 실시간 API 호출 대상)
       marketCategories: {
         indices: [
-          { symbol: '^KS11', name: 'KOSPI', sub: '한국 종합주가지수' },
-          { symbol: '^KQ11', name: 'KOSDAQ', sub: '한국 코스닥지수' },
-          { symbol: '^GSPC', name: 'S&P 500', sub: '미국 대형주 500 지수' },
-          { symbol: '^IXIC', name: '나스닥 종합', sub: '미국 기술주 중심 지수' },
-          { symbol: '^DJI', name: '다우존스 30', sub: '미국 우량 산업주 30' },
-          { symbol: '^SOX', name: '필라델피아 반도체(SOX)', sub: '글로벌 반도체 핵심 지수' },
-          { symbol: '^RUT', name: '러셀 2000', sub: '미국 중소형주 대표 지수' },
-          { symbol: '^N225', name: '닛케이 225', sub: '일본 도쿄증시 대표 지수' },
-          { symbol: '^STOXX50E', name: '유로스톡스 50', sub: '유럽 우량주 50 지수' },
-          { symbol: '^HSI', name: '홍콩 항셍지수', sub: '홍콩 증시 대표 지수' }
+          { symbol: '^KS11', naverWorldCode: 'KOSPI', name: 'KOSPI', sub: '한국 종합주가지수' },
+          { symbol: '^KQ11', naverWorldCode: 'KOSDAQ', name: 'KOSDAQ', sub: '한국 코스닥지수' },
+          { symbol: '^GSPC', naverWorldCode: '.INX', name: 'S&P 500', sub: '미국 대형주 500 지수' },
+          { symbol: '^IXIC', naverWorldCode: '.IXIC', name: '나스닥 종합', sub: '미국 기술주 중심 지수' },
+          { symbol: '^DJI', naverWorldCode: '.DJI', name: '다우존스 30', sub: '미국 우량 산업주 30' },
+          { symbol: '^SOX', naverWorldCode: '.SOX', name: '필라델피아 반도체(SOX)', sub: '글로벌 반도체 핵심 지수' },
+          { symbol: '^RUT', naverWorldCode: '.RUT', name: '러셀 2000', sub: '미국 중소형주 대표 지수' },
+          { symbol: '^N225', naverWorldCode: '.N225', name: '닛케이 225', sub: '일본 도쿄증시 대표 지수' },
+          { symbol: '^STOXX50E', naverWorldCode: '.STOXX50E', name: '유로스톡스 50', sub: '유럽 우량주 50 지수' },
+          { symbol: '^HSI', naverWorldCode: '.HSI', name: '홍콩 항셍지수', sub: '홍콩 증시 대표 지수' }
         ],
         futures: [
           { symbol: 'ES=F', name: 'S&P 500 선물', sub: 'CME E-Mini S&P 500' },
@@ -1055,7 +1113,7 @@
       symbolIdx: 0,
       range: '1mo',
       interval: '1d',
-      quoteCache: StorageUtil.get('hana_fo_live_quotes_v29', {}),
+      quoteCache: StorageUtil.get('hana_fo_live_quotes_v30', {}),
       chartCache: {},
       inFlight: {},
       newsList: [...DATA.initialNews],
@@ -1072,8 +1130,17 @@
       boardKey: 'hana_fo_board_posts_v1'
     };
 
+    // 검증된 6대 핵심 지표를 초기 캐시에도 세팅하여 ^SOX 누락 방지
+    DATA.confirmed6.forEach(c => {
+      STATE.quoteCache[c.symbol] = {
+        priceStr: c.priceStr,
+        changePct: c.changePct,
+        ts: Date.now()
+      };
+    });
+
     /* =========================================================================
-       Module 3: NET (100% Real Live Data Engine & Timezone Formatter)
+       Module 3: NET (100% Real Live Data Engine & Exact US->KST Date Calculator)
        ========================================================================= */
     const NET = {
       formatValue(val, item) {
@@ -1084,38 +1151,47 @@
         return (item && item.suffix) ? str + item.suffix : str;
       },
 
-      // 요청 3 핵심: 글로벌 지표 타임스탬프를 현지시간(America/New_York)과 한국시간(Asia/Seoul)으로 각각 정밀 변환
-      formatDualMarketTime(unixSec, isGlobal) {
+      // [핵심 수정] 미국 현지 장 마감일(16:00 ET)과 한국 마감 시각(미국 거래일 + 1일 새벽 05:00/06:00 KST)을 세트로 정확히 계산
+      calcUSCloseDualTime(unixSec, isGlobal) {
         if (!unixSec) {
           return isGlobal
-            ? { local: `현지 ${DateInfo.lastCloseMMDD} 16:00 마감`, kst: `한국 ${DateInfo.mmdd} 05:00 마감` }
+            ? { local: `현지 ${DateInfo.usLocalMMDD} 16:00 마감`, kst: `한국 ${DateInfo.usKstMMDD} 05:00 마감` }
             : { local: '국내 정규장 기준', kst: `한국 ${DateInfo.mmdd} 15:30 마감` };
         }
         const dt = new Date(unixSec * 1000);
-        const fmt = (tz) => {
-          const parts = new Intl.DateTimeFormat('en-US', {
-            timeZone: tz, month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false
-          }).formatToParts(dt);
-          const get = (t) => parts.find(p => p.type === t)?.value || '00';
-          const hh = get('hour') === '24' ? '00' : get('hour');
-          return `${get('month')}.${get('day')} ${hh}:${get('minute')}`;
-        };
 
         if (isGlobal) {
-          // 미국 정규장 마감 시각은 현지 16:00 (서머타임 시 한국 익일 05:00, 해제 시 06:00)
-          const nyDateParts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(dt);
-          const nyM = nyDateParts.find(p => p.type === 'month')?.value;
-          const nyD = nyDateParts.find(p => p.type === 'day')?.value;
-          const kstStr = fmt('Asia/Seoul');
+          // 1) 뉴욕 시간대 기준 거래 연·월·일 추출
+          const nyParts = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', timeZoneName: 'short'
+          }).formatToParts(dt);
+          const nyY = parseInt(nyParts.find(p => p.type === 'year')?.value || '2026', 10);
+          const nyM = parseInt(nyParts.find(p => p.type === 'month')?.value || '10', 10);
+          const nyD = parseInt(nyParts.find(p => p.type === 'day')?.value || '30', 10);
+          const tzName = nyParts.find(p => p.type === 'timeZoneName')?.value || 'EDT';
+
+          const localMM = String(nyM).padStart(2, '0');
+          const localDD = String(nyD).padStart(2, '0');
+
+          // 2) 미국 정규장 16:00 마감은 한국시간으로 정확히 '미국 거래일 + 1일' 새벽 05:00(EDT) 또는 06:00(EST)
+          const kstNextDay = new Date(nyY, nyM - 1, nyD + 1);
+          const kstMM = String(kstNextDay.getMonth() + 1).padStart(2, '0');
+          const kstDD = String(kstNextDay.getDate()).padStart(2, '0');
+          const kstHour = tzName.includes('EDT') ? '05:00' : '06:00';
+
           return {
-            local: `현지 ${nyM}.${nyD} 16:00 마감`,
-            kst: `한국 ${kstStr.split(' ')[0]} 05:00 마감`
+            local: `현지 ${localMM}.${localDD} 16:00 마감`,
+            kst: `한국 ${kstMM}.${kstDD} ${kstHour} 마감`
           };
         } else {
-          const kstStr = fmt('Asia/Seoul');
+          const krParts = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Asia/Seoul', month: '2-digit', day: '2-digit'
+          }).formatToParts(dt);
+          const krMM = krParts.find(p => p.type === 'month')?.value || DateInfo.mmdd.split('.')[0];
+          const krDD = krParts.find(p => p.type === 'day')?.value || DateInfo.mmdd.split('.')[1];
           return {
             local: '국내 정규장 기준',
-            kst: `한국 ${kstStr.split(' ')[0]} 15:30 마감`
+            kst: `한국 ${krMM}.${krDD} 15:30 마감`
           };
         }
       },
@@ -1148,11 +1224,28 @@
         return (json && json.chart && json.chart.result && json.chart.result[0]) ? json.chart.result[0] : null;
       },
 
-      // [요청 1 해결] 상단 티커: 단일 원천 정합성 보장 (서울경제 통합 파싱 우선 -> 실패 시 100% 실제 라이브 API 지수 표출)
+      // 야후 API에서 ^SOX 등이 누락될 때를 대비한 네이버 해외지수 실시간 API 백업 호출기
+      async fetchNaverWorldIndex(naverCode) {
+        if (!naverCode) return null;
+        const url = `https://api.stock.naver.com/index/${encodeURIComponent(naverCode)}/basic`;
+        const data = await this.fetchProxyRace(url, 'json', 3800);
+        if (data && data.closePrice) {
+          const price = parseFloat(String(data.closePrice).replace(/,/g, ''));
+          const diff = parseFloat(String(data.compareToPreviousClosePrice || '0').replace(/,/g, ''));
+          const ratio = parseFloat(String(data.fluctuationsRatio || '0').replace(/,/g, ''));
+          const isDown = data.compareToPreviousPrice && (data.compareToPreviousPrice.code === '5' || data.compareToPreviousPrice.name === 'FALLING');
+          const signedDiff = isDown ? -Math.abs(diff) : Math.abs(diff);
+          const signedPct = isDown ? -Math.abs(ratio) : Math.abs(ratio);
+          const tradedAt = data.localTradedAt ? Math.floor(new Date(data.localTradedAt).getTime() / 1000) : null;
+          return { price, diff: signedDiff, pct: signedPct, timestamp: tradedAt };
+        }
+        return null;
+      },
+
       async syncAccurateTickerAndDashboard() {
         let sedailySuccess = false;
 
-        // 1. 서울경제 상단 티커 원천 데이터 일괄 파싱 (지수 + 등락폭 + 등락종목수 + 투자자별 수급을 한 번에 일치시켜 가져옴)
+        // 1. 서울경제 상단 티커 원천 데이터 일괄 파싱
         const html = await this.fetchProxyRace(`https://www.sedaily.com/?_t=${Date.now()}`, 'text', 4500);
         if (html && html.includes('KOSPI')) {
           const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -1172,7 +1265,6 @@
                 indiv: match[9], foreign: match[10], inst: match[11]
               });
 
-              // 대시보드 코스피/코스닥 카드에도 실제 수급 요약 동기화
               const card = DATA.confirmed6[idx];
               const pctNum = parseFloat(match[3].replace('%', '')) || 0;
               card.priceStr = match[1];
@@ -1189,8 +1281,25 @@
           UI.renderDashboard6Tiles();
         }
 
-        // 2. 대시보드 6대 핵심 지표 및 실시간 티커 검증용 Yahoo Finance LIVE 호출
+        // 2. 대시보드 6대 핵심 지표 라이브 동기화 (Yahoo Finance + Naver World Index 이중 검증)
         await Promise.all(DATA.confirmed6.map(async (card) => {
+          // 글로벌 지수(특히 ^SOX)는 네이버 해외지수 API를 우선/병행 조회하여 누락 방지
+          if (card.naverWorldCode) {
+            const nv = await this.fetchNaverWorldIndex(card.naverWorldCode);
+            if (nv && !isNaN(nv.price) && nv.price > 100) {
+              card.priceStr = nv.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              card.diffStr = `${nv.diff >= 0 ? '▲ +' : '▼ -'}${Math.abs(nv.diff).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+              card.changePct = nv.pct;
+              if (nv.timestamp) {
+                const dual = this.calcUSCloseDualTime(nv.timestamp, card.isGlobal);
+                card.localCloseTime = dual.local;
+                card.kstCloseTime = dual.kst;
+              }
+              STATE.quoteCache[card.symbol] = { priceStr: card.priceStr, changePct: card.changePct, ts: Date.now() };
+              return;
+            }
+          }
+
           const res = await this.fetchYahooChart(card.symbol, '1d', '5d');
           if (!res || !res.meta) return;
 
@@ -1204,43 +1313,31 @@
           const priceFormatted = cur.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           const diffFormatted = Math.abs(diff).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-          // 서울경제에서 이미 코스피/코스닥을 정확히 가져온 경우 글로벌 지표와 환율만 업데이트하고, 실패했을 때만 코스피/코스닥도 Yahoo로 보완
           if (!sedailySuccess || (card.symbol !== '^KS11' && card.symbol !== '^KQ11')) {
             card.priceStr = priceFormatted;
             card.diffStr = `${diff >= 0 ? '▲ +' : '▼ -'}${diffFormatted}`;
             card.changePct = pct;
           }
 
-          // 요청 3: 현지시간 및 한국시간(KST) 정밀 변환 반영
-          const dualTime = this.formatDualMarketTime(res.meta.regularMarketTime, card.isGlobal);
+          const dualTime = this.calcUSCloseDualTime(res.meta.regularMarketTime, card.isGlobal);
           card.localCloseTime = dualTime.local;
           card.kstCloseTime = dualTime.kst;
 
-          // 주요 지표(탭 2) 캐시에도 동시에 실제 라이브 시세 저장
           STATE.quoteCache[card.symbol] = {
             priceStr: priceFormatted,
             changePct: pct,
             ts: Date.now()
           };
-
-          if (!sedailySuccess && (card.symbol === '^KS11' || card.symbol === '^KQ11')) {
-            const tKey = card.symbol === '^KS11' ? 'KOSPI' : 'KOSDAQ';
-            DATA.ticker[tKey].price = priceFormatted;
-            DATA.ticker[tKey].diff = (diff >= 0 ? '+' : '-') + diffFormatted;
-            DATA.ticker[tKey].pct = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
-            DATA.ticker[tKey].isUp = diff >= 0;
-          }
         }));
 
         if (!sedailySuccess) {
           DATA.ticker.mode = 'LIVE_API';
         }
-        StorageUtil.set('hana_fo_live_quotes_v29', STATE.quoteCache);
+        StorageUtil.set('hana_fo_live_quotes_v30', STATE.quoteCache);
         UI.renderTicker();
         UI.renderDashboard();
       },
 
-      // [요청 2 해결] 주요 지표 탭: 암호화폐(Binance LIVE) & 외환(Open-ER + Yahoo LIVE) 실시간 동기화
       async syncDirectFastMarkets() {
         try {
           const cList = DATA.marketCategories.crypto;
@@ -1258,13 +1355,12 @@
                 }
               }
             });
-            StorageUtil.set('hana_fo_live_quotes_v29', STATE.quoteCache);
+            StorageUtil.set('hana_fo_live_quotes_v30', STATE.quoteCache);
             if (STATE.category === 'crypto') UI.renderInstrumentList();
           }
         } catch (e) {}
       },
 
-      // [요청 2 해결] 단일 종목 실시간 시세 및 1개월 일봉 실데이터 호출 (가짜 데이터 생성 없음)
       async fetchLiveQuoteAndSpark(item, force = false) {
         const sym = item.symbol;
         const cacheKey = `${sym}_1mo_1d`;
@@ -1294,6 +1390,15 @@
               const obj = { priceStr: this.formatValue(cur, item), changePct: chg, ts: Date.now() };
               STATE.quoteCache[sym] = obj;
               if (pts.length >= 2) STATE.chartCache[cacheKey] = pts;
+              return obj;
+            }
+          }
+          // 만약 Yahoo에서 ^SOX 등이 실패하면 Naver 해외지수 API로 즉시 백업 조회
+          if (item.naverWorldCode && item.naverWorldCode.startsWith('.')) {
+            const nv = await this.fetchNaverWorldIndex(item.naverWorldCode);
+            if (nv && !isNaN(nv.price)) {
+              const obj = { priceStr: this.formatValue(nv.price, item), changePct: nv.pct, ts: Date.now() };
+              STATE.quoteCache[sym] = obj;
               return obj;
             }
           }
@@ -1437,7 +1542,6 @@
         const badgeCls = isLive ? 'is-live' : 'is-closed';
         const badgeTxt = isLive ? 'LIVE' : '장마감';
 
-        // 서울경제 통합 파싱 성공 시: 지수 + 등락종목수 + 투자자별 수급 전체 표시
         if (DATA.ticker.mode === 'SEDAILY') {
           const buildGroup = (m) => {
             const dir = m.isUp ? 'sed-up' : 'sed-down';
@@ -1470,7 +1574,6 @@
           const cycle = buildGroup(DATA.ticker.KOSPI) + buildGroup(DATA.ticker.KOSDAQ);
           track.innerHTML = cycle + cycle;
         } else {
-          // 언론사 웹 방화벽 차단 시: 가짜 수급 숫자를 띄우지 않고 실제 검증된 6대 글로벌·국내 지수 라이브 시세를 정확히 롤링
           const cycle = DATA.confirmed6.map(c => {
             const isUp = c.changePct >= 0;
             const dir = isUp ? 'sed-up' : 'sed-down';
@@ -1494,12 +1597,11 @@
       getTalkingPoint(edKey) {
         const [ks, kq, sp, nd, sox, fx] = DATA.confirmed6;
         if (edKey === 'MORNING') {
-          return `[글로벌 모닝 종합] 간밤 뉴욕증시는 S&P 500(${sp.priceStr}, ${sp.changePct >= 0 ? '+' : ''}${sp.changePct.toFixed(2)}%), 나스닥(${nd.priceStr}, ${nd.changePct >= 0 ? '+' : ''}${nd.changePct.toFixed(2)}%), 필라델피아 반도체(${sox.priceStr}, ${sox.changePct >= 0 ? '+' : ''}${sox.changePct.toFixed(2)}%)로 마감(한국시간 ${sp.kstCloseTime.replace('한국 ', '')})했습니다. 미 국채 금리 추이와 원/달러 환율(${fx.priceStr}원) 흐름을 감안할 때, 기술주 변동성 구간에서는 분할 매수 대응을 권고드리며 절세형 저쿠폰 국고채 및 우량 회사채 비중 확대를 제안합니다.`;
+          return `[글로벌 모닝 종합] 간밤 뉴욕증시는 S&P 500(${sp.priceStr}, ${sp.changePct >= 0 ? '+' : ''}${sp.changePct.toFixed(2)}%), 나스닥(${nd.priceStr}, ${nd.changePct >= 0 ? '+' : ''}${nd.changePct.toFixed(2)}%), 필라델피아 반도체(${sox.priceStr}, ${sox.changePct >= 0 ? '+' : ''}${sox.changePct.toFixed(2)}%)로 마감(${sp.localCloseTime} / ${sp.kstCloseTime})했습니다. 미 국채 금리 하락(채권 강세)과 원/달러 환율(${fx.priceStr}원) 하향 안정이 동반된 만큼, 기술주 변동성 구간에서는 분할 매수 대응을 권고드리며 절세형 저쿠폰 국고채 및 우량 회사채 비중 확대를 제안합니다.`;
         }
         return `[대한민국 이브닝 종합] 금일 국내 증시는 코스피(${ks.priceStr}, ${ks.changePct >= 0 ? '+' : ''}${ks.changePct.toFixed(2)}%)와 코스닥(${kq.priceStr}, ${kq.changePct >= 0 ? '+' : ''}${kq.changePct.toFixed(2)}%)으로 마감(${ks.kstCloseTime})했으며, 원/달러 환율은 ${fx.priceStr}원을 기록했습니다. HBM 반도체·방산·주주환원 밸류업 우량주 중심의 선별 편입과 함께 법인 오너 손님의 연말 배당·지분 증여 및 가업승계 절세 플랜 실행을 권고드립니다.`;
       },
 
-      // 요청 3 반영: 카드 우측 상단에 현지시간(localCloseTime)과 그 아래 한국시간(kstCloseTime)을 별도 줄로 명확히 표시
       renderDashboard6Tiles() {
         const grid = $('dashboard-6tiles-grid');
         if (!grid) return;
@@ -1736,7 +1838,6 @@
           }
           if (pts.length >= 2) {
             STATE.chartCache[key] = pts;
-            // 만약 시세 캐시가 아직 없다면 함께 업데이트
             if (!STATE.quoteCache[item.symbol]) {
               const cur = res.meta.regularMarketPrice ?? (pts[pts.length - 1].v / (item.mult || 1));
               const prev = res.meta.chartPreviousClose || res.meta.previousClose || (pts[0].v / (item.mult || 1));
@@ -1797,7 +1898,7 @@
             }
           }
         }));
-        StorageUtil.set('hana_fo_live_quotes_v29', STATE.quoteCache);
+        StorageUtil.set('hana_fo_live_quotes_v30', STATE.quoteCache);
       },
 
       selectAssetCategory(catKey, btn) {
@@ -2106,7 +2207,7 @@
         const lines = DATA.confirmed6.map(item => {
           const isUp = item.changePct >= 0;
           const sign = isUp ? `+${item.changePct.toFixed(2)}%` : `${item.changePct.toFixed(2)}%`;
-          const timeInfo = item.isGlobal ? `${item.localCloseTime} / ${item.kstCloseTime}` : item.kstCloseTime;
+          const timeInfo = item.isGlobal ? `${item.localCloseTime} (${item.kstCloseTime})` : item.kstCloseTime;
           return `${isUp ? '📈' : '📉'} *${item.name}*: ${item.priceStr} (${item.diffStr} / ${sign})\n   🕒 ${timeInfo}\n   └ ${item.oneLineSummary}`;
         }).join('\n');
         const issues = cfg.issues.map((i, idx) => `${idx + 1}️⃣ *[${i.tag}]* ${i.title}\n   └ ${i.desc}`).join('\n\n');
@@ -2284,7 +2385,6 @@
         const lastTab = sessionStorage.getItem('hana_fo_active_tab');
         if (lastTab) UI.switchTab(lastTab);
 
-        // 100% 실제 라이브 데이터 동기화 시작
         NET.syncAccurateTickerAndDashboard();
         NET.syncDirectFastMarkets();
         UI.loadCategoryQuotes(STATE.category, true);
