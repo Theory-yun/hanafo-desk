@@ -143,15 +143,6 @@
     }
     .tab-section.active { display: block; }
 
-    .two-col-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    @media (min-width: 1024px) {
-      .two-col-grid { grid-template-columns: 1fr 1fr; }
-    }
-
     .card-box {
       background-color: #ffffff;
       border: 1px solid #e2e8f0;
@@ -292,19 +283,26 @@
     .text-down { color: #2563eb; }
     .text-flat { color: #64748b; }
 
-    /* [마켓 뉴스룸] 스타일 */
-    .news-filter-bar {
+    /* [마켓 뉴스룸] 컨트롤 & 검색 & 카드 스타일 */
+    .news-top-controls {
       display: flex;
-      gap: 8px;
-      overflow-x: auto;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
       padding-bottom: 14px;
       border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
+    }
+    .news-filter-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
       scrollbar-width: none;
     }
     .news-filter-bar::-webkit-scrollbar { display: none; }
     .news-filter-btn {
-      padding: 7px 16px;
+      padding: 7px 15px;
       border-radius: 999px;
       border: 1px solid #cbd5e1;
       background-color: #ffffff;
@@ -322,18 +320,49 @@
       color: #ffffff;
       border-color: #004B49;
     }
+    .news-search-box {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .news-search-input {
+      padding: 7px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 210px;
+      font-family: inherit;
+    }
+    .news-search-btn {
+      background-color: #004B49;
+      color: #ffffff;
+      border: none;
+      padding: 7px 13px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
 
     .news-card-item {
       padding: 16px 14px;
       border-bottom: 1px solid #f1f5f9;
-      transition: background-color 0.1s ease;
-      display: block;
-      text-decoration: none;
+      transition: background-color 0.12s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .news-card-item:last-child { border-bottom: none; }
     .news-card-item:hover { background-color: #f8fafc; border-radius: 8px; }
-    
-    .news-badges-wrap { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+
+    .news-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .news-badges-wrap { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
     .badge-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.02em; }
     .tag-macro { background-color: #e0f2fe; color: #0369a1; }
     .tag-tax { background-color: #fef3c7; color: #92400e; }
@@ -341,11 +370,71 @@
     .tag-forex { background-color: #f3e8ff; color: #7e22ce; }
     .tag-alt { background-color: #fff1f2; color: #be123c; }
 
-    .news-main-title { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 6px; line-height: 1.45; }
-    .news-card-item:hover .news-main-title { color: #004B49; text-decoration: underline; }
-    
-    .news-meta-info { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #64748b; }
-    .news-press { font-weight: 600; color: #004B49; background: #f0fdf4; padding: 1px 6px; border-radius: 4px; border: 1px solid #dcfce7; }
+    .news-title-link {
+      font-size: 15.5px;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.45;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .news-title-link:hover { color: #004B49; text-decoration: underline; }
+
+    .news-meta-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .news-press {
+      font-weight: 700;
+      color: #004B49;
+      background: #f0fdf4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #bbf7d0;
+    }
+    .news-action-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .btn-news-util {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-news-util:hover { border-color: #004B49; color: #004B49; background: #f8fafc; }
+    .btn-news-util.scrapped { background: #fef9c3; border-color: #eab308; color: #854d0e; }
+
+    /* 기사 열람 중 뒤로가기 감지용 상단 플로팅 바 */
+    .article-return-banner {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #004B49;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 9999;
+      font-size: 13px;
+      align-items: center;
+      gap: 12px;
+    }
+    .article-return-banner.show { display: flex; }
 
     /* [F/O Insight] 리포트 자료실 스타일 */
     .report-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
@@ -399,7 +488,7 @@
         <h1 class="brand-title">WM RESEARCH DESK</h1>
       </div>
       <div class="header-controls">
-        <span id="current-date">기준 : 2026.11.01(SUN)</span>
+        <span id="current-date">기준 : 2026.11.02(MON)</span>
         <button type="button" onclick="forceRefreshData()" class="btn-refresh">데이터 새로고침</button>
       </div>
     </div>
@@ -408,11 +497,11 @@
   <!-- 2-1. 녹색 바 하단 사이트 메뉴 -->
   <nav class="main-nav">
     <div class="nav-inner">
-      <button type="button" class="nav-btn active" onclick="switchTab('tab-dashboard', this)">종합 대시보드</button>
-      <button type="button" class="nav-btn" onclick="switchTab('tab-indicators', this)">주요 지표</button>
-      <button type="button" class="nav-btn" onclick="switchTab('tab-newsroom', this)">마켓 뉴스룸</button>
-      <button type="button" class="nav-btn" onclick="switchTab('tab-insight', this)">F/O Insight</button>
-      <button type="button" class="nav-btn" onclick="switchTab('tab-board', this)">게시판</button>
+      <button type="button" class="nav-btn active" data-tab="tab-dashboard" onclick="switchTab('tab-dashboard', this)">종합 대시보드</button>
+      <button type="button" class="nav-btn" data-tab="tab-indicators" onclick="switchTab('tab-indicators', this)">주요 지표</button>
+      <button type="button" class="nav-btn" data-tab="tab-newsroom" onclick="switchTab('tab-newsroom', this)">마켓 뉴스룸</button>
+      <button type="button" class="nav-btn" data-tab="tab-insight" onclick="switchTab('tab-insight', this)">F/O Insight</button>
+      <button type="button" class="nav-btn" data-tab="tab-board" onclick="switchTab('tab-board', this)">게시판</button>
     </div>
   </nav>
 
@@ -420,7 +509,7 @@
   <main id="tab-dashboard" class="tab-section active">
     <div class="card-box" style="min-height: 360px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #94a3b8;">
       <p style="font-size: 15px; font-weight: 600; color: #64748b; margin-bottom: 6px;">종합 대시보드 영역 (구성 준비 중)</p>
-      <p style="font-size: 13px;">상단 메뉴에서 <strong>[주요 지표]</strong> 또는 <strong>[F/O Insight 자료실]</strong>을 이용해 주세요.</p>
+      <p style="font-size: 13px;">상단 메뉴에서 <strong>[주요 지표]</strong>, <strong>[마켓 뉴스룸]</strong>, <strong>[F/O Insight]</strong>를 이용해 주세요.</p>
     </div>
   </main>
 
@@ -458,7 +547,7 @@
 
         <div id="svg-chart-container" class="svg-chart-box"></div>
 
-        <!-- 기간 선택 버튼 (요청 반영: 1D, 1M, 3M, 1Y, 전체) -->
+        <!-- 기간 선택 버튼: 1D, 1M, 3M, 1Y, 전체 -->
         <div class="range-bar">
           <button type="button" class="range-btn" onclick="changeChartRange('1d', '5m', this)">1D</button>
           <button type="button" class="range-btn active" onclick="changeChartRange('1mo', '1d', this)">1M</button>
@@ -480,36 +569,58 @@
     </div>
   </section>
 
-  <!-- [메뉴 3] 마켓 뉴스룸 (언론사 표기, 새창 이동 및 무한 스크롤 완벽 구동) -->
+  <!-- [메뉴 3] 마켓 뉴스룸 (실시간 RSS 연동 + 10개 단위 무제한 과거 로딩 + PB 실무 툴 탑재) -->
   <section id="tab-newsroom" class="tab-section">
     <div class="card-box">
       <div class="section-header">
         <h2 class="section-title">
           <span class="bar-gold"></span>
-          WM RESEARCH 마켓 뉴스룸
+          WM RESEARCH 실시간 마켓 뉴스룸
         </h2>
-        <span style="font-size: 12px; color: #64748b;">고액자산가 가치보존 및 승계 핵심 키워드 실시간 수집</span>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span id="news-status-badge" style="font-size: 12px; color: #047857; font-weight: 600;">● 실시간 뉴스 피드 가동중</span>
+          <button type="button" onclick="refreshNewsPool()" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:4px 10px; border-radius:4px; font-size:11.5px; font-weight:600; cursor:pointer;">최신 뉴스 재수집</button>
+        </div>
       </div>
 
-      <div class="news-filter-bar">
-        <button type="button" class="news-filter-btn active" onclick="filterNews('ALL', this)">전체보기</button>
-        <button type="button" class="news-filter-btn" onclick="filterNews('매크로', this)">매크로</button>
-        <button type="button" class="news-filter-btn" onclick="filterNews('TAX', this)">TAX</button>
-        <button type="button" class="news-filter-btn" onclick="filterNews('부동산', this)">부동산</button>
-        <button type="button" class="news-filter-btn" onclick="filterNews('외환', this)">외환</button>
-        <button type="button" class="news-filter-btn" onclick="filterNews('대체투자', this)">대체투자</button>
+      <!-- 상단 5대 키워드 필터 바 + 스크랩북 + 실시간 키워드 검색창 -->
+      <div class="news-top-controls">
+        <div class="news-filter-bar">
+          <button type="button" class="news-filter-btn active" onclick="filterNews('ALL', this)">전체보기</button>
+          <button type="button" class="news-filter-btn" onclick="filterNews('매크로', this)">매크로</button>
+          <button type="button" class="news-filter-btn" onclick="filterNews('TAX', this)">TAX · 패밀리오피스</button>
+          <button type="button" class="news-filter-btn" onclick="filterNews('부동산', this)">부동산</button>
+          <button type="button" class="news-filter-btn" onclick="filterNews('외환', this)">외환</button>
+          <button type="button" class="news-filter-btn" onclick="filterNews('대체투자', this)">대체투자</button>
+          <button type="button" class="news-filter-btn" onclick="filterNews('SCRAP', this)">⭐ 스크랩북 (<span id="scrap-count">0</span>)</button>
+        </div>
+
+        <div class="news-search-box">
+          <input type="text" id="custom-news-Input" class="news-search-input" placeholder="키워드 실시간 검색 (예: 유언대용신탁)" onkeydown="if(event.key==='Enter') searchCustomKeyword()">
+          <button type="button" class="news-search-btn" onclick="searchCustomKeyword()">실시간 검색</button>
+        </div>
       </div>
 
-      <div id="news-container" style="min-height: 300px;"></div>
+      <!-- 뉴스 기사 리스트 영역 -->
+      <div id="news-container" style="min-height: 360px;"></div>
       
-      <!-- 수동 더보기 버튼 추가 (무한 스크롤 백업용) -->
-      <div style="text-align:center; padding:22px 0 10px 0;">
-        <button type="button" onclick="loadMoreNews()" class="btn-primary" style="background-color: #475569; font-size:12px; padding:8px 20px;">+ 과거 기사 더 불러오기</button>
+      <!-- 10개 단위 무제한 과거 기사 불러오기 영역 -->
+      <div style="text-align:center; padding:22px 0 10px 0; border-top: 1px solid #f1f5f9; margin-top: 10px;">
+        <div id="news-count-info" style="font-size:12px; color:#64748b; margin-bottom:10px;"></div>
+        <button type="button" id="btn-load-more-news" onclick="loadMoreNews(10)" class="btn-primary" style="background-color: #004B49; font-size:13px; padding:10px 26px;">
+          + 과거 기사 10개 더 불러오기 (기간 제한 없음)
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- [메뉴 4] F/O Insight (국내외 패밀리오피스 핵심 부자 보고서 자료실) -->
+  <!-- 기사 창 열람 시 뒤로가기/복귀 안내 배너 -->
+  <div id="article-return-banner" class="article-return-banner">
+    <span>📰 외부 언론사 원문 창이 열렸습니다.</span>
+    <button type="button" onclick="closeOpenedArticleWindow()" style="background:#C5A059; color:#002E2C; border:none; padding:5px 10px; border-radius:4px; font-weight:700; cursor:pointer;">기사 창 닫기</button>
+  </div>
+
+  <!-- [메뉴 4] F/O Insight -->
   <section id="tab-insight" class="tab-section">
     <div class="card-box" style="margin-bottom: 24px;">
       <div class="section-header">
@@ -517,30 +628,30 @@
           <span class="bar-gold"></span>
           F/O 전략 기획 필수 리서치 & 부자 보고서 자료실
         </h2>
-        <span style="font-size: 12px; color: #64748b;">KB · 하나 · UBS 등 국내외 패밀리오피스 전략 담당자 필독서</span>
+        <span style="font-size: 12px; color: #64748b;">KB · 하나 · UBS · PwC 등 국내외 패밀리오피스 전략 담당자 필독서</span>
       </div>
       <p style="font-size: 13.5px; color: #475569; margin-bottom: 16px; line-height: 1.5;">
-        초고액자산가(HNW) 및 패밀리오피스 시장 분석, 가업승계, 자산배분 트렌드를 담은 핵심 연구 보고서입니다. 우측의 **[PDF 다운로드/열람]** 버튼을 통해 원문을 즉시 확인하실 수 있습니다.
+        초고액자산가(HNW) 및 패밀리오피스 시장 분석, 가업승계, 글로벌 자산배분 트렌드를 담은 핵심 연구 보고서입니다. 우측 버튼을 클릭하면 즉시 PDF 다운로드 또는 공식 발행 원문으로 연결됩니다.
       </p>
 
       <div style="overflow-x: auto;">
         <table class="report-table">
           <thead>
             <tr>
-              <th style="width: 80px; text-align: center;">중요도</th>
+              <th style="width: 100px; text-align: center;">중요도</th>
               <th>보고서 명칭 및 핵심 주제</th>
-              <th style="width: 140px;">발행처 / 연도</th>
-              <th style="width: 140px; text-align: center;">다운로드 / 링크</th>
+              <th style="width: 160px;">발행처 / 기준</th>
+              <th style="width: 150px; text-align: center;">다운로드 / 원문</th>
             </tr>
           </thead>
           <tbody>
             <tr class="report-row">
-              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+              <td style="text-align: center;"><span class="star-rating">★★★★★</span></td>
               <td>
                 <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">2025 한국 부자 보고서 (Korea Wealth Report)</div>
-                <div style="font-size: 12px; color: #64748b;">한국 부자의 자산 현황, 부의 축적 노하우 및 15년 발자취 총결산</div>
+                <div style="font-size: 12px; color: #64748b;">금융자산 10억 이상 한국 부자의 자산 배분, 부동산·금융 비중 및 부의 이전·승계 분석</div>
               </td>
-              <td><span style="font-weight:600; color:#004B49;">KB금융경영연구소</span><br><span style="font-size:11.5px; color:#94a3b8;">2025.12</span></td>
+              <td><span style="font-weight:600; color:#004B49;">KB금융지주 경영연구소</span><br><span style="font-size:11.5px; color:#94a3b8;">연례 핵심 리포트</span></td>
               <td style="text-align: center;">
                 <a href="https://files-scs.pstatic.net/2025/12/23/FhQP9SHDXS/2025%20%ED%95%9C%EA%B5%AD%20%EB%B6%80%EC%9E%90%20%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf" target="_blank" rel="noopener noreferrer" class="btn-download">
                   <span>📥 PDF 다운로드</span>
@@ -548,25 +659,25 @@
               </td>
             </tr>
             <tr class="report-row">
-              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+              <td style="text-align: center;"><span class="star-rating">★★★★★</span></td>
               <td>
-                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">2025 대한민국 웰스 리포트 (Korean Wealth Report)</div>
-                <div style="font-size: 12px; color: #64748b;">영리치와 올드리치의 투자 행태 비교 및 자산관리 트렌드 분석</div>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">대한민국 웰스 리포트 (Korean Wealth Report)</div>
+                <div style="font-size: 12px; color: #64748b;">초고액자산가(UHNW) 및 영리치·올드리치 포트폴리오 변화와 패밀리오피스 수요 진단</div>
               </td>
-              <td><span style="font-weight:600; color:#004B49;">하나금융연구소</span><br><span style="font-size:11.5px; color:#94a3b8;">2025.04</span></td>
+              <td><span style="font-weight:600; color:#004B49;">하나금융연구소</span><br><span style="font-size:11.5px; color:#94a3b8;">하나금융 공식 발간</span></td>
               <td style="text-align: center;">
                 <a href="https://www.hanaif.re.kr/boardDetail.do?hmpeSeqNo=36521" target="_blank" rel="noopener noreferrer" class="btn-download">
-                  <span>🔗 원문 페이지</span>
+                  <span>🔗 공식 리포트</span>
                 </a>
               </td>
             </tr>
             <tr class="report-row">
-              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐⭐</span></td>
+              <td style="text-align: center;"><span class="star-rating">★★★★★</span></td>
               <td>
-                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">UBS Global Family Office Report (글로벌 패밀리오피스 보고서)</div>
-                <div style="font-size: 12px; color: #64748b;">전 세계 싱글패밀리오피스 300여 가문의 자산 배분, 사모펀드 및 승계 전략 조사</div>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">UBS Global Family Office Report (글로벌 패밀리오피스 리포트)</div>
+                <div style="font-size: 12px; color: #64748b;">글로벌 300여 개 싱글 패밀리오피스의 자산배분(대체투자·사모·채권), 거버넌스 및 승계 벤치마크</div>
               </td>
-              <td><span style="font-weight:600; color:#004B49;">UBS Global Wealth</span><br><span style="font-size:11.5px; color:#94a3b8;">2026 최신호</span></td>
+              <td><span style="font-weight:600; color:#004B49;">UBS Global Wealth</span><br><span style="font-size:11.5px; color:#94a3b8;">글로벌 표준 백서</span></td>
               <td style="text-align: center;">
                 <a href="https://advisors.ubs.com/mediahandler/media/808993/global-family-office-report-en-2026-single.pdf" target="_blank" rel="noopener noreferrer" class="btn-download">
                   <span>📥 PDF 다운로드</span>
@@ -574,16 +685,29 @@
               </td>
             </tr>
             <tr class="report-row">
-              <td style="text-align: center;"><span class="star-rating">⭐⭐⭐⭐</span></td>
+              <td style="text-align: center;"><span class="star-rating">★★★★☆</span></td>
               <td>
-                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">초고액자산가 가업승계 및 비상장주식 가치평가 실무 가이드</div>
-                <div style="font-size: 12px; color: #64748b;">가업상속공제 요건 충족 및 법인 주식 지분 이동 시뮬레이션</div>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">Citi Global Family Office Survey Insights</div>
+                <div style="font-size: 12px; color: #64748b;">아시아·북미·유럽 패밀리오피스 CIO들의 거시경제 전망 및 다이렉트 딜(Direct Investing) 동향</div>
               </td>
-              <td><span style="font-weight:600; color:#004B49;">F/O 솔루션실</span><br><span style="font-size:11.5px; color:#94a3b8;">2026 내부자료</span></td>
+              <td><span style="font-weight:600; color:#004B49;">Citi Private Bank</span><br><span style="font-size:11.5px; color:#94a3b8;">글로벌 서베이</span></td>
               <td style="text-align: center;">
-                <button type="button" onclick="alert('사내 보안 문서입니다. 본사 F/O솔루션실 인가 권한이 필요합니다.')" class="btn-download" style="background:#64748b;">
-                  <span>🔒 사내 보안</span>
-                </button>
+                <a href="https://www.privatebank.citibank.com/insights/family-office-survey" target="_blank" rel="noopener noreferrer" class="btn-download">
+                  <span>🔗 원문 자료실</span>
+                </a>
+              </td>
+            </tr>
+            <tr class="report-row">
+              <td style="text-align: center;"><span class="star-rating">★★★★☆</span></td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">PwC Global Family Office Deals Study & Tax Guide</div>
+                <div style="font-size: 12px; color: #64748b;">법인 오너 가문의 M&A, 지배구조 개편, 가업승계 및 글로벌 세무 자문 트렌드</div>
+              </td>
+              <td><span style="font-weight:600; color:#004B49;">PwC Global</span><br><span style="font-size:11.5px; color:#94a3b8;">딜·세무 인사이트</span></td>
+              <td style="text-align: center;">
+                <a href="https://www.pwc.com/gx/en/services/family-business/family-office.html" target="_blank" rel="noopener noreferrer" class="btn-download">
+                  <span>🔗 원문 자료실</span>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -653,7 +777,7 @@
     })();
 
     // 2. 로컬스토리지 캐시
-    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v3';
+    const CACHE_STORAGE_KEY = 'hana_fo_market_cache_v4';
     let quoteCache = {};
     let chartCache = {};
 
@@ -888,8 +1012,8 @@
       });
       const polylinePoints = coords.join(' ');
       const areaPoints = `${padX},${H - padY} ${polylinePoints} ${W - padX},${H - padY}`;
-      const startDate = new Date(points[0].t * 1000).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
-      const endDate = new Date(points[points.length - 1].t * 1000).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+      const startDate = new Date(points[0].t * 1000).toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric' });
+      const endDate = new Date(points[points.length - 1].t * 1000).toLocaleDateString('ko-KR', { year: '2-digit', month: 'numeric', day: 'numeric' });
 
       container.innerHTML = `
         <svg viewBox="0 0 ${W} ${H + 20}" style="width:100%; height:100%; overflow:visible;">
@@ -992,12 +1116,19 @@
       saveCacheToDisk();
     }
 
+    // 탭 전환 및 상태 유지 (뒤로가기 시에도 마켓 뉴스룸 유지)
     function switchTab(tabId, btnElement) {
       document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
       const target = document.getElementById(tabId);
       if (target) target.classList.add('active');
-      if (btnElement) btnElement.classList.add('active');
+      if (btnElement) {
+        btnElement.classList.add('active');
+      } else {
+        const matchedBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
+        if (matchedBtn) matchedBtn.classList.add('active');
+      }
+      sessionStorage.setItem('hana_fo_active_tab', tabId);
 
       if (tabId === 'tab-indicators') loadCategoryQuotes(currentCategory, false);
       if (tabId === 'tab-newsroom' && newsArticles.length === 0) initNewsroom();
@@ -1024,175 +1155,426 @@
       loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], range, interval);
     }
 
-    // 5. [마켓 뉴스룸] 실시간 기사 수집 (정확한 원문 링크 및 언론사 매핑)
-    const RAW_NEWS_POOL = [
+    // =========================================================================
+    // 5. [마켓 뉴스룸] 실시간 Google News RSS 엔진 + 10개 무제한 과거 로딩 + 뒤로가기 창 닫기
+    // =========================================================================
+    const NEWS_CATEGORY_RULES = [
       {
-        title: "미 연준 금리 인하 기대감 속 미 국채 10년물 금리 방향성과 패밀리오피스 채권 포트폴리오 전략",
-        date: "2026.11.01",
-        press: "한국경제",
-        url: "https://www.hankyung.com/article/2026110101231",
-        tags: ["매크로"]
+        cat: '매크로',
+        query: '연준 금리 OR 한국은행 기준금리 OR 미국채 금리 OR FOMC OR 물가지수',
+        keywords: ['금리', '연준', 'FOMC', '파월', '국채', '물가', 'CPI', '인플레이션', '통화정책', '한국은행', '경기', '성장률']
       },
       {
-        title: "가업상속공제 요건 완화 및 법인 CEO 주식 증여 플랜 가문 맞춤형 세미나 개최",
-        date: "2026.11.01",
-        press: "매일경제",
-        url: "https://www.mk.co.kr/news/economy/11234567",
-        tags: ["TAX", "패밀리오피스"]
+        cat: 'TAX',
+        query: '패밀리오피스 OR 가업상속공제 OR 상속세 개편 OR 증여세 OR 유언대용신탁 OR 비상장주식',
+        keywords: ['세무', '세제', '상속', '증여', '가업승계', '가업상속', '패밀리오피스', '유언대용신탁', '신탁', '절세', '비상장', '배당', '국세청', '법인세', '양도세']
       },
       {
-        title: "원/달러 환율 상단 저항선 테스트... 수출 기업 실적 및 초고액자산가 환헤지 타이밍 점검",
-        date: "2026.10.31",
-        press: "연합뉴스",
-        url: "https://www.yna.co.kr/view/AKR20261031000100002",
-        tags: ["외환", "매크로"]
+        cat: '부동산',
+        query: '상업용 빌딩 매매 OR 종합부동산세 OR 토지거래허가구역 OR 초고가 아파트 OR 부동산 신탁',
+        keywords: ['부동산', '빌딩', '종부세', '종합부동산세', '토지거래', '재건축', '아파트', '상업용', '오피스', '꼬마빌딩', 'PF', '분양']
       },
       {
-        title: "상업용 빌딩 및 초고가 부동산 매입 수요 증가... 토지거래허가구역 해제 기대감",
-        date: "2026.10.31",
-        press: "머니투데이",
-        url: "https://news.mt.co.kr/mtview.php?no=202610310001",
-        tags: ["부동산"]
+        cat: '외환',
+        query: '원달러 환율 OR 달러 인덱스 OR 엔달러 환율 OR 외환시장 환헤지',
+        keywords: ['환율', '원/달러', '원달러', '달러', '엔화', '유로', '위안', '외환', '환헤지', 'DXY', '강달러']
       },
       {
-        title: "국제 금값 사상 최고가 경신 속 중앙은행 매수세 지속 및 실물 금·원자재 ETF 편입 문의 폭증",
-        date: "2026.10.30",
-        press: "서울경제",
-        url: "https://www.sedaily.com/NewsView/22ZZZZZZZZ",
-        tags: ["대체투자", "매크로"]
-      },
-      {
-        title: "비상장주식 평가 및 유언대용신탁 활용 사례... 패밀리오피스 전담 자문단 리포트 발간",
-        date: "2026.10.30",
-        press: "한국경제",
-        url: "https://www.hankyung.com/article/2026103099991",
-        tags: ["TAX", "패밀리오피스"]
-      },
-      {
-        title: "종합부동산세 개편 논의 및 법인 명의 부동산 보유에 따른 절세 시뮬레이션 결과",
-        date: "2026.10.29",
-        press: "매일경제",
-        url: "https://www.mk.co.kr/news/realestate/11222222",
-        tags: ["부동산", "TAX"]
-      },
-      {
-        title: "글로벌 유동성 및 달러 인덱스(DXY) 변동성 확대에 따른 자산가 포트폴리오 다변화 방안",
-        date: "2026.10.29",
-        press: "디지털타임스",
-        url: "https://www.dt.co.kr/contents.html?article_no=202610290200",
-        tags: ["외환", "매크로"]
-      },
-      {
-        title: "가상자산 과세 유예 연장 및 영리치 고객 대상 비트코인·이더리움 신탁 상품 문의 증가",
-        date: "2026.10.28",
-        press: "연합인포맥스",
-        url: "https://news.einfomax.co.kr/news/articleView.html?idxno=500000",
-        tags: ["대체투자"]
-      },
-      {
-        title: "FOMC 앞두고 CPI 물가 지표 발표... 파월 의장 발언에 따른 금융시장 반응 요약",
-        date: "2026.10.28",
-        press: "서울경제",
-        url: "https://www.sedaily.com/NewsView/22YYYYYYYY",
-        tags: ["매크로"]
-      },
-      {
-        title: "증여세 포괄주의 과세 강화에 따른 가문 자산 이전 시 오너 일가 유의사항",
-        date: "2026.10.27",
-        press: "한국경제",
-        url: "https://www.hankyung.com/article/2026102788881",
-        tags: ["TAX", "패밀리오피스"]
-      },
-      {
-        title: "WTI · 브렌트유 원유 스프레드 축소 및 지정학적 리스크에 따른 에너지 원자재 헤지 전략",
-        date: "2026.10.27",
-        press: "매일경제",
-        url: "https://www.mk.co.kr/news/economy/11111111",
-        tags: ["대체투자", "매크로"]
+        cat: '대체투자',
+        query: '국제 금값 OR WTI 원유 OR 비트코인 현물 ETF OR 사모펀드 PEF OR 원자재 투자',
+        keywords: ['금값', '금 시세', '원유', 'WTI', '브렌트유', '구리', '원자재', '비트코인', '가상자산', '암호화폐', '사모펀드', 'PEF', '대체투자', '헤지펀드']
       }
     ];
 
     let newsArticles = [];
     let currentNewsFilter = 'ALL';
-    let displayedNewsCount = 6;
+    let displayedNewsCount = 10; // 기본 10개 노출
+    let historicalStep = 0;      // 과거 기사 무제한 확장 단계
+    let isFetchingMoreNews = false;
+    let openedArticleWin = null;
+
+    // 스크랩북 저장소
+    const SCRAP_STORAGE_KEY = 'hana_fo_scrapped_news_v1';
+    let scrappedMap = {};
+    try {
+      const savedScrap = localStorage.getItem(SCRAP_STORAGE_KEY);
+      if (savedScrap) scrappedMap = JSON.parse(savedScrap);
+    } catch (e) {}
+
+    function updateScrapCountUI() {
+      const el = document.getElementById('scrap-count');
+      if (el) el.textContent = Object.keys(scrappedMap).length;
+    }
 
     function getTagClass(tag) {
       if (tag === '매크로') return 'tag-macro';
-      if (tag === 'TAX' || tag === '패밀리오피스') return 'tag-tax';
+      if (tag === 'TAX') return 'tag-tax';
       if (tag === '부동산') return 'tag-estate';
       if (tag === '외환') return 'tag-forex';
       if (tag === '대체투자') return 'tag-alt';
       return 'tag-macro';
     }
 
+    // 기사 제목을 분석해 다중 카테고리 배지 자동 판별 (예: TAX + 부동산 동시 해당 시 2개 모두 부착)
+    function classifyArticleTags(title, primaryCat) {
+      const matched = new Set();
+      if (primaryCat && primaryCat !== 'ALL') matched.add(primaryCat);
+
+      NEWS_CATEGORY_RULES.forEach(rule => {
+        for (const kw of rule.keywords) {
+          if (title.includes(kw)) {
+            matched.add(rule.cat);
+            break;
+          }
+        }
+      });
+
+      const arr = Array.from(matched);
+      return arr.length > 0 ? arr.slice(0, 3) : [primaryCat || '매크로'];
+    }
+
+    // RSS XML 파싱 함수 (Google News RSS에서 실제 원문 링크, 제목, 언론사명, 발행일 추출)
+    async function fetchGoogleNewsRSS(searchQuery, defaultCat) {
+      const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(searchQuery)}&hl=ko&gl=KR&ceid=KR:ko`;
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`
+      ];
+
+      const fetchXml = async (pUrl) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4500);
+        try {
+          const res = await fetch(pUrl, { signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error('Bad status');
+          const text = await res.text();
+          if (!text.includes('<item>')) throw new Error('No RSS items');
+          return text;
+        } catch (err) {
+          clearTimeout(timer);
+          throw err;
+        }
+      };
+
+      try {
+        const xmlText = await Promise.any(proxies.map(p => fetchXml(p)));
+        const xmlDoc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const items = Array.from(xmlDoc.querySelectorAll('item'));
+
+        return items.map(item => {
+          let rawTitle = item.querySelector('title')?.textContent || '';
+          const link = item.querySelector('link')?.textContent || '';
+          const pubDateStr = item.querySelector('pubDate')?.textContent || '';
+          let press = item.querySelector('source')?.textContent || '';
+
+          // 제목 끝에 붙은 " - 언론사명" 분리 정리
+          if (!press && rawTitle.lastIndexOf(' - ') !== -1) {
+            press = rawTitle.substring(rawTitle.lastIndexOf(' - ') + 3).trim();
+            rawTitle = rawTitle.substring(0, rawTitle.lastIndexOf(' - ')).trim();
+          } else if (press && rawTitle.endsWith(' - ' + press)) {
+            rawTitle = rawTitle.substring(0, rawTitle.length - (' - ' + press).length).trim();
+          }
+          if (!press) press = '주요 언론사';
+
+          const ts = pubDateStr ? new Date(pubDateStr).getTime() : Date.now();
+          const d = new Date(ts);
+          const dateFormatted = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+
+          return {
+            id: link || rawTitle,
+            title: rawTitle,
+            press: press,
+            date: dateFormatted,
+            timestamp: isNaN(ts) ? 0 : ts,
+            url: link,
+            tags: classifyArticleTags(rawTitle, defaultCat)
+          };
+        });
+      } catch (e) {
+        return [];
+      }
+    }
+
+    // 중복 기사 제거 및 최신순 정렬 병합
+    function mergeAndSortArticles(newItems) {
+      const existingTitles = new Set(newsArticles.map(a => a.title));
+      newItems.forEach(item => {
+        if (item.title && !existingTitles.has(item.title)) {
+          existingTitles.add(item.title);
+          newsArticles.push(item);
+        }
+      });
+      newsArticles.sort((a, b) => b.timestamp - a.timestamp);
+    }
+
+    // 기사 클릭 시 원문 열람 & 뒤로가기 시 자동 창 닫기 처리
+    function openNewsArticle(url) {
+      if (!url) return;
+      // 이전 열린 기사 창이 있으면 먼저 정리
+      if (openedArticleWin && !openedArticleWin.closed) {
+        try { openedArticleWin.close(); } catch (e) {}
+      }
+
+      // 히스토리 스택에 뉴스 열람 상태를 기록하여 사용자가 '뒤로가기'를 누르면 기사 창을 닫고 뉴스룸으로 복귀
+      history.pushState({ newsViewing: true, tab: 'tab-newsroom' }, '', '#newsroom-view');
+      openedArticleWin = window.open(url, '_blank');
+
+      const banner = document.getElementById('article-return-banner');
+      if (banner) banner.classList.add('show');
+    }
+
+    function closeOpenedArticleWindow() {
+      if (openedArticleWin && !openedArticleWin.closed) {
+        try { openedArticleWin.close(); } catch (e) {}
+      }
+      openedArticleWin = null;
+      const banner = document.getElementById('article-return-banner');
+      if (banner) banner.classList.remove('show');
+    }
+
+    // 브라우저 '뒤로가기' 버튼 클릭 시 열린 기사 창을 닫고 마켓 뉴스룸 화면 그대로 표시
+    window.addEventListener('popstate', () => {
+      closeOpenedArticleWindow();
+      const savedTab = sessionStorage.getItem('hana_fo_active_tab');
+      if (savedTab === 'tab-newsroom') {
+        switchTab('tab-newsroom');
+      }
+    });
+
+    // 사용자가 외부 기사 탭을 보고 다시 포털 화면으로 돌아왔을 때 안내 배너 자동 정리
+    window.addEventListener('focus', () => {
+      setTimeout(() => {
+        if (openedArticleWin && openedArticleWin.closed) {
+          closeOpenedArticleWindow();
+        }
+      }, 300);
+    });
+
+    // PB 고객 브리핑 클립보드 복사 기능
+    function copyArticleBriefing(idx) {
+      const filteredList = getFilteredNewsList();
+      const item = filteredList[idx];
+      if (!item) return;
+      const text = `[HANA Family Office 마켓 브리핑]\n■ ${item.title}\n- 분류: ${item.tags.join(', ')} | 언론사: ${item.press} (${item.date})\n- 원문 보기: ${item.url}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('고객 전달용 브리핑 문구와 원문 링크가 복사되었습니다.\n메신저나 문자에 바로 붙여넣기(Ctrl+V) 하실 수 있습니다.');
+      });
+    }
+
+    // 관심 기사 스크랩 토글 기능
+    function toggleScrapArticle(idx) {
+      const filteredList = getFilteredNewsList();
+      const item = filteredList[idx];
+      if (!item) return;
+
+      if (scrappedMap[item.title]) {
+        delete scrappedMap[item.title];
+      } else {
+        scrappedMap[item.title] = item;
+      }
+      try {
+        localStorage.setItem(SCRAP_STORAGE_KEY, JSON.stringify(scrappedMap));
+      } catch (e) {}
+      updateScrapCountUI();
+      renderNewsroom();
+    }
+
+    function getFilteredNewsList() {
+      if (currentNewsFilter === 'SCRAP') {
+        return Object.values(scrappedMap).sort((a, b) => b.timestamp - a.timestamp);
+      }
+      if (currentNewsFilter === 'ALL') {
+        return newsArticles;
+      }
+      return newsArticles.filter(item => item.tags.includes(currentNewsFilter));
+    }
+
     function renderNewsroom() {
       const container = document.getElementById('news-container');
+      const countInfo = document.getElementById('news-count-info');
       if (!container) return;
 
-      const filtered = currentNewsFilter === 'ALL' 
-        ? newsArticles.slice(0, displayedNewsCount)
-        : newsArticles.filter(item => item.tags.includes(currentNewsFilter)).slice(0, displayedNewsCount);
+      updateScrapCountUI();
+      const allFiltered = getFilteredNewsList();
+      const visibleItems = allFiltered.slice(0, displayedNewsCount);
 
-      if (filtered.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8; font-size:13.5px;">해당 분류에 수집된 뉴스가 없습니다.</div>`;
+      if (visibleItems.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#64748b; font-size:14px;">실시간 기사를 수집 중이거나 해당 조건의 기사가 없습니다. 잠시만 기다려 주세요...</div>`;
+        if (countInfo) countInfo.textContent = '';
         return;
       }
 
-      container.innerHTML = filtered.map(news => {
-        const tagsHtml = news.tags.slice(0, 2).map(t => `<span class="badge-tag ${getTagClass(t)}">${t}</span>`).join('');
+      container.innerHTML = visibleItems.map((news, idx) => {
+        const tagsHtml = news.tags.map(t => `<span class="badge-tag ${getTagClass(t)}">${t}</span>`).join('');
+        const isScrapped = !!scrappedMap[news.title];
+        const safeUrl = news.url.replace(/'/g, "\\'");
+
         return `
-          <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="news-card-item">
-            <div class="news-badges-wrap">${tagsHtml}</div>
-            <h4 class="news-main-title">${news.title}</h4>
-            <div class="news-meta-info">
-              <span class="news-press">${news.press}</span>
-              <span class="news-time">${news.date}</span>
+          <article class="news-card-item">
+            <div class="news-top-row">
+              <div class="news-badges-wrap">${tagsHtml}</div>
             </div>
-          </a>
+            <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="news-title-link" onclick="event.preventDefault(); openNewsArticle('${safeUrl}');">
+              ${news.title}
+            </a>
+            <div class="news-meta-info">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="news-press">${news.press}</span>
+                <span class="news-time">${news.date}</span>
+              </div>
+              <div class="news-action-group">
+                <button type="button" class="btn-news-util ${isScrapped ? 'scrapped' : ''}" onclick="toggleScrapArticle(${idx})">
+                  ${isScrapped ? '★ 스크랩됨' : '☆ 스크랩'}
+                </button>
+                <button type="button" class="btn-news-util" onclick="copyArticleBriefing(${idx})">
+                  📋 브리핑 복사
+                </button>
+              </div>
+            </div>
+          </article>
         `;
       }).join('');
+
+      if (countInfo) {
+        countInfo.textContent = `현재 표시된 기사: ${visibleItems.length}건 (수집된 전체 아카이브: ${allFiltered.length}건)`;
+      }
     }
 
     function filterNews(filterKey, btnEl) {
       currentNewsFilter = filterKey;
-      displayedNewsCount = 6;
+      displayedNewsCount = 10; // 필터 변경 시 기본 10개부터 시작
       document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
       if (btnEl) btnEl.classList.add('active');
       renderNewsroom();
-    }
 
-    function initNewsroom() {
-      newsArticles = [...RAW_NEWS_POOL];
-      renderNewsroom();
-    }
-
-    // 수동 및 무한 스크롤 연동 과거 기사 로딩
-    function loadMoreNews() {
-      displayedNewsCount += 4;
-      if (displayedNewsCount > newsArticles.length && newsArticles.length < 30) {
-        newsArticles.push(
-          { title: "초고액자산가 자산관리 트렌드 리포트: 글로벌 사모펀드(PEF) 및 구조화 신탁 상품 가입 동향", date: "2026.10.25", press: "한국경제", url: "https://www.hankyung.com/article/202610250001", tags: ["대체투자"] },
-          { title: "법인 명의 가업승계 증여 특례 개정안 세부 내용 및 패밀리오피스 자문단 대응 전략", date: "2026.10.24", press: "매일경제", url: "https://www.mk.co.kr/news/economy/10000000", tags: ["TAX", "패밀리오피스"] }
-        );
+      // 특정 카테고리의 기사가 부족하면 즉시 추가 수집
+      if (filterKey !== 'ALL' && filterKey !== 'SCRAP' && getFilteredNewsList().length < 15) {
+        fetchHistoricalBatchForCategory(filterKey);
       }
+    }
+
+    // 실시간 키워드 검색 기능
+    async function searchCustomKeyword() {
+      const input = document.getElementById('custom-news-Input');
+      const kw = input ? input.value.trim() : '';
+      if (!kw) {
+        alert('검색할 키워드를 입력해 주세요.');
+        return;
+      }
+      const statusBadge = document.getElementById('news-status-badge');
+      if (statusBadge) statusBadge.textContent = `● '${kw}' 실시간 뉴스 수집중...`;
+
+      const fetched = await fetchGoogleNewsRSS(kw, '매크로');
+      if (fetched.length > 0) {
+        mergeAndSortArticles(fetched);
+      }
+      currentNewsFilter = 'ALL';
+      displayedNewsCount = 10;
+      document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.news-filter-btn')?.classList.add('active');
+
+      // 검색어가 포함된 기사를 최상단으로 우선 배치
+      newsArticles.sort((a, b) => {
+        const aMatch = a.title.includes(kw) ? 1 : 0;
+        const bMatch = b.title.includes(kw) ? 1 : 0;
+        if (aMatch !== bMatch) return bMatch - aMatch;
+        return b.timestamp - a.timestamp;
+      });
+
+      renderNewsroom();
+      if (statusBadge) statusBadge.textContent = `● '${kw}' 검색 완료 (${fetched.length}건 신규 반영)`;
+    }
+
+    // 과거 기간 제한 없이 계속 새로운 과거 기사를 수집하는 무제한 백그라운드 로더
+    async function fetchHistoricalBatchForCategory(targetCat) {
+      if (isFetchingMoreNews) return;
+      isFetchingMoreNews = true;
+      historicalStep += 1;
+
+      const btn = document.getElementById('btn-load-more-news');
+      if (btn) btn.textContent = '과거 아카이브 기사 10개 추가 수집 중...';
+
+      // 과거 날짜 구간(30일 단위씩 제한 없이 과거로 이동) 계산
+      const endDate = new Date(Date.now() - (historicalStep * 15 * 24 * 60 * 60 * 1000));
+      const beforeStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
+
+      const rulesToFetch = (targetCat && targetCat !== 'ALL' && targetCat !== 'SCRAP')
+        ? NEWS_CATEGORY_RULES.filter(r => r.cat === targetCat)
+        : NEWS_CATEGORY_RULES;
+
+      await Promise.all(rulesToFetch.map(async (rule) => {
+        const datedQuery = `${rule.query} before:${beforeStr}`;
+        const items = await fetchGoogleNewsRSS(datedQuery, rule.cat);
+        if (items.length > 0) {
+          mergeAndSortArticles(items);
+        }
+      }));
+
+      isFetchingMoreNews = false;
+      if (btn) btn.textContent = '+ 과거 기사 10개 더 불러오기 (기간 제한 없음)';
       renderNewsroom();
     }
 
+    // 10개씩 과거 기사 추가 노출 (기간 제한 없음)
+    async function loadMoreNews(stepCount = 10) {
+      displayedNewsCount += stepCount;
+      renderNewsroom();
+
+      const allFiltered = getFilteredNewsList();
+      if (displayedNewsCount >= allFiltered.length - 5 && currentNewsFilter !== 'SCRAP') {
+        await fetchHistoricalBatchForCategory(currentNewsFilter);
+      }
+    }
+
+    // 초기 5대 카테고리 실시간 뉴스 병렬 수집
+    async function initNewsroom() {
+      const statusBadge = document.getElementById('news-status-badge');
+      if (statusBadge) statusBadge.textContent = '● 5대 카테고리 실시간 뉴스 수집중...';
+      renderNewsroom();
+
+      await Promise.all(NEWS_CATEGORY_RULES.map(async (rule) => {
+        const items = await fetchGoogleNewsRSS(rule.query, rule.cat);
+        if (items.length > 0) {
+          mergeAndSortArticles(items);
+          renderNewsroom();
+        }
+      }));
+
+      if (statusBadge) statusBadge.textContent = `● 실시간 뉴스 피드 가동중 (총 ${newsArticles.length}건 수집됨)`;
+    }
+
+    function refreshNewsPool() {
+      newsArticles = [];
+      displayedNewsCount = 10;
+      historicalStep = 0;
+      initNewsroom();
+    }
+
+    // 하단 스크롤(스와이프) 시 10개씩 자동 추가 로딩
+    let scrollTimer = null;
     window.addEventListener('scroll', () => {
       const activeTab = document.getElementById('tab-newsroom');
       if (!activeTab || !activeTab.classList.contains('active')) return;
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 120) {
-        if (displayedNewsCount < newsArticles.length + 8) {
-          loadMoreNews();
-        }
+      if (scrollTimer) return;
+
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 160) {
+        scrollTimer = setTimeout(() => {
+          loadMoreNews(10);
+          scrollTimer = null;
+        }, 350);
       }
     });
 
-    // 6. 초기 구동
+    // 6. 초기 구동 및 이전 활성 탭 복원
     async function initMarketData(force = false) {
       renderTicker();
       renderInstrumentList();
       loadAndDrawChart(MARKET_CATEGORIES[currentCategory][currentSymbolIndex], currentRange, currentInterval);
+
+      // 백그라운드에서 뉴스룸 데이터도 미리 프리패치하여 탭 클릭 시 0.01초 만에 즉시 노출
+      initNewsroom();
 
       await Promise.all(tickerItems.map(async (tItem) => {
         await fetchQuoteAndSpark({ symbol: tItem.symbol }, force);
@@ -1205,7 +1587,16 @@
       }
     }
 
-    function forceRefreshData() { initMarketData(true); }
+    function forceRefreshData() {
+      initMarketData(true);
+      refreshNewsPool();
+    }
+
+    // 페이지 새로고침/뒤로가기 시 직전에 보던 탭(예: 마켓 뉴스룸) 그대로 복원
+    const lastActiveTab = sessionStorage.getItem('hana_fo_active_tab');
+    if (lastActiveTab) {
+      switchTab(lastActiveTab);
+    }
 
     initMarketData(false);
     setInterval(() => initMarketData(true), 60000);
@@ -1288,6 +1679,7 @@
         </div>
       `;
     }
+
     function deletePost(postId) {
       const posts = getPosts().filter(p => p.id !== postId);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
